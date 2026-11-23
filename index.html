@@ -3,51 +3,39 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PromptStore — Viral AI Photo Prompts (₹29)</title>
-
-  <!-- Google Fonts: Inter & Plus Jakarta Sans -->
+  <title>PromptStore – Viral AI Photo Prompts (₹29)</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
-
-  <!-- Tailwind CSS CDN -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <script>
     tailwind.config = {
       darkMode: 'class',
       theme: {
         extend: {
           fontFamily: {
-            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+            sans: ['Inter', 'system-ui', 'sans-serif'],
             display: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
           },
           colors: {
             store: {
               bg: '#09090b',
               card: '#111114',
-              elevated: '#18181d',
               border: '#27272a',
+              accent: '#6366f1',
             }
           }
         }
       }
     };
   </script>
-
-  <!-- Lucide Icons CDN -->
-  <script src="https://unpkg.com/lucide@latest"></script>
-
-  <!-- Razorpay Checkout SDK -->
-  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-
   <style>
     html {
       scroll-behavior: smooth;
       background-color: #09090b;
       color: #fafafa;
     }
-
-    /* Hide scrollbar for horizontal category pills */
     .no-scrollbar::-webkit-scrollbar {
       display: none;
     }
@@ -55,459 +43,214 @@
       -ms-overflow-style: none;
       scrollbar-width: none;
     }
-
-    /* Ambient Hero Gradient */
-    .hero-ambient {
-      background: radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.16) 0%, rgba(168, 85, 247, 0.06) 42%, rgba(9, 9, 11, 0) 75%);
-    }
-
-    /* Smooth Modal Pop Animation */
-    @keyframes modalPopIn {
-      from {
-        opacity: 0;
-        transform: translateY(14px) scale(0.97);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
-    }
-    .animate-modal {
-      animation: modalPopIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
   </style>
 </head>
-<body class="bg-store-bg text-zinc-100 font-sans antialiased selection:bg-indigo-500/30 selection:text-indigo-200 min-h-screen flex flex-col">
+<body class="bg-store-bg text-zinc-100 min-h-screen flex flex-col antialiased selection:bg-indigo-500/30">
 
-  <!-- ===================================================================== -->
-  <!-- STICKY TOP NAVBAR                                                     -->
-  <!-- ===================================================================== -->
+  <!-- Sticky Header -->
   <header class="sticky top-0 z-40 bg-store-bg/85 backdrop-blur-xl border-b border-store-border">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-16 gap-3">
-        <!-- Brand Logo -->
-        <button onclick="switchTab('all')" class="flex items-center gap-2.5 text-left group focus:outline-none">
-          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center shadow-lg shadow-indigo-500/25 group-hover:scale-105 transition-transform">
-            <i data-lucide="sparkles" class="w-5 h-5 text-white"></i>
-          </div>
-          <div class="flex items-center gap-2">
-            <span id="headerBrandName" class="font-display font-extrabold text-lg sm:text-xl tracking-tight text-white">
-              PromptStore
-            </span>
-            <span class="hidden sm:inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-indigo-500/15 text-indigo-300 border border-indigo-500/30">
-              ₹29 Prompts
-            </span>
-          </div>
+    <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between gap-3">
+      <!-- Brand -->
+      <a href="#" id="brandLogo" class="flex items-center gap-2.5 shrink-0">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center font-display font-extrabold text-white text-lg shadow-lg shadow-indigo-500/20">
+          P
+        </div>
+        <div>
+          <span class="font-display font-extrabold text-lg tracking-tight text-white">PromptStore</span>
+          <span class="ml-1.5 text-[11px] font-semibold px-2 py-0.5 rounded-full bg-indigo-500/15 text-indigo-300 border border-indigo-500/30">₹29</span>
+        </div>
+      </a>
+
+      <!-- View Switcher -->
+      <nav class="hidden sm:flex items-center bg-zinc-900/90 p-1 rounded-xl border border-store-border">
+        <button id="tabExploreDesktop" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 text-white transition">
+          Explore Store
         </button>
+        <button id="tabPurchasesDesktop" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-zinc-400 hover:text-white transition flex items-center gap-1.5">
+          <span>My Purchases</span>
+          <span id="purchaseBadgeDesktop" class="px-1.5 py-0.2 rounded-full bg-zinc-800 text-zinc-300 text-[10px]">0</span>
+        </button>
+      </nav>
 
-        <!-- Desktop Navigation Pills -->
-        <nav class="hidden md:flex items-center bg-store-card p-1 rounded-2xl border border-store-border">
-          <button
-            id="navAllDesktop"
-            onclick="switchTab('all')"
-            class="px-4 py-1.5 rounded-xl text-sm font-semibold transition-all bg-indigo-600 text-white shadow-sm"
-          >
-            All Prompts
+      <!-- Auth Controls -->
+      <div class="flex items-center gap-2">
+        <button id="openAuthBtn" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs sm:text-sm font-semibold transition shadow-lg shadow-indigo-600/20">
+          Login / Sign Up
+        </button>
+        <div id="userMenu" class="hidden items-center gap-2">
+          <span id="userEmailLabel" class="hidden md:inline-block text-xs text-zinc-400 max-w-[150px] truncate bg-zinc-900 px-3 py-1.5 rounded-lg border border-store-border"></span>
+          <button id="logoutBtn" class="px-3 py-1.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-store-border text-xs font-medium text-zinc-300 transition">
+            Logout
           </button>
-          <button
-            id="navPurchasesDesktop"
-            onclick="switchTab('purchases')"
-            class="px-4 py-1.5 rounded-xl text-sm font-semibold transition-all text-zinc-400 hover:text-white flex items-center gap-2"
-          >
-            <span>My Purchases</span>
-            <span id="badgeCountDesktop" class="px-2 py-0.5 text-xs font-bold rounded-full bg-zinc-800 text-zinc-300">0</span>
-          </button>
-        </nav>
-
-        <!-- User Auth Controls -->
-        <div class="flex items-center gap-2">
-          <!-- Logged Out: Single Login / Sign Up CTA -->
-          <div id="authLoggedOutBar" class="flex items-center">
-            <button
-              onclick="openAuthModal('login')"
-              class="px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-600/25 transition-all active:scale-95 flex items-center gap-1.5"
-            >
-              <i data-lucide="user" class="w-4 h-4"></i>
-              <span>Login / Sign Up</span>
-            </button>
-          </div>
-
-          <!-- Logged In: Email Chip + Logout -->
-          <div id="authLoggedInBar" class="hidden items-center gap-2">
-            <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-store-card border border-store-border max-w-[145px] sm:max-w-[210px]">
-              <span class="w-2 h-2 rounded-full bg-emerald-400 shrink-0 animate-pulse"></span>
-              <span id="userEmailChip" class="text-xs font-medium text-zinc-200 truncate">user@gmail.com</span>
-            </div>
-            <button
-              onclick="handleLogout()"
-              title="Logout"
-              class="px-3 py-2 rounded-xl text-xs font-semibold text-zinc-300 hover:text-rose-300 bg-store-card hover:bg-rose-500/10 border border-store-border hover:border-rose-500/30 transition-all flex items-center gap-1.5"
-            >
-              <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
-              <span class="hidden sm:inline">Logout</span>
-            </button>
-          </div>
         </div>
       </div>
+    </div>
 
-      <!-- Mobile Navigation Pills -->
-      <div class="flex md:hidden items-center gap-2 pb-3">
-        <button
-          id="navAllMobile"
-          onclick="switchTab('all')"
-          class="flex-1 py-2 px-3 rounded-xl text-xs font-semibold text-center transition-all bg-indigo-600 text-white shadow-sm"
-        >
-          All Prompts
-        </button>
-        <button
-          id="navPurchasesMobile"
-          onclick="switchTab('purchases')"
-          class="flex-1 py-2 px-3 rounded-xl text-xs font-semibold text-center transition-all bg-store-card text-zinc-400 border border-store-border flex items-center justify-center gap-1.5"
-        >
-          <span>My Purchases</span>
-          <span id="badgeCountMobile" class="px-1.5 py-0.5 text-[11px] font-bold rounded-full bg-zinc-800 text-zinc-300">0</span>
-        </button>
-      </div>
+    <!-- Mobile View Switcher -->
+    <div class="sm:hidden border-t border-store-border/70 px-4 py-2 flex gap-2 bg-store-bg">
+      <button id="tabExploreMobile" class="flex-1 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 text-white transition">
+        Explore Store
+      </button>
+      <button id="tabPurchasesMobile" class="flex-1 py-1.5 rounded-lg text-xs font-semibold bg-zinc-900 text-zinc-400 border border-store-border transition flex items-center justify-center gap-1.5">
+        <span>My Purchases</span>
+        <span id="purchaseBadgeMobile" class="px-1.5 rounded-full bg-zinc-800 text-zinc-300 text-[10px]">0</span>
+      </button>
     </div>
   </header>
 
-  <!-- ===================================================================== -->
-  <!-- MAIN CONTENT AREA                                                     -->
-  <!-- ===================================================================== -->
-  <main class="flex-1">
+  <!-- Main Content -->
+  <main class="flex-1 max-w-6xl w-full mx-auto px-4 py-6 sm:py-8">
+    <!-- Hero & Search -->
+    <section id="heroSection" class="mb-7">
+      <div class="max-w-2xl">
+        <span class="inline-flex items-center gap-1.5 text-xs font-medium text-indigo-300 bg-indigo-500/10 border border-indigo-500/25 px-3 py-1 rounded-full mb-3">
+          Instant Copy-Paste AI Prompts
+        </span>
+        <h1 class="font-display font-extrabold text-2xl sm:text-4xl text-white tracking-tight leading-tight">
+          Viral AI Photo Prompts for <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">Just ₹29</span>
+        </h1>
+        <p class="text-zinc-400 text-sm sm:text-base mt-2">
+          Unlock studio-grade prompts for Gemini, Midjourney & ChatGPT. Pay once, unlock instantly, and save forever in your account.
+        </p>
+      </div>
 
-    <!-- =================================================================== -->
-    <!-- TAB 1: ALL PROMPTS STORE                                            -->
-    <!-- =================================================================== -->
-    <section id="allPromptsView" class="hero-ambient">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-16">
-
-        <!-- Compact Mobile-First Hero -->
-        <div class="text-center max-w-2xl mx-auto mb-8">
-          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-store-card border border-store-border text-xs font-medium text-indigo-300 mb-3.5">
-            <i data-lucide="zap" class="w-3.5 h-3.5 text-amber-400"></i>
-            <span>Instant UPI Unlock • Works with Gemini, Midjourney &amp; ChatGPT</span>
-          </div>
-          <h1 class="font-display font-extrabold text-3xl sm:text-5xl tracking-tight text-white leading-[1.15] mb-3">
-            Viral AI Photo Prompts for Just <span class="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">₹29</span>
-          </h1>
-          <p class="text-sm sm:text-base text-zinc-400 leading-relaxed">
-            Unlock high-converting studio portrait prompts in 1 click. Pay once via UPI, copy instantly, and access them forever in <span class="text-zinc-200 font-medium">My Purchases</span>.
-          </p>
+      <!-- Search + Categories -->
+      <div class="mt-5 flex flex-col sm:flex-row gap-3">
+        <div class="relative flex-1">
+          <input
+            id="searchInput"
+            type="text"
+            placeholder="Search prompts (e.g., Cyberpunk, Portrait, Cinematic)..."
+            class="w-full bg-store-card border border-store-border rounded-xl pl-4 pr-4 py-2.5 text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-indigo-500 transition"
+          />
         </div>
+      </div>
 
-        <!-- Search Bar & Horizontal Category Pills -->
-        <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3.5 mb-7">
-          <!-- Search Input -->
-          <div class="relative w-full md:w-80 shrink-0">
-            <i data-lucide="search" class="w-4 h-4 text-zinc-500 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
-            <input
-              id="searchInput"
-              type="text"
-              placeholder="Search prompts or styles..."
-              oninput="handleSearchInput(this.value)"
-              class="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-store-card border border-store-border text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-indigo-500 transition-colors"
-            />
-          </div>
-
-          <!-- Category Filter Pills -->
-          <div id="categoryPillsContainer" class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
-            <!-- Populated via JS -->
-          </div>
-        </div>
-
-        <!-- Prompts Grid (8 Curated Viral Cards) -->
-        <div id="promptsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          <!-- Cards rendered dynamically via JS -->
-        </div>
-
-        <!-- Empty Search State -->
-        <div id="emptySearchState" class="hidden text-center py-16 px-4 rounded-3xl bg-store-card border border-store-border">
-          <div class="w-12 h-12 rounded-2xl bg-zinc-900 border border-store-border flex items-center justify-center mx-auto mb-3 text-zinc-400">
-            <i data-lucide="search-x" class="w-6 h-6"></i>
-          </div>
-          <h3 class="font-display font-bold text-lg text-white mb-1">No prompts found</h3>
-          <p class="text-sm text-zinc-400 mb-4">Try a different keyword or reset your category filter.</p>
-          <button
-            onclick="resetFilters()"
-            class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold transition-colors"
-          >
-            Reset Filters
-          </button>
-        </div>
-
+      <div id="categoryBar" class="mt-3.5 flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
+        <!-- Rendered by JS -->
       </div>
     </section>
 
-    <!-- =================================================================== -->
-    <!-- TAB 2: MY PURCHASES LIBRARY                                         -->
-    <!-- =================================================================== -->
-    <section id="myPurchasesView" class="hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-16">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 pb-5 border-b border-store-border">
-        <div>
-          <h1 class="font-display font-extrabold text-2xl sm:text-3xl text-white">My Purchases</h1>
-          <p class="text-sm text-zinc-400 mt-1">Your unlocked AI photo prompts are saved to your account forever.</p>
-        </div>
-        <button
-          onclick="switchTab('all')"
-          class="self-start sm:self-auto px-4 py-2.5 rounded-xl bg-store-card hover:bg-store-elevated border border-store-border text-xs sm:text-sm font-semibold text-zinc-200 flex items-center gap-2 transition-colors"
-        >
-          <i data-lucide="arrow-left" class="w-4 h-4"></i>
-          <span>Browse All Prompts</span>
-        </button>
-      </div>
-
-      <!-- State A: User Logged Out -->
-      <div id="purchasesLoggedOutCard" class="hidden max-w-md mx-auto text-center py-14 px-6 rounded-3xl bg-store-card border border-store-border">
-        <div class="w-14 h-14 rounded-2xl bg-indigo-500/15 border border-indigo-500/30 flex items-center justify-center mx-auto mb-4 text-indigo-400">
-          <i data-lucide="lock" class="w-7 h-7"></i>
-        </div>
-        <h2 class="font-display font-bold text-xl text-white mb-2">Login to Access Your Library</h2>
-        <p class="text-sm text-zinc-400 mb-6 leading-relaxed">
-          Sign in with your email and password to view and copy all the prompts you’ve unlocked.
-        </p>
-        <div class="flex items-center justify-center gap-3">
-          <button
-            onclick="openAuthModal('login')"
-            class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold shadow-lg shadow-indigo-600/25 transition-all"
-          >
-            Login
-          </button>
-          <button
-            onclick="openAuthModal('signup')"
-            class="px-5 py-2.5 rounded-xl bg-store-elevated hover:bg-zinc-800 border border-store-border text-white text-sm font-semibold transition-all"
-          >
-            Create Account
-          </button>
-        </div>
-      </div>
-
-      <!-- State B: Logged In but 0 Purchases -->
-      <div id="purchasesEmptyCard" class="hidden max-w-md mx-auto text-center py-14 px-6 rounded-3xl bg-store-card border border-store-border">
-        <div class="w-14 h-14 rounded-2xl bg-purple-500/15 border border-purple-500/30 flex items-center justify-center mx-auto mb-4 text-purple-400">
-          <i data-lucide="sparkles" class="w-7 h-7"></i>
-        </div>
-        <h2 class="font-display font-bold text-xl text-white mb-2">No Prompts Unlocked Yet</h2>
-        <p class="text-sm text-zinc-400 mb-6 leading-relaxed">
-          Unlock any viral AI photo prompt for just ₹29. Once unlocked, it stays right here ready to copy anytime!
-        </p>
-        <button
-          onclick="switchTab('all')"
-          class="px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold shadow-lg shadow-indigo-600/25 transition-all"
-        >
-          Explore ₹29 Prompts
-        </button>
-      </div>
-
-      <!-- State C: Unlocked Prompts Grid -->
-      <div id="purchasedPromptsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        <!-- Populated dynamically via JS -->
-      </div>
+    <!-- My Purchases Header (Hidden in Explore view) -->
+    <section id="purchasesHeader" class="hidden mb-6">
+      <h2 class="font-display font-bold text-xl sm:text-2xl text-white">My Unlocked Prompts</h2>
+      <p class="text-xs sm:text-sm text-zinc-400 mt-1">All prompts you have unlocked are saved permanently to your account.</p>
     </section>
 
+    <!-- Prompts Grid -->
+    <section id="promptsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      <!-- Rendered by JS -->
+    </section>
+
+    <!-- Empty State -->
+    <div id="emptyState" class="hidden text-center py-16 px-4 bg-store-card border border-store-border rounded-2xl">
+      <p id="emptyStateTitle" class="text-base font-semibold text-white">No prompts found</p>
+      <p id="emptyStateDesc" class="text-xs sm:text-sm text-zinc-400 mt-1">Try a different search keyword or category.</p>
+      <button id="emptyStateBtn" class="mt-4 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-xs font-semibold text-white transition">
+        Browse All Prompts
+      </button>
+    </div>
   </main>
 
-  <!-- ===================================================================== -->
-  <!-- FOOTER                                                                -->
-  <!-- ===================================================================== -->
-  <footer class="border-t border-store-border bg-store-card/50 py-7 mt-auto">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-zinc-500">
-      <div class="flex items-center gap-2">
-        <span class="font-display font-bold text-zinc-300">PromptStore</span>
-        <span>•</span>
-        <span>Viral AI Photo Prompts (₹29)</span>
-      </div>
-      <p>Instant UPI Checkout &amp; Lifetime Cloud Access</p>
-    </div>
+  <!-- Footer -->
+  <footer class="border-t border-store-border py-6 px-4 text-center text-xs text-zinc-500">
+    <p>© 2026 PromptStore. All prompts tested for high-detail AI image generation.</p>
   </footer>
 
-  <!-- ===================================================================== -->
-  <!-- MODAL 1: AUTHENTICATION (LOGIN / CREATE ACCOUNT)                      -->
-  <!-- ===================================================================== -->
-  <div id="authModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80 backdrop-blur-md">
-    <div class="w-full max-w-md rounded-3xl bg-store-card border border-store-border shadow-2xl p-6 sm:p-7 animate-modal relative">
-      <!-- Close Button -->
-      <button
-        onclick="closeAuthModal()"
-        aria-label="Close modal"
-        class="absolute right-4 top-4 p-2 rounded-xl text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
-      >
-        <i data-lucide="x" class="w-5 h-5"></i>
+  <!-- Auth Modal -->
+  <div id="authModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-store-card border border-store-border w-full max-w-md rounded-2xl p-6 relative shadow-2xl">
+      <button id="closeAuthModal" class="absolute top-4 right-4 w-8 h-8 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-white flex items-center justify-center text-sm font-bold">
+        ✕
       </button>
 
-      <!-- Modal Header -->
-      <div class="mb-5">
-        <div class="w-10 h-10 rounded-xl bg-indigo-500/15 border border-indigo-500/30 flex items-center justify-center text-indigo-400 mb-3">
-          <i data-lucide="shield-check" class="w-5 h-5"></i>
-        </div>
-        <h3 id="authModalTitle" class="font-display font-bold text-xl text-white">Welcome Back</h3>
-        <p id="authModalSubtitle" class="text-xs sm:text-sm text-zinc-400 mt-1">
-          Log in to access or unlock your AI photo prompts.
-        </p>
-      </div>
+      <h3 id="authModalTitle" class="font-display font-bold text-xl text-white">Welcome Back</h3>
+      <p id="authModalSubtitle" class="text-xs text-zinc-400 mt-1">Log in to access or unlock your AI photo prompts.</p>
 
-      <!-- Pending Purchase Info Banner -->
-      <div id="authPendingNotice" class="hidden mb-4 p-3 rounded-2xl bg-indigo-500/10 border border-indigo-500/30 flex items-center gap-2.5 text-xs text-indigo-200">
-        <i data-lucide="sparkles" class="w-4 h-4 text-indigo-400 shrink-0"></i>
-        <span id="authPendingNoticeText">Log in or create an account to unlock this prompt.</span>
-      </div>
-
-      <!-- Mode Switcher Tabs -->
-      <div class="grid grid-cols-2 p-1 rounded-2xl bg-store-bg border border-store-border mb-5">
-        <button
-          id="authTabLogin"
-          type="button"
-          onclick="setAuthMode('login')"
-          class="py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-indigo-600 text-white"
-        >
+      <!-- Mode Switch -->
+      <div class="grid grid-cols-2 bg-zinc-950 p-1 rounded-xl border border-store-border mt-4">
+        <button id="switchLoginBtn" type="button" class="py-2 rounded-lg text-xs font-semibold bg-indigo-600 text-white transition">
           Login
         </button>
-        <button
-          id="authTabSignup"
-          type="button"
-          onclick="setAuthMode('signup')"
-          class="py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all text-zinc-400 hover:text-white"
-        >
+        <button id="switchSignupBtn" type="button" class="py-2 rounded-lg text-xs font-semibold text-zinc-400 hover:text-white transition">
           Create Account
         </button>
       </div>
 
-      <!-- Detailed Error Alert Box -->
-      <div id="authErrorAlert" class="hidden mb-4 p-3.5 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-xs text-rose-200 flex items-start gap-2.5">
-        <i data-lucide="alert-circle" class="w-4 h-4 text-rose-400 shrink-0 mt-0.5"></i>
-        <span id="authErrorMessage" class="leading-relaxed">Error details will appear here.</span>
-      </div>
+      <!-- Error Alert (Plain text only - zero SVG className issues) -->
+      <div id="authErrorBox" class="hidden mt-4 p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-xs text-red-300 leading-relaxed"></div>
 
-      <!-- Email / Password Form -->
-      <form id="authForm" onsubmit="handleAuthFormSubmit(event)" class="space-y-4">
+      <form id="authForm" class="mt-4 space-y-3.5">
         <div>
-          <label for="authEmailInput" class="block text-xs font-medium text-zinc-300 mb-1.5">Email Address</label>
+          <label class="block text-xs font-medium text-zinc-300 mb-1.5">Email Address</label>
           <input
-            id="authEmailInput"
+            id="authEmail"
             type="email"
             required
-            autocomplete="email"
-            placeholder="you@gmail.com"
-            class="w-full px-4 py-3 rounded-2xl bg-store-bg border border-store-border text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-indigo-500 transition-colors"
+            placeholder="you@example.com"
+            class="w-full bg-zinc-950 border border-store-border rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-indigo-500"
           />
         </div>
-
         <div>
-          <label for="authPasswordInput" class="block text-xs font-medium text-zinc-300 mb-1.5">Password</label>
+          <label class="block text-xs font-medium text-zinc-300 mb-1.5">Password</label>
           <input
-            id="authPasswordInput"
+            id="authPassword"
             type="password"
             required
             minlength="6"
-            autocomplete="current-password"
-            placeholder="Enter password (min 6 chars)"
-            class="w-full px-4 py-3 rounded-2xl bg-store-bg border border-store-border text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-indigo-500 transition-colors"
+            placeholder="Minimum 6 characters"
+            class="w-full bg-zinc-950 border border-store-border rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-indigo-500"
           />
         </div>
-
         <button
           id="authSubmitBtn"
           type="submit"
-          class="w-full py-3.5 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm shadow-lg shadow-indigo-600/25 transition-all active:scale-95 flex items-center justify-center gap-2"
+          class="w-full py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold transition shadow-lg shadow-indigo-600/25"
         >
-          <span id="authSubmitBtnText">Login &amp; Continue</span>
+          Login & Continue
         </button>
       </form>
     </div>
   </div>
 
-  <!-- ===================================================================== -->
-  <!-- MODAL 2: UPI PAYMENT CHECKOUT (RAZORPAY + DEMO MODE SIMULATION)       -->
-  <!-- ===================================================================== -->
-  <div id="checkoutModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80 backdrop-blur-md">
-    <div class="w-full max-w-md rounded-3xl bg-store-card border border-store-border shadow-2xl overflow-hidden animate-modal">
-      <!-- Checkout Header -->
-      <div class="bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 px-6 py-4 flex items-center justify-between">
-        <div class="flex items-center gap-2.5">
-          <div class="w-8 h-8 rounded-xl bg-white/15 flex items-center justify-center text-white font-display font-extrabold text-sm">
-            ₹
-          </div>
-          <div>
-            <p class="text-white font-bold text-sm leading-tight">PromptStore UPI Checkout</p>
-            <p class="text-indigo-100 text-[11px]">100% Instant Digital Delivery</p>
-          </div>
-        </div>
-        <button
-          onclick="closeCheckoutModal()"
-          aria-label="Close checkout"
-          class="p-1.5 rounded-xl text-white/80 hover:text-white hover:bg-white/10 transition-colors"
-        >
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
-      </div>
+  <!-- Payment / Unlock Modal -->
+  <div id="paymentModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-store-card border border-store-border w-full max-w-md rounded-2xl p-6 relative shadow-2xl">
+      <button id="closePaymentModal" class="absolute top-4 right-4 w-8 h-8 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-white flex items-center justify-center text-sm font-bold">
+        ✕
+      </button>
 
-      <!-- Checkout Body -->
-      <div class="p-6 space-y-5">
-        <!-- Item Summary -->
-        <div class="p-4 rounded-2xl bg-store-bg border border-store-border space-y-2.5">
-          <div class="flex items-center justify-between text-xs text-zinc-400">
-            <span>Unlocking Prompt</span>
-            <span class="px-2 py-0.5 rounded-md bg-emerald-500/15 text-emerald-300 font-semibold">Lifetime Access</span>
-          </div>
-          <p id="checkoutPromptTitle" class="font-display font-bold text-base text-white">Cyberpunk Neon Portrait</p>
-          <div class="pt-2.5 border-t border-store-border flex items-center justify-between gap-2">
-            <span class="text-xs text-zinc-400 truncate">Account: <span id="checkoutUserEmail" class="text-zinc-200 font-medium">user@gmail.com</span></span>
-            <span id="checkoutPromptPrice" class="font-display font-extrabold text-xl text-emerald-400 shrink-0">₹29</span>
-          </div>
-        </div>
+      <span class="text-[11px] font-semibold uppercase tracking-wider text-indigo-400">Instant Digital Unlock</span>
+      <h3 id="payPromptTitle" class="font-display font-bold text-lg text-white mt-1">Prompt Title</h3>
 
-        <!-- Supported UPI Apps Grid -->
+      <div class="mt-4 p-3.5 rounded-xl bg-zinc-950 border border-store-border flex items-center justify-between">
         <div>
-          <p class="text-[11px] font-semibold uppercase tracking-wider text-zinc-400 mb-2">Pay Instantly via UPI</p>
-          <div class="grid grid-cols-4 gap-2 text-center text-xs font-semibold">
-            <div class="py-2.5 rounded-xl bg-store-bg border border-store-border text-zinc-200">GPay</div>
-            <div class="py-2.5 rounded-xl bg-store-bg border border-store-border text-zinc-200">PhonePe</div>
-            <div class="py-2.5 rounded-xl bg-store-bg border border-store-border text-zinc-200">Paytm</div>
-            <div class="py-2.5 rounded-xl bg-store-bg border border-store-border text-zinc-200">BHIM</div>
-          </div>
+          <p class="text-xs text-zinc-400">One-time access</p>
+          <p class="text-xs text-emerald-400 mt-0.5">Saved forever in My Purchases</p>
         </div>
-
-        <!-- Razorpay Live Pay Button (Shown when real Razorpay Key is added) -->
-        <button
-          id="razorpayLivePayBtn"
-          onclick="launchRazorpayGateway()"
-          class="hidden w-full py-3.5 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm shadow-lg shadow-indigo-600/25 transition-all active:scale-95 flex items-center justify-center gap-2"
-        >
-          <i data-lucide="shield-check" class="w-4 h-4"></i>
-          <span id="razorpayLivePayLabel">Pay ₹29 via Razorpay UPI</span>
-        </button>
-
-        <!-- Demo Mode Simulation Box (Shown when Razorpay Key is still placeholder) -->
-        <div id="demoCheckoutSection" class="space-y-3">
-          <div class="p-3 rounded-2xl bg-amber-500/10 border border-amber-500/25 text-[11px] text-amber-200/90 leading-relaxed">
-            <strong>Demo Checkout Mode:</strong> Tap below to test instant ₹29 UPI unlocking. The prompt will immediately unblur and save to your account!
-          </div>
-          <button
-            id="simulateUpiBtn"
-            onclick="handleSimulatedUpiSuccess()"
-            class="w-full py-3.5 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-extrabold text-sm shadow-lg shadow-emerald-500/25 transition-all active:scale-95 flex items-center justify-center gap-2"
-          >
-            <i data-lucide="check-circle-2" class="w-4 h-4"></i>
-            <span id="simulateUpiBtnLabel">Simulate ₹29 UPI Payment (Demo Mode)</span>
-          </button>
+        <div class="text-right">
+          <span class="font-display font-extrabold text-2xl text-white">₹29</span>
         </div>
       </div>
+
+      <div class="mt-5 space-y-2.5">
+        <button id="razorpayPayBtn" class="w-full py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold transition shadow-lg shadow-indigo-600/25">
+          Pay ₹29 via UPI / Razorpay
+        </button>
+        <button id="demoUnlockBtn" class="w-full py-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-store-border text-zinc-300 text-xs font-medium transition">
+          Test Mode: Simulate ₹29 Payment Success
+        </button>
+      </div>
+      <p class="text-[11px] text-zinc-500 text-center mt-3">
+        Prompt unlocks immediately on this screen after payment confirmation.
+      </p>
     </div>
   </div>
 
-  <!-- ===================================================================== -->
-  <!-- TOAST NOTIFICATION                                                    -->
-  <!-- ===================================================================== -->
-  <div id="toastBanner" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 pointer-events-none transition-all duration-300 opacity-0 translate-y-4 w-max max-w-[92vw]">
-    <div class="px-4 py-3 rounded-2xl bg-zinc-900/95 border border-zinc-700/80 shadow-2xl backdrop-blur-xl flex items-center gap-2.5 text-xs sm:text-sm font-semibold text-white">
-      <i id="toastIcon" data-lucide="check-circle" class="w-4 h-4 text-emerald-400 shrink-0"></i>
-      <span id="toastText">Copied!</span>
-    </div>
-  </div>
+  <!-- Toast Notification -->
+  <div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-50 px-4 py-2.5 rounded-xl bg-zinc-900 border border-zinc-700 text-xs font-medium text-white shadow-xl"></div>
 
-  <!-- ===================================================================== -->
-  <!-- FIREBASE v10.12.2 MODULAR SDK & STORE LOGIC                           -->
-  <!-- ===================================================================== -->
+  <!-- Firebase + App Logic -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import {
@@ -522,22 +265,75 @@
       doc,
       getDoc,
       setDoc,
-      onSnapshot,
-      arrayUnion,
-      serverTimestamp
+      arrayUnion
     } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-    // =========================================================================
-    // 1. STORE CONFIGURATION
-    // =========================================================================
+    // 1. STORE & PAYMENT SETTINGS
     const STORE_CONFIG = {
-      storeName: 'PromptStore',
-      razorpayKeyId: 'rzp_test_REPLACE_WITH_YOUR_KEY' // Replace with your Razorpay Key ID (e.g., 'rzp_live_xxxxxxxx')
+      razorpayKeyId: "rzp_test_REPLACE_WITH_YOUR_KEY", // Replace with your live Razorpay Key ID
+      currency: "INR",
+      priceInRupees: 29
     };
 
-    // =========================================================================
-    // 2. EXACT FIREBASE CONFIGURATION (Project: kruthik-f3cb7)
-    // =========================================================================
+    // 2. YOUR PROMPTS CATALOG (Edit titles, images, and prompt text here)
+    const PROMPTS = [
+      {
+        id: "neon-cyberpunk-portrait",
+        title: "Neon Rain Cyberpunk Street Portrait",
+        category: "Cyberpunk",
+        tool: "Gemini / Midjourney",
+        price: 29,
+        image: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=80",
+        promptText: "Ultra-detailed cinematic street portrait of a young Indian man standing under neon cyan and magenta rain reflections at night, wearing a dark matte techwear jacket, wet hair strands, shallow depth of field, 85mm f/1.4 lens, volumetric fog, dramatic rim lighting, photorealistic 8k."
+      },
+      {
+        id: "royal-editorial-studio",
+        title: "Moody Black & Gold Editorial Studio",
+        category: "Studio Portrait",
+        tool: "Gemini / ChatGPT",
+        price: 29,
+        image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80",
+        promptText: "High-fashion editorial studio portrait against a deep charcoal backdrop, warm golden key light sculpting facial contours, tailored black blazer, crisp skin texture, subtle film grain, Hasselblad medium format aesthetic, sharp focus on eyes, 8k resolution."
+      },
+      {
+        id: "golden-hour-rooftop",
+        title: "Golden Hour Cinematic Rooftop Look",
+        category: "Cinematic",
+        tool: "Gemini / Midjourney",
+        price: 29,
+        image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=800&q=80",
+        promptText: "Candid golden hour portrait on an urban rooftop overlooking a hazy city skyline at sunset, warm amber backlight glowing through hair, linen casual shirt, natural skin tones, anamorphic lens flare, Kodak Portra 400 color grading, 50mm f/1.2."
+      },
+      {
+        id: "dark-fantasy-warrior",
+        title: "Mythic Dark Fantasy Armor Concept",
+        category: "Fantasy",
+        tool: "Midjourney v6",
+        price: 29,
+        image: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80",
+        promptText: "Epic dark fantasy character portrait wearing intricately engraved obsidian and bronze armor, glowing embers floating in dark smoky atmosphere, dramatic chiaroscuro lighting, hyper-detailed textures, Unreal Engine 5 cinematic render, 8k."
+      },
+      {
+        id: "minimal-luxury-watch",
+        title: "Luxury Monochrome Suit & Watch",
+        category: "Editorial",
+        tool: "Gemini / ChatGPT",
+        price: 29,
+        image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80",
+        promptText: "Timeless black-and-white fine art portrait in a tailored dark suit adjusting a mechanical luxury wristwatch, dramatic side window lighting, rich contrast, Leica M11 monochrome photography style, crisp details."
+      },
+      {
+        id: "futuristic-car-night",
+        title: "Midnight Supercar & Smoke Aesthetic",
+        category: "Cinematic",
+        tool: "Gemini / Midjourney",
+        price: 29,
+        image: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=800&q=80",
+        promptText: "Cinematic wide shot leaning beside a matte black sports car inside a dimly lit concrete tunnel, cool blue overhead LED strips, low-lying atmospheric smoke, sharp reflections on glossy paint, automotive magazine photography, 35mm lens."
+      }
+    ];
+
+    // 3. FIREBASE INITIALIZATION (Your Project: kruthik-f3cb7)
     const firebaseConfig = {
       apiKey: "AIzaSyC6HPk_wMU6p17jYzsPvkA-e1i4T81BjFg",
       authDomain: "kruthik-f3cb7.firebaseapp.com",
@@ -548,855 +344,504 @@
       measurementId: "G-D1LTQV04YV"
     };
 
-    // Initialize Firebase App, Auth & Firestore (Analytics omitted for browser safety)
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // =========================================================================
-    // 3. CURATED 8 VIRAL AI PHOTO PROMPTS CATALOG (₹29 EACH)
-    // =========================================================================
-    const PROMPTS = [
-      {
-        id: 'prompt_1',
-        title: 'Midnight Tokyo Neon Cyberpunk',
-        category: 'Neon / Cyberpunk',
-        aiTag: 'Gemini • Midjourney',
-        price: 29,
-        image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=85',
-        promptText: 'Ultra-realistic editorial portrait of the subject standing in a rain-slicked Tokyo neon alleyway at midnight, glowing cyan and magenta holographic reflections on wet skin, sleek matte black techwear jacket, 85mm f/1.4 prime lens, shallow depth of field, cinematic anamorphic lens flare, Kodak Vision3 500T film grain, 8k photorealistic.'
-      },
-      {
-        id: 'prompt_2',
-        title: 'Golden Hour Cinema Look',
-        category: 'Cinematic',
-        aiTag: 'Gemini • ChatGPT',
-        price: 29,
-        image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=85',
-        promptText: 'Cinematic golden hour portrait on an open rooftop overlooking a warm city skyline at sunset, warm amber rim lighting catching hair and jawline, tailored linen shirt with subtle wind movement, Leica M11 50mm Summilux f/1.4, natural skin pores, rich Kodak Portra 400 color grading, movie still aesthetic.'
-      },
-      {
-        id: 'prompt_3',
-        title: 'Oversized Hypebeast Streetwear',
-        category: 'Streetwear',
-        aiTag: 'Midjourney v6',
-        price: 29,
-        image: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=800&q=85',
-        promptText: 'High-fashion urban streetwear editorial shot from a low wide-angle 24mm lens, subject wearing an oversized washed charcoal graphic hoodie, layered silver chains, cargo pants, concrete brutalist skatepark backdrop under moody overcast sky, crisp editorial flash lighting, Hypebeast magazine cover quality.'
-      },
-      {
-        id: 'prompt_4',
-        title: 'Royal Palace Heritage Silk',
-        category: 'Traditional / Royal',
-        aiTag: 'Gemini • Midjourney',
-        price: 29,
-        image: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&w=800&q=85',
-        promptText: 'Regal Indian royal heritage portrait inside an ancient sandstone palace courtyard during late afternoon, intricate hand-embroidered silk attire with subtle gold zari detailing, warm sunbeams filtering through carved jharokha arches, Hasselblad medium format camera, natural skin texture, Vogue India editorial grade.'
-      },
-      {
-        id: 'prompt_5',
-        title: 'GTA VI Vice City Sunset Art',
-        category: 'Viral Reels',
-        aiTag: 'ChatGPT • Midjourney',
-        price: 29,
-        image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&q=85',
-        promptText: 'Official Grand Theft Auto VI loading screen illustration style portrait of the subject leaning against a retro pastel convertible in Vice City at sunset, palm tree silhouettes, vibrant synthwave orange and violet sky, crisp cel-shaded vector ink outlines blended with rich painterly lighting, Rockstar Games cover art.'
-      },
-      {
-        id: 'prompt_6',
-        title: 'Dramatic Monochrome Studio',
-        category: 'Cinematic',
-        aiTag: 'Gemini • ChatGPT',
-        price: 29,
-        image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=800&q=85',
-        promptText: 'High-contrast dramatic black and white studio portrait inspired by Peter Lindbergh, sharp Rembrandt key light sculpting cheekbones, minimalist dark turtleneck, intense confident gaze into the lens, medium format Ilford HP5 400 analog film grain, deep velvety shadows, timeless gallery print.'
-      },
-      {
-        id: 'prompt_7',
-        title: 'Monsoon Rain Neon Reflection',
-        category: 'Neon / Cyberpunk',
-        aiTag: 'Gemini • Midjourney',
-        price: 29,
-        image: 'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=crop&w=800&q=85',
-        promptText: 'Atmospheric night street photography portrait holding a clear transparent umbrella during heavy monsoon rain, glowing amber and electric blue streetlight bokeh orbs melting in background, glistening water droplets on dark bomber jacket, Sony A7R V 85mm GM f/1.4, moody teal-and-orange cinema grade.'
-      },
-      {
-        id: 'prompt_8',
-        title: '3D Pixar Viral Reel Avatar',
-        category: 'Viral Reels',
-        aiTag: 'ChatGPT • Gemini',
-        price: 29,
-        image: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=800&q=85',
-        promptText: 'Stylized 3D animated feature film character portrait preserving exact facial likeness and hairstyle, expressive warm eyes, soft subsurface skin scattering, cozy modern café background with warm string lights bokeh, Pixar and Disney Animation Studios rendering quality, Octane Render, global illumination, 8k.'
-      }
-    ];
-
-    const CATEGORIES = [
-      'All',
-      'Cinematic',
-      'Streetwear',
-      'Neon / Cyberpunk',
-      'Traditional / Royal',
-      'Viral Reels'
-    ];
-
-    // =========================================================================
-    // 4. APPLICATION STATE & LOCALSTORAGE BACKUP HELPERS
-    // =========================================================================
+    // 4. APP STATE
     let currentUser = null;
-    let unlockedPromptIds = new Set();
-    let unsubscribeFirestore = null;
-    let currentTab = 'all';
-    let selectedCategory = 'All';
-    let searchQuery = '';
-    let authModalMode = 'login';
-    let pendingPromptForCheckout = null;
-    let activeCheckoutPrompt = null;
+    let unlockedIds = new Set();
+    let activeTab = "explore"; // "explore" | "purchases"
+    let activeCategory = "All";
+    let searchQuery = "";
+    let authMode = "login"; // "login" | "signup"
+    let pendingPrompt = null;
 
-    function getLocalStorageKey(uid) {
-      return `promptstore_purchases_${uid}`;
+    // DOM Elements
+    const promptsGrid = document.getElementById("promptsGrid");
+    const categoryBar = document.getElementById("categoryBar");
+    const searchInput = document.getElementById("searchInput");
+    const emptyState = document.getElementById("emptyState");
+    const heroSection = document.getElementById("heroSection");
+    const purchasesHeader = document.getElementById("purchasesHeader");
+
+    const authModal = document.getElementById("authModal");
+    const authForm = document.getElementById("authForm");
+    const authErrorBox = document.getElementById("authErrorBox");
+    const paymentModal = document.getElementById("paymentModal");
+
+    // Toast Helper (Pure text - safe on all browsers)
+    let toastTimer;
+    function showToast(msg) {
+      const toast = document.getElementById("toast");
+      toast.textContent = msg;
+      toast.classList.remove("hidden");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.add("hidden"), 2800);
     }
 
-    function readLocalPurchases(uid) {
-      if (!uid) return [];
+    // Load & Save Unlocked Prompts (Firestore + LocalStorage backup)
+    async function loadUserPurchases(uid) {
+      const localKey = `promptstore_unlocked_${uid}`;
       try {
-        const raw = localStorage.getItem(getLocalStorageKey(uid));
-        const parsed = raw ? JSON.parse(raw) : [];
-        return Array.isArray(parsed) ? parsed : [];
-      } catch (e) {
-        console.warn('localStorage read fallback:', e);
-        return [];
+        const cached = JSON.parse(localStorage.getItem(localKey) || "[]");
+        unlockedIds = new Set(cached);
+      } catch (_) {
+        unlockedIds = new Set();
       }
-    }
 
-    function writeLocalPurchases(uid, idsArray) {
-      if (!uid) return;
       try {
-        const unique = Array.from(new Set(idsArray));
-        localStorage.setItem(getLocalStorageKey(uid), JSON.stringify(unique));
-      } catch (e) {
-        console.warn('localStorage write fallback:', e);
+        const snap = await getDoc(doc(db, "users", uid));
+        if (snap.exists() && Array.isArray(snap.data().unlockedPrompts)) {
+          snap.data().unlockedPrompts.forEach(id => unlockedIds.add(id));
+          localStorage.setItem(localKey, JSON.stringify([...unlockedIds]));
+        }
+      } catch (err) {
+        console.warn("Firestore sync skipped:", err.message);
       }
-    }
 
-    // =========================================================================
-    // 5. BOOT & FIREBASE AUTH STATE LISTENER
-    // =========================================================================
-    function initStore() {
-      document.getElementById('headerBrandName').textContent = STORE_CONFIG.storeName;
-      renderCategoryPills();
-      renderAllPromptsGrid();
-      lucide.createIcons();
-
-      onAuthStateChanged(auth, async (user) => {
-        currentUser = user;
-        updateNavbarAuthUI();
-
-        if (unsubscribeFirestore) {
-          unsubscribeFirestore();
-          unsubscribeFirestore = null;
-        }
-
-        if (user) {
-          // 1. Immediately hydrate from localStorage backup so UI is instant
-          const localIds = readLocalPurchases(user.uid);
-          unlockedPromptIds = new Set(localIds);
-          refreshStoreUI();
-
-          // 2. Sync with Firestore in isolated try/catch (never breaks auth!)
-          syncFirestorePurchases(user);
-
-          // 3. Resume pending checkout if user logged in from an Unlock CTA
-          if (pendingPromptForCheckout) {
-            const promptToUnlock = pendingPromptForCheckout;
-            pendingPromptForCheckout = null;
-            closeAuthModal();
-            setTimeout(() => openCheckoutModal(promptToUnlock), 180);
-          }
-        } else {
-          unlockedPromptIds = new Set();
-          refreshStoreUI();
-        }
-      });
-    }
-
-    async function syncFirestorePurchases(user) {
-      try {
-        const userRef = doc(db, 'users', user.uid);
-
-        // Initial fetch + ensure user doc exists
-        try {
-          const snap = await getDoc(userRef);
-          if (snap.exists()) {
-            const data = snap.data();
-            const remotePrompts = Array.isArray(data.purchasedPrompts)
-              ? data.purchasedPrompts
-              : Array.isArray(data.purchasedIds)
-              ? data.purchasedIds
-              : [];
-            const merged = new Set([...unlockedPromptIds, ...remotePrompts]);
-            unlockedPromptIds = merged;
-            writeLocalPurchases(user.uid, Array.from(merged));
-            refreshStoreUI();
-          } else {
-            await setDoc(
-              userRef,
-              {
-                email: user.email || '',
-                purchasedPrompts: Array.from(unlockedPromptIds),
-                createdAt: serverTimestamp()
-              },
-              { merge: true }
-            );
-          }
-        } catch (dbInitErr) {
-          console.warn('Firestore initial sync fallback:', dbInitErr);
-        }
-
-        // Real-time listener wrapped in error callback
-        unsubscribeFirestore = onSnapshot(
-          userRef,
-          (docSnap) => {
-            if (docSnap.exists()) {
-              const data = docSnap.data();
-              const remoteList = Array.isArray(data.purchasedPrompts)
-                ? data.purchasedPrompts
-                : Array.isArray(data.purchasedIds)
-                ? data.purchasedIds
-                : [];
-              const merged = new Set([...unlockedPromptIds, ...remoteList]);
-              unlockedPromptIds = merged;
-              writeLocalPurchases(user.uid, Array.from(merged));
-              refreshStoreUI();
-            }
-          },
-          (snapshotErr) => {
-            console.warn('Firestore snapshot fallback:', snapshotErr);
-          }
-        );
-      } catch (dbErr) {
-        console.warn('Firestore sync fallback:', dbErr);
-      }
-    }
-
-    function isPromptUnlocked(promptId) {
-      if (!currentUser) return false;
-      return unlockedPromptIds.has('ALL') || unlockedPromptIds.has(promptId);
-    }
-
-    function getUnlockedCount() {
-      if (!currentUser) return 0;
-      if (unlockedPromptIds.has('ALL')) return PROMPTS.length;
-      return PROMPTS.filter((p) => unlockedPromptIds.has(p.id)).length;
-    }
-
-    function refreshStoreUI() {
       updatePurchaseBadges();
-      renderAllPromptsGrid();
-      renderMyPurchasesView();
-      lucide.createIcons();
+      renderPrompts();
     }
 
-    function updateNavbarAuthUI() {
-      const loggedOutBar = document.getElementById('authLoggedOutBar');
-      const loggedInBar = document.getElementById('authLoggedInBar');
-      const emailChip = document.getElementById('userEmailChip');
+    async function unlockPromptForUser(promptId) {
+      if (!currentUser) return;
+      unlockedIds.add(promptId);
 
-      if (currentUser) {
-        loggedOutBar.classList.add('hidden');
-        loggedInBar.classList.remove('hidden');
-        loggedInBar.classList.add('flex');
-        emailChip.textContent = currentUser.email || 'Account';
-      } else {
-        loggedOutBar.classList.remove('hidden');
-        loggedInBar.classList.add('hidden');
-        loggedInBar.classList.remove('flex');
+      const localKey = `promptstore_unlocked_${currentUser.uid}`;
+      localStorage.setItem(localKey, JSON.stringify([...unlockedIds]));
+
+      updatePurchaseBadges();
+      renderPrompts();
+
+      try {
+        await setDoc(
+          doc(db, "users", currentUser.uid),
+          {
+            email: currentUser.email,
+            unlockedPrompts: arrayUnion(promptId),
+            updatedAt: new Date().toISOString()
+          },
+          { merge: true }
+        );
+      } catch (err) {
+        console.warn("Firestore save warning:", err.message);
       }
     }
 
     function updatePurchaseBadges() {
-      const count = getUnlockedCount();
-      const deskBadge = document.getElementById('badgeCountDesktop');
-      const mobBadge = document.getElementById('badgeCountMobile');
+      const count = unlockedIds.size;
+      document.getElementById("purchaseBadgeDesktop").textContent = count;
+      document.getElementById("purchaseBadgeMobile").textContent = count;
+    }
 
-      deskBadge.textContent = count;
-      mobBadge.textContent = count;
+    // Render Categories
+    function renderCategories() {
+      const categories = ["All", ...new Set(PROMPTS.map(p => p.category))];
+      categoryBar.innerHTML = "";
+      categories.forEach(cat => {
+        const btn = document.createElement("button");
+        btn.textContent = cat;
+        const isActive = cat === activeCategory;
+        btn.className = isActive
+          ? "px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-indigo-600 text-white shrink-0 transition"
+          : "px-3.5 py-1.5 rounded-xl text-xs font-medium bg-store-card border border-store-border text-zinc-400 hover:text-white shrink-0 transition";
+        btn.onclick = () => {
+          activeCategory = cat;
+          renderCategories();
+          renderPrompts();
+        };
+        categoryBar.appendChild(btn);
+      });
+    }
 
-      if (count > 0) {
-        deskBadge.className = 'px-2 py-0.5 text-xs font-bold rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30';
-        mobBadge.className = 'px-1.5 py-0.5 text-[11px] font-bold rounded-full bg-emerald-500/20 text-emerald-300';
+    // Render Prompt Cards
+    function renderPrompts() {
+      let filtered = PROMPTS;
+
+      if (activeTab === "purchases") {
+        filtered = filtered.filter(p => unlockedIds.has(p.id));
       } else {
-        deskBadge.className = 'px-2 py-0.5 text-xs font-bold rounded-full bg-zinc-800 text-zinc-300';
-        mobBadge.className = 'px-1.5 py-0.5 text-[11px] font-bold rounded-full bg-zinc-800 text-zinc-300';
+        if (activeCategory !== "All") {
+          filtered = filtered.filter(p => p.category === activeCategory);
+        }
+        if (searchQuery.trim()) {
+          const q = searchQuery.toLowerCase();
+          filtered = filtered.filter(
+            p =>
+              p.title.toLowerCase().includes(q) ||
+              p.category.toLowerCase().includes(q) ||
+              p.tool.toLowerCase().includes(q)
+          );
+        }
       }
-    }
 
-    // =========================================================================
-    // 6. UI RENDERERS (CATEGORIES, PROMPT CARDS & MY PURCHASES)
-    // =========================================================================
-    function renderCategoryPills() {
-      const container = document.getElementById('categoryPillsContainer');
-      container.innerHTML = CATEGORIES.map((cat) => {
-        const active = selectedCategory === cat;
-        return `
-          <button
-            onclick="selectCategory('${cat}')"
-            class="px-3.5 py-2 rounded-2xl text-xs sm:text-sm font-semibold whitespace-nowrap transition-all ${
-              active
-                ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/25'
-                : 'bg-store-card text-zinc-400 hover:text-white border border-store-border hover:border-zinc-600'
-            }"
-          >
-            ${cat}
-          </button>
-        `;
-      }).join('');
-    }
+      promptsGrid.innerHTML = "";
 
-    function buildPromptCardHTML(prompt, unlocked) {
-      const fallbackImg = `https://placehold.co/800x1000/18181d/a5b4fc?text=${encodeURIComponent(prompt.title)}`;
+      if (filtered.length === 0) {
+        emptyState.classList.remove("hidden");
+        if (activeTab === "purchases") {
+          document.getElementById("emptyStateTitle").textContent = "No unlocked prompts yet";
+          document.getElementById("emptyStateDesc").textContent =
+            "Unlock any prompt for ₹29 and it will appear here permanently.";
+        } else {
+          document.getElementById("emptyStateTitle").textContent = "No matching prompts";
+          document.getElementById("emptyStateDesc").textContent =
+            "Try clearing your search or switching category.";
+        }
+        return;
+      }
 
-      return `
-        <article class="group rounded-3xl bg-store-card border ${unlocked ? 'border-emerald-500/35' : 'border-store-border hover:border-indigo-500/40'} overflow-hidden flex flex-col shadow-xl transition-all duration-300">
-          <!-- Preview Image Container -->
-          <div class="relative aspect-[4/5] w-full overflow-hidden bg-store-elevated">
-            <img
-              src="${prompt.image}"
-              alt="${prompt.title}"
-              loading="lazy"
-              onerror="this.onerror=null;this.src='${fallbackImg}';"
-              class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
-            />
-            <div class="absolute inset-0 bg-gradient-to-t from-store-card via-transparent to-black/35 opacity-95"></div>
+      emptyState.classList.add("hidden");
 
-            <!-- Top Row: Category Tag & Price / Unlocked Badge -->
-            <div class="absolute top-3 left-3 right-3 flex items-center justify-between gap-2">
-              <span class="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-black/70 backdrop-blur-md text-zinc-200 border border-white/10 truncate">
-                ${prompt.category}
-              </span>
+      filtered.forEach(item => {
+        const isUnlocked = currentUser && unlockedIds.has(item.id);
+        const card = document.createElement("article");
+        card.className =
+          "bg-store-card border border-store-border rounded-2xl overflow-hidden flex flex-col justify-between transition hover:border-zinc-700";
+
+        card.innerHTML = `
+          <div>
+            <div class="relative aspect-[4/5] bg-zinc-950 overflow-hidden">
+              <img
+                src="${item.image}"
+                alt="${item.title}"
+                loading="lazy"
+                class="w-full h-full object-cover transition duration-500 ${
+                  isUnlocked ? "blur-0 scale-100" : "blur-md scale-110 brightness-75"
+                }"
+              />
+              <div class="absolute top-3 left-3 flex items-center gap-1.5">
+                <span class="px-2.5 py-1 rounded-lg bg-black/70 backdrop-blur-md text-[11px] font-semibold text-zinc-200 border border-white/10">
+                  ${item.category}
+                </span>
+              </div>
+              <div class="absolute top-3 right-3">
+                ${
+                  isUnlocked
+                    ? `<span class="px-2.5 py-1 rounded-lg bg-emerald-500/20 backdrop-blur-md text-[11px] font-semibold text-emerald-300 border border-emerald-500/30">Unlocked</span>`
+                    : `<span class="px-2.5 py-1 rounded-lg bg-black/75 backdrop-blur-md text-[11px] font-semibold text-amber-300 border border-amber-500/30">Locked • ₹${item.price}</span>`
+                }
+              </div>
               ${
-                unlocked
-                  ? `<span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-500 text-zinc-950 shadow-md flex items-center gap-1 shrink-0">
-                      <i data-lucide="check" class="w-3 h-3 stroke-[3]"></i>
-                      <span>Unlocked</span>
-                    </span>`
-                  : `<span class="px-2.5 py-1 rounded-full text-xs font-extrabold bg-indigo-600 text-white shadow-md shrink-0">
-                      ₹${prompt.price}
-                    </span>`
+                !isUnlocked
+                  ? `<div class="absolute inset-0 flex flex-col items-center justify-center p-4 text-center bg-black/30">
+                      <div class="px-3.5 py-2 rounded-xl bg-zinc-950/90 border border-white/10 backdrop-blur-md">
+                        <p class="text-xs font-semibold text-white">Preview Blurred</p>
+                        <p class="text-[11px] text-zinc-400 mt-0.5">Unlock to view full HD & copy prompt</p>
+                      </div>
+                    </div>`
+                  : ""
               }
             </div>
 
-            <!-- Title & AI Model Tag on Image Bottom -->
-            <div class="absolute bottom-3 left-3.5 right-3.5">
-              <span class="inline-block text-[10px] font-semibold uppercase tracking-wider text-indigo-300 mb-0.5">
-                ${prompt.aiTag}
-              </span>
-              <h3 class="font-display font-bold text-base sm:text-lg text-white leading-snug">
-                ${prompt.title}
-              </h3>
+            <div class="p-4">
+              <div class="flex items-center justify-between gap-2 text-[11px] text-zinc-400 mb-1">
+                <span>${item.tool}</span>
+                <span>ID: #${item.id.slice(0, 6)}</span>
+              </div>
+              <h3 class="font-display font-bold text-base text-white leading-snug">${item.title}</h3>
+
+              ${
+                isUnlocked
+                  ? `<div class="mt-3 p-3 rounded-xl bg-zinc-950 border border-store-border text-xs text-zinc-200 leading-relaxed select-all">
+                      ${item.promptText}
+                    </div>`
+                  : `<div class="mt-3 p-3 rounded-xl bg-zinc-950/70 border border-store-border/70 text-xs text-zinc-500 select-none blur-[3px]">
+                      Ultra-detailed cinematic portrait prompt hidden until unlocked for ₹${item.price}...
+                    </div>`
+              }
             </div>
           </div>
 
-          <!-- Card Body: Blurred/Revealed Prompt Box & Action CTA -->
-          <div class="p-4 flex-1 flex flex-col justify-between gap-3.5">
-            <!-- Prompt Preview Box -->
-            <div class="relative rounded-2xl bg-store-bg border border-store-border p-3 overflow-hidden">
-              <div class="flex items-center justify-between mb-1.5">
-                <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-500">Prompt Text</span>
-                ${
-                  unlocked
-                    ? `<span class="text-[10px] font-semibold text-emerald-400">Ready to Copy</span>`
-                    : `<span class="text-[10px] font-semibold text-amber-400 flex items-center gap-1"><i data-lucide="lock" class="w-3 h-3"></i> Locked</span>`
-                }
-              </div>
-
-              <p class="text-xs text-zinc-300 leading-relaxed transition-all duration-300 ${
-                unlocked ? 'blur-0 select-text' : 'blur-sm select-none pointer-events-none opacity-80'
-              }">
-                ${prompt.promptText}
-              </p>
-
-              ${
-                !unlocked
-                  ? `<div class="absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-store-bg via-store-bg/85 to-transparent flex items-end justify-center pb-2 pointer-events-none">
-                      <span class="px-2.5 py-0.5 rounded-lg bg-zinc-900/90 border border-store-border text-[10px] font-medium text-zinc-300">
-                        Pay ₹${prompt.price} to unblur &amp; copy
-                      </span>
-                    </div>`
-                  : ''
-              }
-            </div>
-
-            <!-- Bottom Action Button -->
+          <div class="px-4 pb-4">
             ${
-              unlocked
-                ? `<button
-                    onclick="copyPromptToClipboard('${prompt.id}')"
-                    class="w-full py-3 px-4 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-bold text-xs sm:text-sm shadow-lg shadow-emerald-500/20 transition-all active:scale-95 flex items-center justify-center gap-2"
-                  >
-                    <i data-lucide="copy" class="w-4 h-4"></i>
-                    <span>Copy Prompt</span>
+              isUnlocked
+                ? `<button data-copy-id="${item.id}" class="copy-prompt-btn w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold transition">
+                    Copy Prompt
                   </button>`
-                : `<button
-                    onclick="handleUnlockButtonClick('${prompt.id}')"
-                    class="w-full py-3 px-4 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs sm:text-sm shadow-lg shadow-indigo-600/25 transition-all active:scale-95 flex items-center justify-center gap-2"
-                  >
-                    <i data-lucide="unlock" class="w-4 h-4"></i>
-                    <span>Unlock Prompt – ₹${prompt.price}</span>
+                : `<button data-unlock-id="${item.id}" class="unlock-prompt-btn w-full py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold transition shadow-lg shadow-indigo-600/20">
+                    Unlock Prompt – ₹${item.price}
                   </button>`
             }
           </div>
-        </article>
-      `;
-    }
+        `;
 
-    function renderAllPromptsGrid() {
-      const grid = document.getElementById('promptsGrid');
-      const emptyState = document.getElementById('emptySearchState');
-      const q = searchQuery.trim().toLowerCase();
-
-      const filtered = PROMPTS.filter((p) => {
-        const matchCat = selectedCategory === 'All' || p.category === selectedCategory;
-        const matchSearch =
-          !q ||
-          p.title.toLowerCase().includes(q) ||
-          p.category.toLowerCase().includes(q) ||
-          p.aiTag.toLowerCase().includes(q);
-        return matchCat && matchSearch;
+        promptsGrid.appendChild(card);
       });
 
-      if (filtered.length === 0) {
-        grid.innerHTML = '';
-        emptyState.classList.remove('hidden');
-      } else {
-        emptyState.classList.add('hidden');
-        grid.innerHTML = filtered.map((p) => buildPromptCardHTML(p, isPromptUnlocked(p.id))).join('');
-      }
+      // Attach Card Button Listeners
+      document.querySelectorAll(".unlock-prompt-btn").forEach(btn => {
+        btn.onclick = () => {
+          const promptObj = PROMPTS.find(p => p.id === btn.dataset.unlockId);
+          if (!promptObj) return;
+          if (!currentUser) {
+            pendingPrompt = promptObj;
+            openAuth("signup");
+            showToast("Create a free account or login first to unlock.");
+            return;
+          }
+          openPayment(promptObj);
+        };
+      });
+
+      document.querySelectorAll(".copy-prompt-btn").forEach(btn => {
+        btn.onclick = async () => {
+          const promptObj = PROMPTS.find(p => p.id === btn.dataset.copyId);
+          if (!promptObj) return;
+          try {
+            await navigator.clipboard.writeText(promptObj.promptText);
+            btn.textContent = "Copied!";
+            showToast("Prompt copied to clipboard!");
+            setTimeout(() => {
+              btn.textContent = "Copy Prompt";
+            }, 2000);
+          } catch (_) {
+            showToast("Select the prompt text box above to copy.");
+          }
+        };
+      });
     }
 
-    function renderMyPurchasesView() {
-      const loggedOutCard = document.getElementById('purchasesLoggedOutCard');
-      const emptyCard = document.getElementById('purchasesEmptyCard');
-      const grid = document.getElementById('purchasedPromptsGrid');
+    // Tab Switching
+    function switchTab(tab) {
+      activeTab = tab;
+      const isExplore = tab === "explore";
 
+      heroSection.classList.toggle("hidden", !isExplore);
+      purchasesHeader.classList.toggle("hidden", isExplore);
+
+      document.getElementById("tabExploreDesktop").className = isExplore
+        ? "px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 text-white transition"
+        : "px-3.5 py-1.5 rounded-lg text-xs font-semibold text-zinc-400 hover:text-white transition";
+      document.getElementById("tabPurchasesDesktop").className = !isExplore
+        ? "px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 text-white transition flex items-center gap-1.5"
+        : "px-3.5 py-1.5 rounded-lg text-xs font-semibold text-zinc-400 hover:text-white transition flex items-center gap-1.5";
+
+      document.getElementById("tabExploreMobile").className = isExplore
+        ? "flex-1 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 text-white transition"
+        : "flex-1 py-1.5 rounded-lg text-xs font-semibold bg-zinc-900 text-zinc-400 border border-store-border transition";
+      document.getElementById("tabPurchasesMobile").className = !isExplore
+        ? "flex-1 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 text-white transition flex items-center justify-center gap-1.5"
+        : "flex-1 py-1.5 rounded-lg text-xs font-semibold bg-zinc-900 text-zinc-400 border border-store-border transition flex items-center justify-center gap-1.5";
+
+      renderPrompts();
+    }
+
+    document.getElementById("tabExploreDesktop").onclick = () => switchTab("explore");
+    document.getElementById("tabExploreMobile").onclick = () => switchTab("explore");
+    document.getElementById("tabPurchasesDesktop").onclick = () => {
       if (!currentUser) {
-        loggedOutCard.classList.remove('hidden');
-        emptyCard.classList.add('hidden');
-        grid.innerHTML = '';
+        openAuth("login");
+        showToast("Please login to view your purchased prompts.");
         return;
       }
-
-      loggedOutCard.classList.add('hidden');
-      const owned = PROMPTS.filter((p) => isPromptUnlocked(p.id));
-
-      if (owned.length === 0) {
-        emptyCard.classList.remove('hidden');
-        grid.innerHTML = '';
-      } else {
-        emptyCard.classList.add('hidden');
-        grid.innerHTML = owned.map((p) => buildPromptCardHTML(p, true)).join('');
+      switchTab("purchases");
+    };
+    document.getElementById("tabPurchasesMobile").onclick = () => {
+      if (!currentUser) {
+        openAuth("login");
+        showToast("Please login to view your purchased prompts.");
+        return;
       }
+      switchTab("purchases");
+    };
+
+    document.getElementById("emptyStateBtn").onclick = () => {
+      searchQuery = "";
+      searchInput.value = "";
+      activeCategory = "All";
+      renderCategories();
+      switchTab("explore");
+    };
+
+    searchInput.addEventListener("input", e => {
+      searchQuery = e.target.value;
+      renderPrompts();
+    });
+
+    // Auth Modal Logic
+    function openAuth(mode = "login") {
+      authMode = mode;
+      authErrorBox.classList.add("hidden");
+      authErrorBox.textContent = "";
+      updateAuthModalUI();
+      authModal.classList.remove("hidden");
     }
 
-    // =========================================================================
-    // 7. NAVIGATION, SEARCH & FILTERS
-    // =========================================================================
-    window.switchTab = function (tab) {
-      currentTab = tab;
-      const allView = document.getElementById('allPromptsView');
-      const purchasesView = document.getElementById('myPurchasesView');
+    function updateAuthModalUI() {
+      const isLogin = authMode === "login";
+      document.getElementById("authModalTitle").textContent = isLogin
+        ? "Welcome Back"
+        : "Create Your Free Account";
+      document.getElementById("authModalSubtitle").textContent = isLogin
+        ? "Log in to access or unlock your AI photo prompts."
+        : "Save your unlocked prompts forever and access them anytime.";
+      document.getElementById("authSubmitBtn").textContent = isLogin
+        ? "Login & Continue"
+        : "Create Account & Continue";
 
-      const navAllDesk = document.getElementById('navAllDesktop');
-      const navPurDesk = document.getElementById('navPurchasesDesktop');
-      const navAllMob = document.getElementById('navAllMobile');
-      const navPurMob = document.getElementById('navPurchasesMobile');
-
-      if (tab === 'all') {
-        allView.classList.remove('hidden');
-        purchasesView.classList.add('hidden');
-
-        navAllDesk.className = 'px-4 py-1.5 rounded-xl text-sm font-semibold transition-all bg-indigo-600 text-white shadow-sm';
-        navPurDesk.className = 'px-4 py-1.5 rounded-xl text-sm font-semibold transition-all text-zinc-400 hover:text-white flex items-center gap-2';
-
-        navAllMob.className = 'flex-1 py-2 px-3 rounded-xl text-xs font-semibold text-center transition-all bg-indigo-600 text-white shadow-sm';
-        navPurMob.className = 'flex-1 py-2 px-3 rounded-xl text-xs font-semibold text-center transition-all bg-store-card text-zinc-400 border border-store-border flex items-center justify-center gap-1.5';
-      } else {
-        allView.classList.add('hidden');
-        purchasesView.classList.remove('hidden');
-
-        navPurDesk.className = 'px-4 py-1.5 rounded-xl text-sm font-semibold transition-all bg-indigo-600 text-white shadow-sm flex items-center gap-2';
-        navAllDesk.className = 'px-4 py-1.5 rounded-xl text-sm font-semibold transition-all text-zinc-400 hover:text-white';
-
-        navPurMob.className = 'flex-1 py-2 px-3 rounded-xl text-xs font-semibold text-center transition-all bg-indigo-600 text-white shadow-sm flex items-center justify-center gap-1.5';
-        navAllMob.className = 'flex-1 py-2 px-3 rounded-xl text-xs font-semibold text-center transition-all bg-store-card text-zinc-400 border border-store-border';
-
-        renderMyPurchasesView();
-      }
-      lucide.createIcons();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
-
-    window.selectCategory = function (category) {
-      selectedCategory = category;
-      renderCategoryPills();
-      renderAllPromptsGrid();
-      lucide.createIcons();
-    };
-
-    window.handleSearchInput = function (value) {
-      searchQuery = value;
-      renderAllPromptsGrid();
-      lucide.createIcons();
-    };
-
-    window.resetFilters = function () {
-      selectedCategory = 'All';
-      searchQuery = '';
-      document.getElementById('searchInput').value = '';
-      renderCategoryPills();
-      renderAllPromptsGrid();
-      lucide.createIcons();
-    };
-
-    // =========================================================================
-    // 8. AUTHENTICATION MODAL & ISOLATED FIREBASE AUTH HANDLERS
-    // =========================================================================
-    window.openAuthModal = function (mode = 'login', pendingText = '') {
-      setAuthMode(mode);
-      hideAuthAlert();
-
-      const pendingBox = document.getElementById('authPendingNotice');
-      const pendingLabel = document.getElementById('authPendingNoticeText');
-      if (pendingText) {
-        pendingLabel.textContent = pendingText;
-        pendingBox.classList.remove('hidden');
-      } else {
-        pendingBox.classList.add('hidden');
-      }
-
-      const modal = document.getElementById('authModal');
-      modal.classList.remove('hidden');
-      modal.classList.add('flex');
-      lucide.createIcons();
-    };
-
-    window.closeAuthModal = function () {
-      const modal = document.getElementById('authModal');
-      modal.classList.add('hidden');
-      modal.classList.remove('flex');
-    };
-
-    window.setAuthMode = function (mode) {
-      authModalMode = mode;
-      hideAuthAlert();
-
-      const tabLogin = document.getElementById('authTabLogin');
-      const tabSignup = document.getElementById('authTabSignup');
-      const titleEl = document.getElementById('authModalTitle');
-      const subEl = document.getElementById('authModalSubtitle');
-      const btnText = document.getElementById('authSubmitBtnText');
-
-      if (mode === 'login') {
-        tabLogin.className = 'py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-indigo-600 text-white';
-        tabSignup.className = 'py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all text-zinc-400 hover:text-white';
-        titleEl.textContent = 'Welcome Back';
-        subEl.textContent = 'Log in to access or unlock your AI photo prompts.';
-        btnText.textContent = 'Login & Continue';
-      } else {
-        tabSignup.className = 'py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-indigo-600 text-white';
-        tabLogin.className = 'py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all text-zinc-400 hover:text-white';
-        titleEl.textContent = 'Create Your Free Account';
-        subEl.textContent = 'Save your unlocked prompts forever and access them anytime.';
-        btnText.textContent = 'Create Account & Continue';
-      }
-    };
-
-    function showAuthAlert(msg) {
-      const box = document.getElementById('authErrorAlert');
-      document.getElementById('authErrorMessage').textContent = msg;
-      box.classList.remove('hidden');
+      document.getElementById("switchLoginBtn").className = isLogin
+        ? "py-2 rounded-lg text-xs font-semibold bg-indigo-600 text-white transition"
+        : "py-2 rounded-lg text-xs font-semibold text-zinc-400 hover:text-white transition";
+      document.getElementById("switchSignupBtn").className = !isLogin
+        ? "py-2 rounded-lg text-xs font-semibold bg-indigo-600 text-white transition"
+        : "py-2 rounded-lg text-xs font-semibold text-zinc-400 hover:text-white transition";
     }
 
-    function hideAuthAlert() {
-      document.getElementById('authErrorAlert').classList.add('hidden');
-    }
+    document.getElementById("openAuthBtn").onclick = () => openAuth("login");
+    document.getElementById("closeAuthModal").onclick = () => authModal.classList.add("hidden");
+    document.getElementById("switchLoginBtn").onclick = () => {
+      authMode = "login";
+      authErrorBox.classList.add("hidden");
+      updateAuthModalUI();
+    };
+    document.getElementById("switchSignupBtn").onclick = () => {
+      authMode = "signup";
+      authErrorBox.classList.add("hidden");
+      updateAuthModalUI();
+    };
 
-    function formatReadableAuthError(err) {
-      const code = err && err.code ? err.code : 'unknown-error';
+    function formatFirebaseAuthError(code) {
       switch (code) {
-        case 'auth/email-already-in-use':
-          return 'This email already has an account — switch to the Login tab!';
-        case 'auth/invalid-credential':
-        case 'auth/wrong-password':
-        case 'auth/user-not-found':
-          return 'Incorrect email or password.';
-        case 'auth/weak-password':
-          return `Password is too weak. Please use at least 6 characters with letters & numbers (${code}).`;
-        case 'auth/invalid-email':
-          return `Please enter a valid email address (${code}).`;
-        case 'auth/too-many-requests':
-          return `Too many attempts. Please wait a minute and try again (${code}).`;
+        case "auth/email-already-in-use":
+          return "This email already has an account. Switch to the Login tab above!";
+        case "auth/invalid-credential":
+        case "auth/wrong-password":
+        case "auth/user-not-found":
+          return "Incorrect email or password. Please check and try again.";
+        case "auth/weak-password":
+          return "Password is too weak. Use at least 6 characters (e.g., Kruthik@123).";
+        case "auth/invalid-email":
+          return "Please enter a valid email address.";
+        case "auth/too-many-requests":
+          return "Too many attempts. Please wait a minute and try again.";
         default:
-          return `${err.message || 'Authentication error'} (${code})`;
+          return `Authentication error (${code || "try-again"}). Please try again.`;
       }
     }
 
-    window.handleAuthFormSubmit = async function (event) {
-      event.preventDefault();
-      hideAuthAlert();
+    authForm.addEventListener("submit", async e => {
+      e.preventDefault();
+      const email = document.getElementById("authEmail").value.trim();
+      const password = document.getElementById("authPassword").value;
+      const submitBtn = document.getElementById("authSubmitBtn");
 
-      const email = document.getElementById('authEmailInput').value.trim();
-      const password = document.getElementById('authPasswordInput').value;
-      const submitBtn = document.getElementById('authSubmitBtn');
-      const submitLabel = document.getElementById('authSubmitBtnText');
-
+      authErrorBox.classList.add("hidden");
       submitBtn.disabled = true;
-      const originalText = submitLabel.textContent;
-      submitLabel.textContent = authModalMode === 'signup' ? 'Creating Account...' : 'Logging In...';
+      submitBtn.textContent = authMode === "login" ? "Logging in..." : "Creating account...";
 
-      let authenticatedUser = null;
-
-      // Step 1: Perform ONLY Firebase Auth inside this try/catch
       try {
-        if (authModalMode === 'signup') {
-          const cred = await createUserWithEmailAndPassword(auth, email, password);
-          authenticatedUser = cred.user;
-          showToast('Account created! Welcome to PromptStore.');
+        if (authMode === "login") {
+          await signInWithEmailAndPassword(auth, email, password);
         } else {
-          const cred = await signInWithEmailAndPassword(auth, email, password);
-          authenticatedUser = cred.user;
-          showToast('Logged in successfully!');
+          await createUserWithEmailAndPassword(auth, email, password);
         }
-      } catch (authErr) {
-        console.error('Firebase Auth error:', authErr);
-        showAuthAlert(formatReadableAuthError(authErr));
-        submitBtn.disabled = false;
-        submitLabel.textContent = originalText;
-        return;
-      }
 
-      // Step 2: Auth succeeded! Clear form and close modal right away
-      document.getElementById('authForm').reset();
-      submitBtn.disabled = false;
-      submitLabel.textContent = originalText;
+        authModal.classList.add("hidden");
+        authForm.reset();
+        showToast("Logged in successfully!");
 
-      if (!pendingPromptForCheckout) {
-        closeAuthModal();
-      }
-
-      // Step 3: Isolated Firestore profile initialization (never blocks Login/Signup!)
-      if (authenticatedUser) {
-        try {
-          await setDoc(
-            doc(db, 'users', authenticatedUser.uid),
-            {
-              email: authenticatedUser.email || email,
-              updatedAt: serverTimestamp()
-            },
-            { merge: true }
-          );
-        } catch (dbErr) {
-          console.warn('Firestore sync fallback:', dbErr);
+        if (pendingPrompt) {
+          const toUnlock = pendingPrompt;
+          pendingPrompt = null;
+          openPayment(toUnlock);
         }
-      }
-    };
-
-    window.handleLogout = async function () {
-      try {
-        await signOut(auth);
-        showToast('Logged out successfully.');
       } catch (err) {
-        console.error('Logout error:', err);
-        showToast('Could not log out. Please try again.', 'error');
+        authErrorBox.textContent = formatFirebaseAuthError(err.code);
+        authErrorBox.classList.remove("hidden");
+      } finally {
+        submitBtn.disabled = false;
+        updateAuthModalUI();
       }
+    });
+
+    document.getElementById("logoutBtn").onclick = async () => {
+      await signOut(auth);
+      unlockedIds.clear();
+      updatePurchaseBadges();
+      switchTab("explore");
+      showToast("Logged out.");
     };
 
-    // =========================================================================
-    // 9. CHECKOUT MODAL, RAZORPAY & DEMO UPI SIMULATION
-    // =========================================================================
-    window.handleUnlockButtonClick = function (promptId) {
-      const prompt = PROMPTS.find((p) => p.id === promptId);
-      if (!prompt) return;
+    // Payment Modal Logic
+    let activePayPrompt = null;
 
-      if (!currentUser) {
-        pendingPromptForCheckout = prompt;
-        openAuthModal(
-          'login',
-          `Log in or create an account to unlock "${prompt.title}" (₹${prompt.price}).`
-        );
-        return;
-      }
-
-      openCheckoutModal(prompt);
-    };
-
-    function openCheckoutModal(prompt) {
-      activeCheckoutPrompt = prompt;
-
-      document.getElementById('checkoutPromptTitle').textContent = prompt.title;
-      document.getElementById('checkoutUserEmail').textContent = currentUser ? currentUser.email : '';
-      document.getElementById('checkoutPromptPrice').textContent = `₹${prompt.price}`;
-
-      const isPlaceholderKey =
-        !STORE_CONFIG.razorpayKeyId ||
-        STORE_CONFIG.razorpayKeyId.startsWith('rzp_test_REPLACE');
-
-      const liveBtn = document.getElementById('razorpayLivePayBtn');
-      const demoSec = document.getElementById('demoCheckoutSection');
-
-      if (isPlaceholderKey) {
-        liveBtn.classList.add('hidden');
-        demoSec.classList.remove('hidden');
-        document.getElementById('simulateUpiBtnLabel').textContent = `Simulate ₹${prompt.price} UPI Payment (Demo Mode)`;
-      } else {
-        demoSec.classList.add('hidden');
-        liveBtn.classList.remove('hidden');
-        document.getElementById('razorpayLivePayLabel').textContent = `Pay ₹${prompt.price} via Razorpay UPI`;
-      }
-
-      const modal = document.getElementById('checkoutModal');
-      modal.classList.remove('hidden');
-      modal.classList.add('flex');
-      lucide.createIcons();
+    function openPayment(promptObj) {
+      activePayPrompt = promptObj;
+      document.getElementById("payPromptTitle").textContent = promptObj.title;
+      paymentModal.classList.remove("hidden");
     }
 
-    window.closeCheckoutModal = function () {
-      const modal = document.getElementById('checkoutModal');
-      modal.classList.add('hidden');
-      modal.classList.remove('flex');
-      activeCheckoutPrompt = null;
+    document.getElementById("closePaymentModal").onclick = () => {
+      paymentModal.classList.add("hidden");
+      activePayPrompt = null;
     };
 
-    window.launchRazorpayGateway = function () {
-      if (!activeCheckoutPrompt || !currentUser) return;
-      if (typeof Razorpay === 'undefined') {
-        showToast('Razorpay SDK failed to load. Check internet connection.', 'error');
+    document.getElementById("demoUnlockBtn").onclick = async () => {
+      if (!activePayPrompt) return;
+      const id = activePayPrompt.id;
+      paymentModal.classList.add("hidden");
+      await unlockPromptForUser(id);
+      showToast("Unlocked! Prompt is now visible & saved.");
+    };
+
+    document.getElementById("razorpayPayBtn").onclick = () => {
+      if (!activePayPrompt) return;
+
+      if (STORE_CONFIG.razorpayKeyId.includes("REPLACE_WITH_YOUR_KEY")) {
+        showToast("Add your Razorpay Key ID in code, or use Test Mode button below.");
         return;
       }
 
-      const prompt = activeCheckoutPrompt;
       const options = {
         key: STORE_CONFIG.razorpayKeyId,
-        amount: prompt.price * 100, // Amount in paise
-        currency: 'INR',
-        name: STORE_CONFIG.storeName,
-        description: prompt.title,
+        amount: activePayPrompt.price * 100, // paise
+        currency: STORE_CONFIG.currency,
+        name: "PromptStore",
+        description: activePayPrompt.title,
         prefill: {
-          email: currentUser.email || ''
+          email: currentUser ? currentUser.email : ""
         },
-        theme: {
-          color: '#6366f1'
-        },
-        handler: async function (response) {
-          closeCheckoutModal();
-          await finalizePromptUnlock(prompt, response.razorpay_payment_id);
+        theme: { color: "#6366f1" },
+        handler: async function () {
+          const id = activePayPrompt.id;
+          paymentModal.classList.add("hidden");
+          await unlockPromptForUser(id);
+          showToast("Payment successful! Prompt unlocked.");
         }
       };
 
       const rzp = new Razorpay(options);
-      rzp.on('payment.failed', function (res) {
-        console.error('Razorpay payment failed:', res.error);
-        showToast(res.error.description || 'Payment failed. Please try again.', 'error');
-      });
       rzp.open();
     };
 
-    window.handleSimulatedUpiSuccess = async function () {
-      if (!activeCheckoutPrompt || !currentUser) return;
-      const btn = document.getElementById('simulateUpiBtn');
-      const label = document.getElementById('simulateUpiBtnLabel');
+    // Auth State Observer
+    onAuthStateChanged(auth, async user => {
+      currentUser = user;
+      const openAuthBtn = document.getElementById("openAuthBtn");
+      const userMenu = document.getElementById("userMenu");
+      const userEmailLabel = document.getElementById("userEmailLabel");
 
-      btn.disabled = true;
-      label.textContent = 'Unlocking Prompt...';
-
-      const promptToUnlock = activeCheckoutPrompt;
-      await finalizePromptUnlock(promptToUnlock, 'demo_upi_' + Date.now());
-
-      btn.disabled = false;
-      closeCheckoutModal();
-    };
-
-    async function finalizePromptUnlock(prompt, paymentId) {
-      if (!currentUser || !prompt) return;
-
-      // 1. Immediately unlock in memory + localStorage so UI updates in 0ms
-      unlockedPromptIds.add(prompt.id);
-      writeLocalPurchases(currentUser.uid, Array.from(unlockedPromptIds));
-      refreshStoreUI();
-
-      showToast(`Unlocked "${prompt.title}"! Saved to My Purchases.`);
-
-      // 2. Sync to Firestore in isolated try/catch
-      try {
-        await setDoc(
-          doc(db, 'users', currentUser.uid),
-          {
-            email: currentUser.email || '',
-            purchasedPrompts: arrayUnion(prompt.id),
-            lastPaymentId: paymentId,
-            updatedAt: serverTimestamp()
-          },
-          { merge: true }
-        );
-      } catch (dbErr) {
-        console.warn('Firestore sync fallback:', dbErr);
-      }
-    }
-
-    // =========================================================================
-    // 10. ONE-TAP CLIPBOARD COPY & TOAST NOTIFICATION
-    // =========================================================================
-    window.copyPromptToClipboard = function (promptId) {
-      const prompt = PROMPTS.find((p) => p.id === promptId);
-      if (!prompt) return;
-
-      const textArea = document.createElement('textarea');
-      textArea.value = prompt.promptText;
-      textArea.style.position = 'fixed';
-      textArea.style.left = '-9999px';
-      document.body.appendChild(textArea);
-      textArea.select();
-
-      try {
-        document.execCommand('copy');
-        showToast('Copied! Paste into Gemini, Midjourney or ChatGPT.');
-      } catch (err) {
-        console.error('Copy error:', err);
-        showToast('Please select and copy the text manually.', 'error');
-      } finally {
-        document.body.removeChild(textArea);
-      }
-    };
-
-    let toastTimer = null;
-    function showToast(message, type = 'success') {
-      const banner = document.getElementById('toastBanner');
-      const textEl = document.getElementById('toastText');
-      const iconEl = document.getElementById('toastIcon');
-
-      textEl.textContent = message;
-      if (type === 'error') {
-        iconEl.setAttribute('data-lucide', 'alert-circle');
-        iconEl.className = 'w-4 h-4 text-rose-400 shrink-0';
+      if (user) {
+        openAuthBtn.classList.add("hidden");
+        userMenu.classList.remove("hidden");
+        userMenu.classList.add("flex");
+        userEmailLabel.textContent = user.email;
+        await loadUserPurchases(user.uid);
       } else {
-        iconEl.setAttribute('data-lucide', 'check-circle');
-        iconEl.className = 'w-4 h-4 text-emerald-400 shrink-0';
+        openAuthBtn.classList.remove("hidden");
+        userMenu.classList.add("hidden");
+        userMenu.classList.remove("flex");
+        unlockedIds.clear();
+        updatePurchaseBadges();
+        renderPrompts();
       }
-      lucide.createIcons();
+    });
 
-      banner.classList.remove('opacity-0', 'translate-y-4');
-      banner.classList.add('opacity-100', 'translate-y-0');
-
-      if (toastTimer) clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => {
-        banner.classList.add('opacity-0', 'translate-y-4');
-        banner.classList.remove('opacity-100', 'translate-y-0');
-      }, 3200);
-    }
-
-    // Boot Application
-    initStore();
+    // Initial Render
+    renderCategories();
+    renderPrompts();
   </script>
 </body>
 </html>
-```
