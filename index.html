@@ -1,0 +1,1036 @@
+```html
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PromptStore — Viral AI Photo Prompts (₹29)</title>
+
+  <!-- Google Fonts: Inter & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Tailwind Custom Theme Config -->
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+            display: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
+          },
+          colors: {
+            store: {
+              bg: '#09090b',
+              card: '#111114',
+              border: '#27272a',
+              accent: '#38bdf8',
+            }
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    html {
+      scroll-behavior: smooth;
+      background-color: #09090b;
+      color: #f4f4f5;
+    }
+
+    /* Hide scrollbar on horizontal category filter bar */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    /* Subtle ambient glow for hero section */
+    .hero-glow {
+      background: radial-gradient(ellipse 80% 55% at 50% 0%, rgba(56, 189, 248, 0.14) 0%, rgba(9, 9, 11, 0) 70%);
+    }
+
+    /* Glassmorphic surface utility */
+    .glass-panel {
+      background: rgba(17, 17, 20, 0.78);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    /* Realistic blurred prompt lock effect (non-selectable) */
+    .blurred-prompt-text {
+      filter: blur(4.5px);
+      user-select: none;
+      -webkit-user-select: none;
+      pointer-events: none;
+    }
+
+    /* Smooth modal pop-in animation */
+    @keyframes modalSlideUp {
+      from {
+        opacity: 0;
+        transform: translateY(16px) scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+    .animate-modal-in {
+      animation: modalSlideUp 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+  </style>
+</head>
+<body class="bg-[#09090b] text-zinc-100 font-sans antialiased min-h-screen flex flex-col overflow-x-hidden selection:bg-sky-500/30 selection:text-sky-200">
+
+  <!-- ==================== STICKY NAVBAR ==================== -->
+  <header class="sticky top-0 z-40 glass-panel border-b border-white/[0.08]">
+    <div class="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-2.5">
+      
+      <!-- Brand Logo -->
+      <button id="brandLogoBtn" type="button" class="flex items-center gap-2.5 group focus:outline-none shrink-0">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-sky-400 to-cyan-500 flex items-center justify-center shadow-lg shadow-sky-500/25 group-hover:scale-105 transition-transform">
+          <svg class="w-5 h-5 text-zinc-950" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+          </svg>
+        </div>
+        <div class="text-left">
+          <span id="navBrandName" class="font-display text-lg font-extrabold tracking-tight text-white block leading-none">
+            Prompt<span class="text-sky-400">Store</span>
+          </span>
+          <span class="text-[10px] text-zinc-400 font-medium tracking-wide uppercase block mt-0.5">Viral AI Prompts</span>
+        </div>
+      </button>
+
+      <!-- Desktop Inline Search -->
+      <div class="hidden md:block flex-1 max-w-md mx-4 relative">
+        <div class="pointer-events-none absolute inset-y-0 left-0 pl-3.5 flex items-center text-zinc-400">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </div>
+        <input
+          id="desktopSearchInput"
+          type="text"
+          placeholder="Search style, mood, or AI tool..."
+          autocomplete="off"
+          class="w-full pl-10 pr-4 py-2 rounded-xl bg-[#111114] border border-white/10 focus:border-sky-400 focus:ring-2 focus:ring-sky-400/20 text-sm text-white placeholder-zinc-500 outline-none transition-all"
+        />
+      </div>
+
+      <!-- Right Actions: Mobile Search Toggle + ₹99 Combo Button -->
+      <div class="flex items-center gap-2 shrink-0">
+        <!-- Mobile Search Toggle Button -->
+        <button
+          id="mobileSearchToggleBtn"
+          type="button"
+          aria-label="Toggle search"
+          class="md:hidden p-2.5 rounded-xl bg-[#111114] border border-white/10 text-zinc-300 hover:text-white hover:border-white/20 transition-colors active:scale-95"
+        >
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </button>
+
+        <!-- ₹99 Combo Highlight CTA -->
+        <button
+          id="navComboBtn"
+          type="button"
+          class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-sky-400 hover:bg-sky-300 text-zinc-950 font-bold text-xs sm:text-sm shadow-lg shadow-sky-500/25 transition-all active:scale-95"
+        >
+          <span>🔥</span>
+          <span id="navComboLabel">₹99 Combo</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Collapsible Mobile Search Drawer -->
+    <div id="mobileSearchDrawer" class="hidden md:hidden px-3.5 pb-3 pt-1 border-t border-white/[0.05]">
+      <div class="relative">
+        <div class="pointer-events-none absolute inset-y-0 left-0 pl-3.5 flex items-center text-zinc-400">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </div>
+        <input
+          id="mobileDrawerSearchInput"
+          type="text"
+          placeholder="Search portraits, neon, luxury, Gemini..."
+          autocomplete="off"
+          class="w-full pl-10 pr-9 py-2.5 rounded-xl bg-[#09090b] border border-white/10 focus:border-sky-400 text-sm text-white placeholder-zinc-500 outline-none"
+        />
+        <button id="clearMobileSearchBtn" type="button" aria-label="Clear search" class="hidden absolute inset-y-0 right-0 pr-3 flex items-center text-zinc-400 hover:text-white">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== COMPACT HERO & MEGA COMBO BANNER ==================== -->
+  <section class="hero-glow border-b border-white/[0.06]">
+    <div class="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8 pt-7 pb-6 sm:pt-11 sm:pb-9">
+      
+      <!-- Hero Text -->
+      <div class="text-center max-w-2xl mx-auto">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-400/10 border border-sky-400/25 text-sky-300 text-[11px] sm:text-xs font-semibold mb-3.5">
+          <span class="w-1.5 h-1.5 rounded-full bg-sky-400 animate-pulse"></span>
+          <span>Works on Phone &bull; Gemini, ChatGPT &amp; Midjourney</span>
+        </div>
+
+        <h1 class="font-display text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-[1.15]">
+          Create Viral AI Photos <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-cyan-200">in Seconds</span>
+        </h1>
+
+        <p class="mt-2.5 sm:mt-3 text-xs sm:text-base text-zinc-400 leading-relaxed max-w-xl mx-auto">
+          See the result, unlock the exact prompt for just <span class="text-white font-semibold">₹29</span>. Instant delivery right after UPI payment.
+        </p>
+      </div>
+
+      <!-- Featured Mega Bundle Card -->
+      <div class="mt-6 sm:mt-8 max-w-4xl mx-auto">
+        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#111114] via-[#131922] to-[#111114] border border-sky-400/30 p-4 sm:p-5 shadow-2xl shadow-sky-950/30">
+          <!-- Subtle Corner Glow -->
+          <div class="pointer-events-none absolute -top-12 -right-12 w-40 h-40 rounded-full bg-sky-400/15 blur-2xl"></div>
+
+          <div class="relative flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div class="space-y-1.5">
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-lg bg-amber-400/15 border border-amber-400/30 text-amber-300 text-[11px] font-bold uppercase tracking-wider">
+                  Best Value &bull; Save 65%
+                </span>
+                <span class="text-xs text-zinc-400 font-medium">Instant PDF + Copy-Paste File</span>
+              </div>
+              <h2 id="comboTitle" class="font-display text-base sm:text-xl font-extrabold text-white leading-snug">
+                🔥 Mega Bundle: All 10+ Viral Prompts — Just ₹99
+              </h2>
+              <p class="text-xs sm:text-sm text-zinc-400">
+                Get every prompt in this store + bonus lighting &amp; face-consistency tips in one download.
+              </p>
+            </div>
+
+            <div class="flex sm:flex-col items-center sm:items-end justify-between gap-2 shrink-0">
+              <div class="flex items-baseline gap-2">
+                <span class="text-xs text-zinc-500 line-through font-medium">₹290</span>
+                <span id="comboPriceDisplay" class="font-display text-xl sm:text-2xl font-extrabold text-sky-400">₹99</span>
+              </div>
+              <button
+                id="heroComboBuyBtn"
+                type="button"
+                class="px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl bg-sky-400 hover:bg-sky-300 text-zinc-950 font-bold text-xs sm:text-sm shadow-lg shadow-sky-500/25 transition-all active:scale-95 whitespace-nowrap"
+              >
+                Unlock Bundle – ₹99 →
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== SEARCH, FILTERS & GALLERY ==================== -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-3.5 sm:px-6 lg:px-8 py-5 sm:py-8">
+
+    <!-- Filter Controls Row -->
+    <div class="flex flex-col gap-3.5 mb-5 sm:mb-7">
+      
+      <!-- Inline Quick Search (Visible on Mobile & Tablet for instant filtering) -->
+      <div class="md:hidden relative">
+        <div class="pointer-events-none absolute inset-y-0 left-0 pl-3.5 flex items-center text-zinc-400">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </div>
+        <input
+          id="mainSearchInput"
+          type="text"
+          placeholder="Search viral styles (Neon, Royal, Car, Perfume...)"
+          autocomplete="off"
+          class="w-full pl-10 pr-9 py-2.5 rounded-xl bg-[#111114] border border-white/10 focus:border-sky-400 text-sm text-white placeholder-zinc-500 outline-none transition-colors"
+        />
+        <button id="clearMainSearchBtn" type="button" aria-label="Clear search" class="hidden absolute inset-y-0 right-0 pr-3 flex items-center text-zinc-400 hover:text-white">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Horizontal Scrollable Category Pills + Count -->
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <div id="categoryPillsContainer" class="flex items-center gap-2 overflow-x-auto no-scrollbar -mx-3.5 px-3.5 sm:mx-0 sm:px-0 pb-1">
+          <!-- Category pills injected dynamically -->
+        </div>
+
+        <span id="resultsCountText" class="text-xs text-zinc-400 font-medium shrink-0 hidden sm:inline">
+          Showing 8 prompts
+        </span>
+      </div>
+    </div>
+
+    <!-- Image-First Prompt Gallery Grid (2 cols on mobile, 3 on md, 4 on lg) -->
+    <div id="promptsGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5">
+      <!-- Prompt cards rendered via JS -->
+    </div>
+
+    <!-- Empty Search State -->
+    <div id="emptyState" class="hidden py-14 px-4 text-center rounded-2xl border border-dashed border-white/10 bg-[#111114]/60">
+      <div class="w-12 h-12 rounded-2xl bg-zinc-800/80 flex items-center justify-center mx-auto mb-3 text-zinc-400">
+        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+      </div>
+      <h3 class="text-base font-bold text-white">No styles matched your search</h3>
+      <p class="text-xs sm:text-sm text-zinc-400 mt-1">Try another keyword or switch back to all categories.</p>
+      <button id="resetFiltersBtn" type="button" class="mt-4 px-4 py-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-xs sm:text-sm font-semibold text-white transition-colors">
+        Show all prompts
+      </button>
+    </div>
+
+    <!-- ==================== HOW IT WORKS (3-STEP TRUST BAR) ==================== -->
+    <section class="mt-12 sm:mt-16 pt-8 sm:pt-10 border-t border-white/[0.08]">
+      <div class="text-center mb-6">
+        <span class="text-[11px] font-bold uppercase tracking-widest text-sky-400">Simple &amp; Instant</span>
+        <h2 class="font-display text-xl sm:text-2xl font-extrabold text-white mt-1">How It Works</h2>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5 sm:gap-5">
+        <!-- Step 1 -->
+        <div class="rounded-2xl bg-[#111114] border border-white/[0.08] p-4 sm:p-5 flex sm:flex-col items-start gap-3.5">
+          <div class="w-10 h-10 rounded-xl bg-sky-400/15 border border-sky-400/30 text-sky-400 flex items-center justify-center font-display font-extrabold text-sm shrink-0">
+            01
+          </div>
+          <div>
+            <h3 class="font-display font-bold text-sm sm:text-base text-white">Choose a Visual Style</h3>
+            <p class="text-xs sm:text-sm text-zinc-400 mt-1 leading-relaxed">
+              Browse real AI showcase images and tap any look you want to recreate with your own face or subject.
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="rounded-2xl bg-[#111114] border border-white/[0.08] p-4 sm:p-5 flex sm:flex-col items-start gap-3.5">
+          <div class="w-10 h-10 rounded-xl bg-sky-400/15 border border-sky-400/30 text-sky-400 flex items-center justify-center font-display font-extrabold text-sm shrink-0">
+            02
+          </div>
+          <div>
+            <h3 class="font-display font-bold text-sm sm:text-base text-white">Pay ₹29 via UPI</h3>
+            <p class="text-xs sm:text-sm text-zinc-400 mt-1 leading-relaxed">
+              Complete quick, secure checkout using PhonePe, Google Pay, or Paytm in under 10 seconds.
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="rounded-2xl bg-[#111114] border border-white/[0.08] p-4 sm:p-5 flex sm:flex-col items-start gap-3.5">
+          <div class="w-10 h-10 rounded-xl bg-sky-400/15 border border-sky-400/30 text-sky-400 flex items-center justify-center font-display font-extrabold text-sm shrink-0">
+            03
+          </div>
+          <div>
+            <h3 class="font-display font-bold text-sm sm:text-base text-white">Instant Prompt Delivery</h3>
+            <p class="text-xs sm:text-sm text-zinc-400 mt-1 leading-relaxed">
+              Download the exact copy-paste prompt file immediately and generate stunning photos on your phone.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="border-t border-white/[0.08] bg-[#09090b] mt-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-zinc-500">
+      <p>&copy; <span id="currentYear"></span> <span id="footerBrandName" class="text-zinc-300 font-semibold">PromptStore</span>. All rights reserved.</p>
+      <div class="flex items-center gap-3 text-zinc-400">
+        <span class="inline-flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+          100% Secure UPI Checkout
+        </span>
+        <span>&bull;</span>
+        <span>Instant Digital Delivery</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== FULL IMAGE & CHECKOUT PREVIEW MODAL ==================== -->
+  <div id="previewModal" class="hidden fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/85 backdrop-blur-md" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="animate-modal-in w-full sm:max-w-3xl max-h-[93vh] flex flex-col sm:flex-row bg-[#111114] border border-white/15 rounded-t-3xl sm:rounded-3xl shadow-2xl overflow-hidden">
+      
+      <!-- Left / Top: Large Showcase Image -->
+      <div class="relative w-full sm:w-[46%] bg-zinc-950 shrink-0 overflow-hidden">
+        <div class="aspect-[4/4] sm:aspect-auto sm:h-full w-full relative">
+          <img
+            id="modalImage"
+            src=""
+            alt="AI Prompt Result Preview"
+            class="w-full h-full object-cover"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-[#111114] via-transparent to-black/30 sm:bg-gradient-to-t sm:from-black/60 sm:via-transparent sm:to-transparent"></div>
+
+          <!-- Tool & Price Overlay on Modal Image -->
+          <div class="absolute top-3 left-3 flex items-center gap-2">
+            <span id="modalToolBadge" class="px-2.5 py-1 rounded-lg text-xs font-bold backdrop-blur-md border"></span>
+          </div>
+
+          <!-- Close Button (Mobile Floating Top-Right) -->
+          <button id="closeModalMobileBtn" type="button" aria-label="Close preview" class="sm:hidden absolute top-3 right-3 w-9 h-9 rounded-full bg-black/60 backdrop-blur-md border border-white/15 text-white flex items-center justify-center">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Right / Bottom: Checkout Details & Pay CTA -->
+      <div class="flex-1 flex flex-col max-h-[55vh] sm:max-h-[90vh] overflow-y-auto p-5 sm:p-6">
+        
+        <!-- Header Row -->
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <div class="flex items-center gap-2 mb-1.5">
+              <span id="modalCategoryBadge" class="px-2.5 py-0.5 rounded-md bg-white/[0.06] border border-white/10 text-[11px] font-semibold text-zinc-300"></span>
+              <span class="text-[11px] text-sky-400 font-semibold">Instant Delivery</span>
+            </div>
+            <h2 id="modalTitle" class="font-display text-xl sm:text-2xl font-extrabold text-white leading-tight"></h2>
+          </div>
+
+          <!-- Desktop Close Button -->
+          <button id="closeModalDesktopBtn" type="button" aria-label="Close preview" class="hidden sm:flex p-2 rounded-xl text-zinc-400 hover:text-white hover:bg-white/10 transition-colors shrink-0">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Compatibility & What's Included -->
+        <div class="mt-4 space-y-2.5">
+          <div class="flex items-center gap-2 text-xs text-zinc-300 bg-white/[0.04] border border-white/[0.07] rounded-xl px-3 py-2">
+            <svg class="w-4 h-4 text-sky-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+            </svg>
+            <span id="modalCompatibility">Works on Mobile &bull; Gemini / ChatGPT</span>
+          </div>
+
+          <ul class="grid grid-cols-1 gap-1.5 text-xs text-zinc-400">
+            <li class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-emerald-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.4">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+              <span>Exact copy-paste prompt with camera &amp; lighting tags</span>
+            </li>
+            <li class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-emerald-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.4">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+              <span>Quick guide on how to use your own reference photo</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Blurred Locked Prompt Preview Box -->
+        <div class="mt-4 relative rounded-2xl bg-[#09090b] border border-white/10 p-3.5 overflow-hidden">
+          <p id="modalBlurredSnippet" class="blurred-prompt-text text-xs text-zinc-300 leading-relaxed">
+            Ultra-realistic 8K cinematic photograph shot on 85mm f/1.4 lens, dramatic rim lighting, atmospheric color grading, hyper-detailed textures, natural skin tones, editorial studio finish --ar 4:5 --stylize 250
+          </p>
+          <div class="absolute inset-0 bg-[#09090b]/45 flex flex-col items-center justify-center text-center px-3">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-zinc-900/95 border border-sky-400/35 text-xs font-semibold text-sky-300 shadow-lg">
+              <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.3">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+              <span>Prompt Locked &bull; Pay to Reveal</span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Primary Payment CTA -->
+        <div class="mt-5 pt-4 border-t border-white/[0.08]">
+          <button
+            id="modalBuyBtn"
+            type="button"
+            class="w-full py-3.5 px-5 rounded-2xl bg-sky-400 hover:bg-sky-300 text-zinc-950 font-display font-extrabold text-sm sm:text-base shadow-xl shadow-sky-500/25 transition-all active:scale-[0.98] flex items-center justify-center gap-2"
+          >
+            <span id="modalBuyBtnText">Pay ₹29 &amp; Unlock Now →</span>
+          </button>
+
+          <!-- UPI Trust Badges -->
+          <div class="mt-3 flex flex-wrap items-center justify-center gap-2 text-[11px] text-zinc-400">
+            <span class="px-2 py-0.5 rounded-md bg-white/[0.05] border border-white/10 font-semibold text-zinc-300">GPay</span>
+            <span class="px-2 py-0.5 rounded-md bg-white/[0.05] border border-white/10 font-semibold text-zinc-300">PhonePe</span>
+            <span class="px-2 py-0.5 rounded-md bg-white/[0.05] border border-white/10 font-semibold text-zinc-300">Paytm</span>
+            <span class="text-zinc-500">&bull;</span>
+            <span class="text-emerald-400 font-medium">Instant Delivery</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== IN-APP TOAST NOTIFICATION (DEMO LINK & INFO) ==================== -->
+  <div id="toast" class="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 w-[92vw] max-w-md pointer-events-none opacity-0 translate-y-4 transition-all duration-300">
+    <div class="flex items-start gap-3 px-4 py-3.5 rounded-2xl bg-[#111114]/95 backdrop-blur-md border border-sky-400/40 shadow-2xl shadow-black/80 text-white">
+      <div class="w-7 h-7 rounded-xl bg-sky-400/20 text-sky-400 flex items-center justify-center shrink-0 mt-0.5">
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.3">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </div>
+      <div class="text-xs sm:text-sm leading-snug">
+        <p id="toastTitle" class="font-bold text-sky-300">Demo Payment Link Triggered</p>
+        <p id="toastMessage" class="text-zinc-300 mt-0.5"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== STORE CONFIGURATION & APPLICATION JS ==================== -->
+  <script>
+    /**
+     * =========================================================================
+     * 1. EASY STORE CONFIGURATION (EDIT YOUR BRAND & MEGA BUNDLE LINK HERE!)
+     * =========================================================================
+     * Replace 'https://YOUR-PAYMENT-LINK/...' with your real SuperProfile,
+     * Cosmofeed, Instamojo, or Razorpay Payment Page URL.
+     */
+    const STORE_CONFIG = {
+      brandNameFirst: 'Prompt',
+      brandNameHighlight: 'Store',
+      currency: '₹',
+      comboTitle: '🔥 Mega Bundle: All 10+ Viral Prompts — Just ₹99',
+      comboPrice: 99,
+      comboPaymentLink: 'https://YOUR-PAYMENT-LINK/mega-bundle-99'
+    };
+
+    /**
+     * =========================================================================
+     * 2. PROMPTS CATALOG (ADD, EDIT, OR PASTE YOUR REAL PAYMENT LINKS HERE!)
+     * =========================================================================
+     * Each item needs:
+     *  - id: unique identifier
+     *  - title: catchy name shown under the image
+     *  - category: 'Cinematic' | 'Portraits' | 'Streetwear' | 'Luxury' | 'Sci-Fi' | 'Product'
+     *  - tool: 'Gemini' | 'ChatGPT' | 'Midjourney'
+     *  - compatibility: short device/tool note shown in the preview modal
+     *  - price: number (e.g., 29)
+     *  - image: high-res 4:5 portrait image URL (your generated AI image URL)
+     *  - paymentLink: your SuperProfile / Razorpay / Instamojo URL for this prompt
+     */
+    const PROMPTS = [
+      {
+        id: 'ps-1',
+        title: 'Cinematic Neon Street Portrait',
+        category: 'Portraits',
+        tool: 'Gemini',
+        compatibility: 'Works on Mobile • Gemini / ChatGPT',
+        price: 29,
+        image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=85',
+        paymentLink: 'https://YOUR-PAYMENT-LINK/cinematic-neon-portrait'
+      },
+      {
+        id: 'ps-2',
+        title: 'Royal Vintage King Look',
+        category: 'Portraits',
+        tool: 'ChatGPT',
+        compatibility: 'Works on Mobile • ChatGPT / Gemini',
+        price: 29,
+        image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=800&q=85',
+        paymentLink: 'https://YOUR-PAYMENT-LINK/royal-vintage-king'
+      },
+      {
+        id: 'ps-3',
+        title: 'Cyberpunk Night Rider',
+        category: 'Sci-Fi',
+        tool: 'Midjourney',
+        compatibility: 'Works on Midjourney v6 & Gemini',
+        price: 29,
+        image: 'https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=800&q=85',
+        paymentLink: 'https://YOUR-PAYMENT-LINK/cyberpunk-night-rider'
+      },
+      {
+        id: 'ps-4',
+        title: 'Luxury Studio Fashion Editorial',
+        category: 'Streetwear',
+        tool: 'Gemini',
+        compatibility: 'Works on Mobile • Gemini / ChatGPT',
+        price: 29,
+        image: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=85',
+        paymentLink: 'https://YOUR-PAYMENT-LINK/luxury-studio-fashion'
+      },
+      {
+        id: 'ps-5',
+        title: 'Dark Moody Rainy Window',
+        category: 'Cinematic',
+        tool: 'ChatGPT',
+        compatibility: 'Works on Mobile • ChatGPT / Gemini',
+        price: 29,
+        image: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=800&q=85',
+        paymentLink: 'https://YOUR-PAYMENT-LINK/dark-moody-rainy'
+      },
+      {
+        id: 'ps-6',
+        title: '3D Miniature Hero Diorama',
+        category: 'Sci-Fi',
+        tool: 'Midjourney',
+        compatibility: 'Works on Midjourney / ChatGPT 4o',
+        price: 29,
+        image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=85',
+        paymentLink: 'https://YOUR-PAYMENT-LINK/3d-miniature-diorama'
+      },
+      {
+        id: 'ps-7',
+        title: 'Golden Hour Desert Car Shot',
+        category: 'Luxury',
+        tool: 'Gemini',
+        compatibility: 'Works on Mobile • Gemini / Midjourney',
+        price: 29,
+        image: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=800&q=85',
+        paymentLink: 'https://YOUR-PAYMENT-LINK/golden-hour-desert-car'
+      },
+      {
+        id: 'ps-8',
+        title: 'Minimalist Luxury Perfume Ad',
+        category: 'Product',
+        tool: 'Midjourney',
+        compatibility: 'Works on Midjourney / Gemini / ChatGPT',
+        price: 29,
+        image: 'https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=800&q=85',
+        paymentLink: 'https://YOUR-PAYMENT-LINK/minimalist-perfume-ad'
+      }
+    ];
+
+    /**
+     * =========================================================================
+     * 3. CONSTANTS & STATE
+     * =========================================================================
+     */
+    const CATEGORIES = ['All', 'Cinematic', 'Portraits', 'Streetwear', 'Luxury', 'Sci-Fi', 'Product'];
+
+    const TOOL_BADGE_STYLES = {
+      Gemini: 'bg-sky-500/25 text-sky-200 border-sky-400/40',
+      ChatGPT: 'bg-emerald-500/25 text-emerald-200 border-emerald-400/40',
+      Midjourney: 'bg-purple-500/25 text-purple-200 border-purple-400/40'
+    };
+
+    let state = {
+      searchQuery: '',
+      selectedCategory: 'All',
+      activePromptId: null
+    };
+
+    let toastTimer = null;
+
+    /**
+     * =========================================================================
+     * 4. DOM ELEMENTS
+     * =========================================================================
+     */
+    const els = {
+      brandLogoBtn: document.getElementById('brandLogoBtn'),
+      navBrandName: document.getElementById('navBrandName'),
+      footerBrandName: document.getElementById('footerBrandName'),
+      navComboBtn: document.getElementById('navComboBtn'),
+      navComboLabel: document.getElementById('navComboLabel'),
+      comboTitle: document.getElementById('comboTitle'),
+      comboPriceDisplay: document.getElementById('comboPriceDisplay'),
+      heroComboBuyBtn: document.getElementById('heroComboBuyBtn'),
+
+      // Search controls
+      desktopSearchInput: document.getElementById('desktopSearchInput'),
+      mobileSearchToggleBtn: document.getElementById('mobileSearchToggleBtn'),
+      mobileSearchDrawer: document.getElementById('mobileSearchDrawer'),
+      mobileDrawerSearchInput: document.getElementById('mobileDrawerSearchInput'),
+      clearMobileSearchBtn: document.getElementById('clearMobileSearchBtn'),
+      mainSearchInput: document.getElementById('mainSearchInput'),
+      clearMainSearchBtn: document.getElementById('clearMainSearchBtn'),
+
+      // Filters & Grid
+      categoryPillsContainer: document.getElementById('categoryPillsContainer'),
+      resultsCountText: document.getElementById('resultsCountText'),
+      promptsGrid: document.getElementById('promptsGrid'),
+      emptyState: document.getElementById('emptyState'),
+      resetFiltersBtn: document.getElementById('resetFiltersBtn'),
+      currentYear: document.getElementById('currentYear'),
+
+      // Preview Modal
+      previewModal: document.getElementById('previewModal'),
+      modalImage: document.getElementById('modalImage'),
+      modalToolBadge: document.getElementById('modalToolBadge'),
+      modalCategoryBadge: document.getElementById('modalCategoryBadge'),
+      modalTitle: document.getElementById('modalTitle'),
+      modalCompatibility: document.getElementById('modalCompatibility'),
+      modalBuyBtn: document.getElementById('modalBuyBtn'),
+      modalBuyBtnText: document.getElementById('modalBuyBtnText'),
+      closeModalMobileBtn: document.getElementById('closeModalMobileBtn'),
+      closeModalDesktopBtn: document.getElementById('closeModalDesktopBtn'),
+
+      // Toast
+      toast: document.getElementById('toast'),
+      toastTitle: document.getElementById('toastTitle'),
+      toastMessage: document.getElementById('toastMessage')
+    };
+
+    /**
+     * =========================================================================
+     * 5. HELPER FUNCTIONS
+     * =========================================================================
+     */
+
+    function escapeHTML(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function getFallbackImageUrl(title) {
+      const encoded = encodeURIComponent(title.slice(0, 22));
+      return `https://placehold.co/600x750/111114/38bdf8?text=${encoded}`;
+    }
+
+    /**
+     * Smart Payment Link Handler:
+     * - If the URL is still a placeholder ('https://YOUR-PAYMENT-LINK...'),
+     *   shows a friendly in-app toast reminding the store owner to paste their real link.
+     * - If replaced with a real SuperProfile/Razorpay/Instamojo URL, opens it in a new tab.
+     */
+    function handlePaymentRedirect(itemTitle, paymentLink) {
+      try {
+        if (!paymentLink || paymentLink.startsWith('https://YOUR-PAYMENT-LINK')) {
+          showToast(
+            `Checkout Ready: "${itemTitle}"`,
+            'Demo link active! Replace YOUR-PAYMENT-LINK inside PROMPTS / STORE_CONFIG with your real SuperProfile, Razorpay, or Instamojo URL.'
+          );
+          return;
+        }
+        window.open(paymentLink, '_blank', 'noopener,noreferrer');
+      } catch (err) {
+        showToast('Unable to open checkout', 'Please check your payment URL in STORE_CONFIG.');
+      }
+    }
+
+    function showToast(title, message) {
+      els.toastTitle.textContent = title;
+      els.toastMessage.textContent = message;
+      els.toast.classList.remove('opacity-0', 'translate-y-4');
+      els.toast.classList.add('opacity-100', 'translate-y-0');
+
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        els.toast.classList.remove('opacity-100', 'translate-y-0');
+        els.toast.classList.add('opacity-0', 'translate-y-4');
+      }, 4200);
+    }
+
+    /**
+     * =========================================================================
+     * 6. RENDERING FUNCTIONS
+     * =========================================================================
+     */
+
+    function applyStoreConfig() {
+      const fullBrand = `${STORE_CONFIG.brandNameFirst}${STORE_CONFIG.brandNameHighlight}`;
+      els.navBrandName.innerHTML = `${escapeHTML(STORE_CONFIG.brandNameFirst)}<span class="text-sky-400">${escapeHTML(STORE_CONFIG.brandNameHighlight)}</span>`;
+      els.footerBrandName.textContent = fullBrand;
+      els.navComboLabel.textContent = `${STORE_CONFIG.currency}${STORE_CONFIG.comboPrice} Combo`;
+      els.comboTitle.textContent = STORE_CONFIG.comboTitle;
+      els.comboPriceDisplay.textContent = `${STORE_CONFIG.currency}${STORE_CONFIG.comboPrice}`;
+      els.heroComboBuyBtn.textContent = `Unlock Bundle – ${STORE_CONFIG.currency}${STORE_CONFIG.comboPrice} →`;
+      els.currentYear.textContent = new Date().getFullYear();
+    }
+
+    function renderCategoryPills() {
+      els.categoryPillsContainer.innerHTML = CATEGORIES.map(cat => {
+        const isActive = state.selectedCategory === cat;
+        const styleClass = isActive
+          ? 'bg-sky-400 text-zinc-950 font-bold border-sky-300 shadow-md shadow-sky-500/20'
+          : 'bg-[#111114] text-zinc-300 hover:text-white border-white/10 hover:border-white/25 font-medium';
+        return `
+          <button
+            type="button"
+            data-category="${escapeHTML(cat)}"
+            class="category-pill shrink-0 px-3.5 py-2 rounded-xl border text-xs sm:text-sm transition-all active:scale-95 ${styleClass}"
+          >
+            ${escapeHTML(cat)}
+          </button>
+        `;
+      }).join('');
+    }
+
+    function renderPromptsGrid() {
+      const query = state.searchQuery.trim().toLowerCase();
+
+      const filtered = PROMPTS.filter(item => {
+        if (state.selectedCategory !== 'All' && item.category !== state.selectedCategory) {
+          return false;
+        }
+        if (query) {
+          const haystack = `${item.title} ${item.category} ${item.tool} ${item.compatibility}`.toLowerCase();
+          if (!haystack.includes(query)) return false;
+        }
+        return true;
+      });
+
+      els.resultsCountText.textContent = `Showing ${filtered.length} ${filtered.length === 1 ? 'prompt' : 'prompts'}`;
+
+      if (filtered.length === 0) {
+        els.promptsGrid.innerHTML = '';
+        els.emptyState.classList.remove('hidden');
+        return;
+      }
+
+      els.emptyState.classList.add('hidden');
+
+      els.promptsGrid.innerHTML = filtered.map(item => {
+        const toolClass = TOOL_BADGE_STYLES[item.tool] || 'bg-zinc-900/80 text-zinc-200 border-white/15';
+        const fallbackUrl = getFallbackImageUrl(item.title);
+        const priceTag = `${STORE_CONFIG.currency}${item.price}`;
+
+        return `
+          <article
+            data-card-id="${escapeHTML(item.id)}"
+            class="prompt-card group flex flex-col rounded-2xl bg-[#111114] border border-white/[0.08] hover:border-sky-400/45 overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:shadow-2xl hover:shadow-black/70 cursor-pointer"
+          >
+            <!-- Tall 4:5 AI Showcase Image -->
+            <div class="relative aspect-[4/5] w-full bg-zinc-950 overflow-hidden">
+              <img
+                src="${escapeHTML(item.image)}"
+                alt="${escapeHTML(item.title)}"
+                loading="lazy"
+                onerror="this.onerror=null;this.src='${fallbackUrl}';"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+              />
+              <!-- Bottom gradient for depth -->
+              <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#111114]/90 via-transparent to-black/25"></div>
+
+              <!-- Top-Left AI Tool Badge -->
+              <span class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-lg text-[10px] sm:text-[11px] font-bold backdrop-blur-md border ${toolClass}">
+                ${escapeHTML(item.tool)}
+              </span>
+
+              <!-- Top-Right Price Badge -->
+              <span class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-lg text-[11px] sm:text-xs font-extrabold bg-black/75 backdrop-blur-md border border-sky-400/40 text-sky-300 shadow-lg">
+                ${escapeHTML(priceTag)}
+              </span>
+
+              <!-- Subtle Tap-to-Preview hint on hover -->
+              <div class="hidden sm:flex absolute bottom-2.5 right-2.5 opacity-0 group-hover:opacity-100 transition-opacity items-center gap-1 px-2.5 py-1 rounded-lg bg-black/70 backdrop-blur-md border border-white/15 text-[11px] font-medium text-white">
+                <span>Preview</span>
+              </div>
+            </div>
+
+            <!-- Card Body -->
+            <div class="p-3 sm:p-4 flex-1 flex flex-col justify-between gap-2.5 sm:gap-3">
+              <div>
+                <h3 class="font-display text-xs sm:text-sm font-bold text-white group-hover:text-sky-300 transition-colors leading-snug line-clamp-2">
+                  ${escapeHTML(item.title)}
+                </h3>
+
+                <!-- Blurred Locked Prompt Preview Box -->
+                <div class="mt-2 relative rounded-xl bg-[#09090b] border border-white/[0.07] px-2.5 py-2 overflow-hidden">
+                  <p class="blurred-prompt-text text-[10px] sm:text-[11px] text-zinc-400 leading-tight truncate">
+                    Ultra detailed 8k cinematic portrait lighting 85mm f1.4 lens dramatic shadows...
+                  </p>
+                  <div class="absolute inset-0 bg-[#09090b]/55 flex items-center justify-center px-1.5">
+                    <span class="inline-flex items-center gap-1 text-[10px] sm:text-[11px] font-semibold text-zinc-300 truncate">
+                      <span>🔒</span>
+                      <span class="truncate">Prompt locked &bull; Pay to reveal</span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Direct Buy / Unlock Button -->
+              <button
+                type="button"
+                data-action="buy"
+                data-id="${escapeHTML(item.id)}"
+                class="w-full py-2.5 px-2.5 sm:px-3.5 rounded-xl bg-sky-400 hover:bg-sky-300 text-zinc-950 font-bold text-[11px] sm:text-xs shadow-lg shadow-sky-500/20 transition-all active:scale-95 flex items-center justify-center gap-1"
+              >
+                <span class="sm:hidden">Unlock – ${escapeHTML(priceTag)}</span>
+                <span class="hidden sm:inline">Unlock Prompt – ${escapeHTML(priceTag)}</span>
+              </button>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    /**
+     * =========================================================================
+     * 7. FULL IMAGE & CHECKOUT PREVIEW MODAL
+     * =========================================================================
+     */
+
+    function openPreviewModal(promptId) {
+      const item = PROMPTS.find(p => p.id === promptId);
+      if (!item) return;
+
+      state.activePromptId = promptId;
+
+      const toolClass = TOOL_BADGE_STYLES[item.tool] || 'bg-zinc-900/80 text-zinc-200 border-white/15';
+      const fallbackUrl = getFallbackImageUrl(item.title);
+
+      els.modalImage.src = item.image;
+      els.modalImage.alt = item.title;
+      els.modalImage.onerror = () => {
+        els.modalImage.onerror = null;
+        els.modalImage.src = fallbackUrl;
+      };
+
+      els.modalToolBadge.textContent = item.tool;
+      els.modalToolBadge.className = `px-2.5 py-1 rounded-lg text-xs font-bold backdrop-blur-md border ${toolClass}`;
+      els.modalCategoryBadge.textContent = item.category;
+      els.modalTitle.textContent = item.title;
+      els.modalCompatibility.textContent = item.compatibility;
+      els.modalBuyBtnText.textContent = `Pay ${STORE_CONFIG.currency}${item.price} & Unlock Now →`;
+
+      els.previewModal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closePreviewModal() {
+      els.previewModal.classList.add('hidden');
+      document.body.style.overflow = '';
+      state.activePromptId = null;
+    }
+
+    /**
+     * =========================================================================
+     * 8. SEARCH SYNC & EVENT LISTENERS
+     * =========================================================================
+     */
+
+    function syncSearchValue(val) {
+      state.searchQuery = val;
+      if (els.desktopSearchInput.value !== val) els.desktopSearchInput.value = val;
+      if (els.mobileDrawerSearchInput.value !== val) els.mobileDrawerSearchInput.value = val;
+      if (els.mainSearchInput.value !== val) els.mainSearchInput.value = val;
+
+      const hasText = val.length > 0;
+      els.clearMobileSearchBtn.classList.toggle('hidden', !hasText);
+      els.clearMainSearchBtn.classList.toggle('hidden', !hasText);
+
+      renderPromptsGrid();
+    }
+
+    function resetAllFilters() {
+      state.selectedCategory = 'All';
+      syncSearchValue('');
+      renderCategoryPills();
+    }
+
+    function bindEvents() {
+      // Brand logo resets filters & scrolls to top
+      els.brandLogoBtn.addEventListener('click', () => {
+        resetAllFilters();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      // Combo Bundle buttons (Navbar + Hero Banner)
+      els.navComboBtn.addEventListener('click', () => {
+        handlePaymentRedirect('Mega Bundle (₹99)', STORE_CONFIG.comboPaymentLink);
+      });
+      els.heroComboBuyBtn.addEventListener('click', () => {
+        handlePaymentRedirect('Mega Bundle (₹99)', STORE_CONFIG.comboPaymentLink);
+      });
+
+      // Mobile Navbar Search Toggle
+      els.mobileSearchToggleBtn.addEventListener('click', () => {
+        const isHidden = els.mobileSearchDrawer.classList.toggle('hidden');
+        if (!isHidden) {
+          setTimeout(() => els.mobileDrawerSearchInput.focus(), 40);
+        }
+      });
+
+      // Synced Real-time Search Inputs
+      els.desktopSearchInput.addEventListener('input', (e) => syncSearchValue(e.target.value));
+      els.mobileDrawerSearchInput.addEventListener('input', (e) => syncSearchValue(e.target.value));
+      els.mainSearchInput.addEventListener('input', (e) => syncSearchValue(e.target.value));
+
+      els.clearMobileSearchBtn.addEventListener('click', () => {
+        syncSearchValue('');
+        els.mobileDrawerSearchInput.focus();
+      });
+      els.clearMainSearchBtn.addEventListener('click', () => {
+        syncSearchValue('');
+        els.mainSearchInput.focus();
+      });
+
+      // Category Filter Pills
+      els.categoryPillsContainer.addEventListener('click', (e) => {
+        const pill = e.target.closest('.category-pill');
+        if (!pill) return;
+        state.selectedCategory = pill.dataset.category;
+        renderCategoryPills();
+        renderPromptsGrid();
+      });
+
+      els.resetFiltersBtn.addEventListener('click', resetAllFilters);
+
+      // Gallery Grid Clicks (Card Preview vs Direct Buy Button)
+      els.promptsGrid.addEventListener('click', (e) => {
+        const buyBtn = e.target.closest('[data-action="buy"]');
+        if (buyBtn) {
+          e.stopPropagation();
+          const item = PROMPTS.find(p => p.id === buyBtn.dataset.id);
+          if (item) {
+            handlePaymentRedirect(item.title, item.paymentLink);
+          }
+          return;
+        }
+
+        const card = e.target.closest('.prompt-card');
+        if (card) {
+          openPreviewModal(card.dataset.cardId);
+        }
+      });
+
+      // Modal Buy Button
+      els.modalBuyBtn.addEventListener('click', () => {
+        const item = PROMPTS.find(p => p.id === state.activePromptId);
+        if (item) {
+          handlePaymentRedirect(item.title, item.paymentLink);
+        }
+      });
+
+      // Modal Close Handlers
+      els.closeModalMobileBtn.addEventListener('click', closePreviewModal);
+      els.closeModalDesktopBtn.addEventListener('click', closePreviewModal);
+      els.previewModal.addEventListener('click', (e) => {
+        if (e.target === els.previewModal) closePreviewModal();
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !els.previewModal.classList.contains('hidden')) {
+          closePreviewModal();
+        }
+      });
+    }
+
+    /**
+     * =========================================================================
+     * 9. INITIALIZE STORE
+     * =========================================================================
+     */
+    function init() {
+      applyStoreConfig();
+      renderCategoryPills();
+      renderPromptsGrid();
+      bindEvents();
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
+```
