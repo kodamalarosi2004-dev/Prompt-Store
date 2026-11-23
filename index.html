@@ -151,10 +151,38 @@
     </div>
   </main>
 
-  <!-- Footer -->
-  <footer class="border-t border-store-border py-6 px-4 text-center text-xs text-zinc-500">
-    <p>© 2026 PromptStore. All prompts tested for high-detail AI image generation.</p>
+  <!-- Footer with Mandatory Compliance & Info Pages -->
+  <footer class="border-t border-store-border bg-zinc-950/60 py-8 px-4">
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="text-center sm:text-left">
+        <p class="font-display font-bold text-sm text-white">PromptStore</p>
+        <p class="text-xs text-zinc-500 mt-0.5">© 2026 PromptStore. All prompts tested for high-detail AI image generation.</p>
+      </div>
+
+      <div class="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs text-zinc-400">
+        <button type="button" data-policy="about" class="policy-link hover:text-white transition">About Us</button>
+        <button type="button" data-policy="privacy" class="policy-link hover:text-white transition">Privacy Policy</button>
+        <button type="button" data-policy="terms" class="policy-link hover:text-white transition">Terms & Conditions</button>
+        <button type="button" data-policy="refund" class="policy-link hover:text-white transition">Refund Policy</button>
+        <button type="button" data-policy="contact" class="policy-link hover:text-white transition">Contact Us</button>
+      </div>
+    </div>
   </footer>
+
+  <!-- Legal & Store Info Modal (About, Privacy, Terms, Refund, Contact) -->
+  <div id="infoModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-store-card border border-store-border w-full max-w-lg rounded-2xl p-6 relative shadow-2xl max-h-[85vh] flex flex-col">
+      <div class="flex items-center justify-between pb-3 border-b border-store-border">
+        <h3 id="infoModalTitle" class="font-display font-bold text-lg text-white">Information</h3>
+        <button id="closeInfoModal" class="w-8 h-8 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-white flex items-center justify-center text-sm font-bold">
+          ✕
+        </button>
+      </div>
+      <div id="infoModalBody" class="mt-4 overflow-y-auto pr-1 text-xs sm:text-sm text-zinc-300 space-y-3 leading-relaxed">
+        <!-- Populated dynamically -->
+      </div>
+    </div>
+  </div>
 
   <!-- Auth Modal -->
   <div id="authModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
@@ -241,7 +269,7 @@
         </button>
       </div>
       <p class="text-[11px] text-zinc-500 text-center mt-3">
-        Secured by Instamojo • Saved forever in My Purchases
+        By continuing, you agree to our Terms & Refund Policy.
       </p>
     </div>
   </div>
@@ -268,12 +296,66 @@
     } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
     // 1. INSTAMOJO AUTOMATIC PAYMENT SETTINGS
-    // Paste your Instamojo Payment Link below once KYC is approved (e.g., "https://imjo.in/xyz123")
     const STORE_CONFIG = {
-      instamojoPaymentLink: "REPLACE_WITH_YOUR_INSTAMOJO_LINK"
+      instamojoPaymentLink: "REPLACE_WITH_YOUR_INSTAMOJO_LINK",
+      supportEmail: "kruthik.kodamala2006@gmail.com"
     };
 
-    // 2. YOUR PROMPTS CATALOG (Clear HD images + hidden prompt text until paid)
+    // 2. STORE POLICIES & INFO CONTENT
+    const POLICY_CONTENT = {
+      about: {
+        title: "About Us",
+        html: `
+          <p><strong class="text-white">PromptStore</strong> is a digital creative platform dedicated to providing carefully tested, high-detail AI photo generation prompts for creators, designers, and social media enthusiasts.</p>
+          <p>Every prompt listed in our store is engineered and verified across leading AI image generators—including <strong class="text-white">Google Gemini, Midjourney, and ChatGPT</strong>—to deliver consistent lighting, realistic textures, and studio-grade composition.</p>
+          <p>Our goal is to save creators hours of trial-and-error by offering ready-to-copy prompts with instant digital delivery and lifetime dashboard access.</p>
+        `
+      },
+      privacy: {
+        title: "Privacy Policy",
+        html: `
+          <p class="text-zinc-400 text-xs">Last Updated: November 2026</p>
+          <p><strong class="text-white">1. Information We Collect:</strong> When you create an account on PromptStore, we collect your email address and maintain a record of the digital prompts unlocked under your account using Google Firebase.</p>
+          <p><strong class="text-white">2. Payment Security:</strong> We do not store your UPI PIN, bank credentials, or debit/credit card numbers. All payments are processed securely through encrypted third-party payment gateways.</p>
+          <p><strong class="text-white">3. How We Use Your Data:</strong> Your account information is used strictly to authenticate your login, restore your unlocked prompts across devices, and provide customer support.</p>
+          <p><strong class="text-white">4. Data Sharing:</strong> We never sell, rent, or trade your personal email or purchase history to third-party marketers.</p>
+        `
+      },
+      terms: {
+        title: "Terms & Conditions",
+        html: `
+          <p class="text-zinc-400 text-xs">Last Updated: November 2026</p>
+          <p><strong class="text-white">1. Digital License:</strong> Purchasing a prompt grants you a personal, non-exclusive license to use the prompt text to generate AI images for personal or social media use.</p>
+          <p><strong class="text-white">2. Prohibited Use:</strong> You may not resell, redistribute, publish, or share the unlocked raw prompt text publicly or on competing prompt marketplaces.</p>
+          <p><strong class="text-white">3. AI Output Variations:</strong> Because AI models evolve continuously, generated images may vary slightly depending on the AI tool version and reference photo used.</p>
+          <p><strong class="text-white">4. Account Responsibility:</strong> You are responsible for keeping your login credentials secure. Unlocked prompts remain tied to the registered email account.</p>
+        `
+      },
+      refund: {
+        title: "Refund & Cancellation Policy",
+        html: `
+          <p class="text-zinc-400 text-xs">Last Updated: November 2026</p>
+          <p><strong class="text-white">1. Instant Digital Delivery:</strong> All items sold on PromptStore are intangible digital text prompts that unlock immediately upon payment confirmation. Therefore, orders cannot be cancelled once unlocked.</p>
+          <p><strong class="text-white">2. Eligible Refunds:</strong> A full refund will be issued within 5–7 business days if: (a) you were charged twice for the same prompt due to a technical glitch, or (b) payment was deducted from your bank/UPI account but the prompt failed to unlock even after contacting support.</p>
+          <p><strong class="text-white">3. How to Request Support:</strong> Email your registered email ID and payment transaction reference to <span class="text-indigo-400">${STORE_CONFIG.supportEmail}</span> within 48 hours of the transaction.</p>
+        `
+      },
+      contact: {
+        title: "Contact Us",
+        html: `
+          <p>Have a question about a prompt, account access, or payment confirmation? We are here to help.</p>
+          <div class="p-3.5 rounded-xl bg-zinc-950 border border-store-border space-y-2">
+            <p><strong class="text-white">Store Name:</strong> PromptStore</p>
+            <p><strong class="text-white">Support Email:</strong> <a href="mailto:${STORE_CONFIG.supportEmail}" class="text-indigo-400 underline">${STORE_CONFIG.supportEmail}</a></p>
+            <p><strong class="text-white">Response Time:</strong> Within 24 hours (Monday – Saturday)</p>
+            <p><strong class="text-white">Country:</strong> India</p>
+          </div>
+          <p class="text-xs text-zinc-400">For faster assistance with payment issues, please include your registered account email and UPI transaction ID.</p>
+        `
+      }
+    };
+
+    // 3. YOUR PROMPTS CATALOG
     const PROMPTS = [
       {
         id: "neon-cyberpunk-portrait",
@@ -331,7 +413,7 @@
       }
     ];
 
-    // 3. FIREBASE INITIALIZATION (kruthik-f3cb7)
+    // 4. FIREBASE INITIALIZATION (kruthik-f3cb7)
     const firebaseConfig = {
       apiKey: "AIzaSyC6HPk_wMU6p17jYzsPvkA-e1i4T81BjFg",
       authDomain: "kruthik-f3cb7.firebaseapp.com",
@@ -346,7 +428,7 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // 4. APP STATE
+    // 5. APP STATE
     let currentUser = null;
     let unlockedIds = new Set();
     let activeTab = "explore";
@@ -366,6 +448,7 @@
     const authForm = document.getElementById("authForm");
     const authErrorBox = document.getElementById("authErrorBox");
     const paymentModal = document.getElementById("paymentModal");
+    const infoModal = document.getElementById("infoModal");
 
     let toastTimer;
     function showToast(msg) {
@@ -376,7 +459,23 @@
       toastTimer = setTimeout(() => toast.classList.add("hidden"), 3000);
     }
 
-    // Configure Instamojo Automatic Callback (Runs 24/7 automatically on payment success)
+    // Policy & Info Modal Handlers
+    document.querySelectorAll(".policy-link").forEach(btn => {
+      btn.onclick = () => {
+        const item = POLICY_CONTENT[btn.dataset.policy];
+        if (!item) return;
+        document.getElementById("infoModalTitle").textContent = item.title;
+        document.getElementById("infoModalBody").innerHTML = item.html;
+        infoModal.classList.remove("hidden");
+      };
+    });
+
+    document.getElementById("closeInfoModal").onclick = () => infoModal.classList.add("hidden");
+    infoModal.addEventListener("click", e => {
+      if (e.target === infoModal) infoModal.classList.add("hidden");
+    });
+
+    // Instamojo Automatic Callback
     if (window.Instamojo) {
       window.Instamojo.configure({
         handlers: {
