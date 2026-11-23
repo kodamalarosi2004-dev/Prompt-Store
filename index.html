@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PromptStore – Viral AI Photo Prompts (₹29)</title>
+  <title>PromptStore – Viral AI Photo Prompts</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script src="https://js.instamojo.com/v1/checkout.js"></script>
   <script>
     tailwind.config = {
       darkMode: 'class',
@@ -57,7 +57,6 @@
         </div>
         <div>
           <span class="font-display font-extrabold text-lg tracking-tight text-white">PromptStore</span>
-          <span class="ml-1.5 text-[11px] font-semibold px-2 py-0.5 rounded-full bg-indigo-500/15 text-indigo-300 border border-indigo-500/30">₹29</span>
         </div>
       </a>
 
@@ -107,10 +106,10 @@
           Instant Copy-Paste AI Prompts
         </span>
         <h1 class="font-display font-extrabold text-2xl sm:text-4xl text-white tracking-tight leading-tight">
-          Viral AI Photo Prompts for <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">Just ₹29</span>
+          Viral <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">AI Photo Prompts</span>
         </h1>
         <p class="text-zinc-400 text-sm sm:text-base mt-2">
-          Unlock studio-grade prompts for Gemini, Midjourney & ChatGPT. Pay once, unlock instantly, and save forever in your account.
+          Unlock studio-grade prompts for Gemini, Midjourney & ChatGPT. Pay once via UPI, unlock automatically in 1 second, and save forever in your account.
         </p>
       </div>
 
@@ -131,7 +130,7 @@
       </div>
     </section>
 
-    <!-- My Purchases Header (Hidden in Explore view) -->
+    <!-- My Purchases Header -->
     <section id="purchasesHeader" class="hidden mb-6">
       <h2 class="font-display font-bold text-xl sm:text-2xl text-white">My Unlocked Prompts</h2>
       <p class="text-xs sm:text-sm text-zinc-400 mt-1">All prompts you have unlocked are saved permanently to your account.</p>
@@ -177,7 +176,7 @@
         </button>
       </div>
 
-      <!-- Error Alert (Plain text only - zero SVG className issues) -->
+      <!-- Error Alert -->
       <div id="authErrorBox" class="hidden mt-4 p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-xs text-red-300 leading-relaxed"></div>
 
       <form id="authForm" class="mt-4 space-y-3.5">
@@ -213,36 +212,36 @@
     </div>
   </div>
 
-  <!-- Payment / Unlock Modal -->
+  <!-- Payment / Instant Auto-Unlock Modal -->
   <div id="paymentModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-store-card border border-store-border w-full max-w-md rounded-2xl p-6 relative shadow-2xl">
       <button id="closePaymentModal" class="absolute top-4 right-4 w-8 h-8 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-white flex items-center justify-center text-sm font-bold">
         ✕
       </button>
 
-      <span class="text-[11px] font-semibold uppercase tracking-wider text-indigo-400">Instant Digital Unlock</span>
+      <span class="text-[11px] font-semibold uppercase tracking-wider text-indigo-400">24/7 Automatic Unlock</span>
       <h3 id="payPromptTitle" class="font-display font-bold text-lg text-white mt-1">Prompt Title</h3>
 
       <div class="mt-4 p-3.5 rounded-xl bg-zinc-950 border border-store-border flex items-center justify-between">
         <div>
-          <p class="text-xs text-zinc-400">One-time access</p>
-          <p class="text-xs text-emerald-400 mt-0.5">Saved forever in My Purchases</p>
+          <p class="text-xs text-zinc-300 font-medium">Instant UPI Checkout</p>
+          <p class="text-[11px] text-emerald-400 mt-0.5">Unlocks automatically right after payment</p>
         </div>
         <div class="text-right">
-          <span class="font-display font-extrabold text-2xl text-white">₹29</span>
+          <span id="payPromptPrice" class="font-display font-extrabold text-2xl text-white">₹29</span>
         </div>
       </div>
 
       <div class="mt-5 space-y-2.5">
-        <button id="razorpayPayBtn" class="w-full py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold transition shadow-lg shadow-indigo-600/25">
-          Pay ₹29 via UPI / Razorpay
+        <button id="instamojoPayBtn" class="w-full py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold transition shadow-lg shadow-indigo-600/25">
+          Pay via UPI (GPay / PhonePe / Paytm)
         </button>
         <button id="demoUnlockBtn" class="w-full py-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-store-border text-zinc-300 text-xs font-medium transition">
-          Test Mode: Simulate ₹29 Payment Success
+          Preview Mode: Simulate Instant Auto-Unlock
         </button>
       </div>
       <p class="text-[11px] text-zinc-500 text-center mt-3">
-        Prompt unlocks immediately on this screen after payment confirmation.
+        Secured by Instamojo • Saved forever in My Purchases
       </p>
     </div>
   </div>
@@ -268,14 +267,13 @@
       arrayUnion
     } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-    // 1. STORE & PAYMENT SETTINGS
+    // 1. INSTAMOJO AUTOMATIC PAYMENT SETTINGS
+    // Paste your Instamojo Payment Link below once KYC is approved (e.g., "https://imjo.in/xyz123")
     const STORE_CONFIG = {
-      razorpayKeyId: "rzp_test_REPLACE_WITH_YOUR_KEY", // Replace with your live Razorpay Key ID
-      currency: "INR",
-      priceInRupees: 29
+      instamojoPaymentLink: "REPLACE_WITH_YOUR_INSTAMOJO_LINK"
     };
 
-    // 2. YOUR PROMPTS CATALOG (Edit titles, images, and prompt text here)
+    // 2. YOUR PROMPTS CATALOG (Clear HD images + hidden prompt text until paid)
     const PROMPTS = [
       {
         id: "neon-cyberpunk-portrait",
@@ -333,7 +331,7 @@
       }
     ];
 
-    // 3. FIREBASE INITIALIZATION (Your Project: kruthik-f3cb7)
+    // 3. FIREBASE INITIALIZATION (kruthik-f3cb7)
     const firebaseConfig = {
       apiKey: "AIzaSyC6HPk_wMU6p17jYzsPvkA-e1i4T81BjFg",
       authDomain: "kruthik-f3cb7.firebaseapp.com",
@@ -351,36 +349,52 @@
     // 4. APP STATE
     let currentUser = null;
     let unlockedIds = new Set();
-    let activeTab = "explore"; // "explore" | "purchases"
+    let activeTab = "explore";
     let activeCategory = "All";
     let searchQuery = "";
-    let authMode = "login"; // "login" | "signup"
+    let authMode = "login";
     let pendingPrompt = null;
+    let activePayPrompt = null;
 
-    // DOM Elements
     const promptsGrid = document.getElementById("promptsGrid");
     const categoryBar = document.getElementById("categoryBar");
     const searchInput = document.getElementById("searchInput");
     const emptyState = document.getElementById("emptyState");
     const heroSection = document.getElementById("heroSection");
     const purchasesHeader = document.getElementById("purchasesHeader");
-
     const authModal = document.getElementById("authModal");
     const authForm = document.getElementById("authForm");
     const authErrorBox = document.getElementById("authErrorBox");
     const paymentModal = document.getElementById("paymentModal");
 
-    // Toast Helper (Pure text - safe on all browsers)
     let toastTimer;
     function showToast(msg) {
       const toast = document.getElementById("toast");
       toast.textContent = msg;
       toast.classList.remove("hidden");
       clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => toast.classList.add("hidden"), 2800);
+      toastTimer = setTimeout(() => toast.classList.add("hidden"), 3000);
     }
 
-    // Load & Save Unlocked Prompts (Firestore + LocalStorage backup)
+    // Configure Instamojo Automatic Callback (Runs 24/7 automatically on payment success)
+    if (window.Instamojo) {
+      window.Instamojo.configure({
+        handlers: {
+          onSuccess: async function (response) {
+            if (!activePayPrompt) return;
+            const unlockedId = activePayPrompt.id;
+            paymentModal.classList.add("hidden");
+            activePayPrompt = null;
+            await unlockPromptForUser(unlockedId, response && response.paymentId ? response.paymentId : "instamojo");
+            showToast("Payment received! Prompt unlocked automatically.");
+          },
+          onFailure: function () {
+            showToast("Payment failed or cancelled. Please try again.");
+          }
+        }
+      });
+    }
+
     async function loadUserPurchases(uid) {
       const localKey = `promptstore_unlocked_${uid}`;
       try {
@@ -404,7 +418,7 @@
       renderPrompts();
     }
 
-    async function unlockPromptForUser(promptId) {
+    async function unlockPromptForUser(promptId, paymentRef = "verified") {
       if (!currentUser) return;
       unlockedIds.add(promptId);
 
@@ -420,6 +434,7 @@
           {
             email: currentUser.email,
             unlockedPrompts: arrayUnion(promptId),
+            lastPaymentRef: paymentRef,
             updatedAt: new Date().toISOString()
           },
           { merge: true }
@@ -435,7 +450,6 @@
       document.getElementById("purchaseBadgeMobile").textContent = count;
     }
 
-    // Render Categories
     function renderCategories() {
       const categories = ["All", ...new Set(PROMPTS.map(p => p.category))];
       categoryBar.innerHTML = "";
@@ -455,7 +469,6 @@
       });
     }
 
-    // Render Prompt Cards
     function renderPrompts() {
       let filtered = PROMPTS;
 
@@ -483,7 +496,7 @@
         if (activeTab === "purchases") {
           document.getElementById("emptyStateTitle").textContent = "No unlocked prompts yet";
           document.getElementById("emptyStateDesc").textContent =
-            "Unlock any prompt for ₹29 and it will appear here permanently.";
+            "Unlock any prompt and it will appear here permanently.";
         } else {
           document.getElementById("emptyStateTitle").textContent = "No matching prompts";
           document.getElementById("emptyStateDesc").textContent =
@@ -498,7 +511,7 @@
         const isUnlocked = currentUser && unlockedIds.has(item.id);
         const card = document.createElement("article");
         card.className =
-          "bg-store-card border border-store-border rounded-2xl overflow-hidden flex flex-col justify-between transition hover:border-zinc-700";
+          "group bg-store-card border border-store-border rounded-2xl overflow-hidden flex flex-col justify-between transition hover:border-zinc-700";
 
         card.innerHTML = `
           <div>
@@ -507,9 +520,7 @@
                 src="${item.image}"
                 alt="${item.title}"
                 loading="lazy"
-                class="w-full h-full object-cover transition duration-500 ${
-                  isUnlocked ? "blur-0 scale-100" : "blur-md scale-110 brightness-75"
-                }"
+                class="w-full h-full object-cover transition duration-500 group-hover:scale-105"
               />
               <div class="absolute top-3 left-3 flex items-center gap-1.5">
                 <span class="px-2.5 py-1 rounded-lg bg-black/70 backdrop-blur-md text-[11px] font-semibold text-zinc-200 border border-white/10">
@@ -519,20 +530,10 @@
               <div class="absolute top-3 right-3">
                 ${
                   isUnlocked
-                    ? `<span class="px-2.5 py-1 rounded-lg bg-emerald-500/20 backdrop-blur-md text-[11px] font-semibold text-emerald-300 border border-emerald-500/30">Unlocked</span>`
-                    : `<span class="px-2.5 py-1 rounded-lg bg-black/75 backdrop-blur-md text-[11px] font-semibold text-amber-300 border border-amber-500/30">Locked • ₹${item.price}</span>`
+                    ? `<span class="px-2.5 py-1 rounded-lg bg-emerald-500/25 backdrop-blur-md text-[11px] font-semibold text-emerald-300 border border-emerald-500/40">Unlocked</span>`
+                    : `<span class="px-2.5 py-1 rounded-lg bg-black/75 backdrop-blur-md text-[11px] font-semibold text-amber-300 border border-amber-500/30">Locked</span>`
                 }
               </div>
-              ${
-                !isUnlocked
-                  ? `<div class="absolute inset-0 flex flex-col items-center justify-center p-4 text-center bg-black/30">
-                      <div class="px-3.5 py-2 rounded-xl bg-zinc-950/90 border border-white/10 backdrop-blur-md">
-                        <p class="text-xs font-semibold text-white">Preview Blurred</p>
-                        <p class="text-[11px] text-zinc-400 mt-0.5">Unlock to view full HD & copy prompt</p>
-                      </div>
-                    </div>`
-                  : ""
-              }
             </div>
 
             <div class="p-4">
@@ -547,8 +548,13 @@
                   ? `<div class="mt-3 p-3 rounded-xl bg-zinc-950 border border-store-border text-xs text-zinc-200 leading-relaxed select-all">
                       ${item.promptText}
                     </div>`
-                  : `<div class="mt-3 p-3 rounded-xl bg-zinc-950/70 border border-store-border/70 text-xs text-zinc-500 select-none blur-[3px]">
-                      Ultra-detailed cinematic portrait prompt hidden until unlocked for ₹${item.price}...
+                  : `<div class="mt-3 relative p-3 rounded-xl bg-zinc-950/70 border border-store-border/70 overflow-hidden">
+                      <p class="text-xs text-zinc-500 select-none blur-[4px]">
+                        Ultra-detailed cinematic portrait prompt hidden until unlocked...
+                      </p>
+                      <div class="absolute inset-0 flex items-center justify-center bg-zinc-950/40">
+                        <span class="text-[11px] font-medium text-zinc-300">Prompt locked • Unlock to copy</span>
+                      </div>
                     </div>`
               }
             </div>
@@ -561,7 +567,7 @@
                     Copy Prompt
                   </button>`
                 : `<button data-unlock-id="${item.id}" class="unlock-prompt-btn w-full py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold transition shadow-lg shadow-indigo-600/20">
-                    Unlock Prompt – ₹${item.price}
+                    Unlock Prompt
                   </button>`
             }
           </div>
@@ -570,7 +576,6 @@
         promptsGrid.appendChild(card);
       });
 
-      // Attach Card Button Listeners
       document.querySelectorAll(".unlock-prompt-btn").forEach(btn => {
         btn.onclick = () => {
           const promptObj = PROMPTS.find(p => p.id === btn.dataset.unlockId);
@@ -603,7 +608,6 @@
       });
     }
 
-    // Tab Switching
     function switchTab(tab) {
       activeTab = tab;
       const isExplore = tab === "explore";
@@ -660,7 +664,6 @@
       renderPrompts();
     });
 
-    // Auth Modal Logic
     function openAuth(mode = "login") {
       authMode = mode;
       authErrorBox.classList.add("hidden");
@@ -765,11 +768,10 @@
     };
 
     // Payment Modal Logic
-    let activePayPrompt = null;
-
     function openPayment(promptObj) {
       activePayPrompt = promptObj;
       document.getElementById("payPromptTitle").textContent = promptObj.title;
+      document.getElementById("payPromptPrice").textContent = `₹${promptObj.price}`;
       paymentModal.classList.remove("hidden");
     }
 
@@ -782,38 +784,24 @@
       if (!activePayPrompt) return;
       const id = activePayPrompt.id;
       paymentModal.classList.add("hidden");
-      await unlockPromptForUser(id);
+      activePayPrompt = null;
+      await unlockPromptForUser(id, "preview_test");
       showToast("Unlocked! Prompt is now visible & saved.");
     };
 
-    document.getElementById("razorpayPayBtn").onclick = () => {
+    document.getElementById("instamojoPayBtn").onclick = () => {
       if (!activePayPrompt) return;
 
-      if (STORE_CONFIG.razorpayKeyId.includes("REPLACE_WITH_YOUR_KEY")) {
-        showToast("Add your Razorpay Key ID in code, or use Test Mode button below.");
+      if (STORE_CONFIG.instamojoPaymentLink.includes("REPLACE_WITH_YOUR")) {
+        showToast("Paste your Instamojo link in code once KYC is approved!");
         return;
       }
 
-      const options = {
-        key: STORE_CONFIG.razorpayKeyId,
-        amount: activePayPrompt.price * 100, // paise
-        currency: STORE_CONFIG.currency,
-        name: "PromptStore",
-        description: activePayPrompt.title,
-        prefill: {
-          email: currentUser ? currentUser.email : ""
-        },
-        theme: { color: "#6366f1" },
-        handler: async function () {
-          const id = activePayPrompt.id;
-          paymentModal.classList.add("hidden");
-          await unlockPromptForUser(id);
-          showToast("Payment successful! Prompt unlocked.");
-        }
-      };
-
-      const rzp = new Razorpay(options);
-      rzp.open();
+      if (window.Instamojo) {
+        window.Instamojo.open(STORE_CONFIG.instamojoPaymentLink);
+      } else {
+        window.open(STORE_CONFIG.instamojoPaymentLink, "_blank");
+      }
     };
 
     // Auth State Observer
@@ -839,7 +827,6 @@
       }
     });
 
-    // Initial Render
     renderCategories();
     renderPrompts();
   </script>
