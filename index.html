@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Jinna Prompts – Viral AI Photo Prompts</title>
-  <!-- Custom JP Premium Favicon -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%23818cf8'/%3E%3Cstop offset='100%25' stop-color='%23c084fc'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='%230d0d12'/%3E%3Crect x='2' y='2' width='60' height='60' rx='14' fill='none' stroke='url(%23g)' stroke-width='3'/%3E%3Cpath d='M23 18v20c0 5.5-3.5 9-8.5 9-2 0-3.8-.5-5-1.3l1.8-4.2c.8.5 1.8.8 2.8.8 2.4 0 3.9-1.6 3.9-4.5V18h5zm10 0h9.5c5.8 0 9.5 3.4 9.5 8.8 0 5.5-3.7 8.9-9.5 8.9H38V46h-5V18zm5 4.3v9.2h4.2c3 0 4.8-1.7 4.8-4.6 0-2.9-1.8-4.6-4.8-4.6H38z' fill='%23ffffff'/%3E%3Cpath d='M51 11l1.5 3.5L56 16l-3.5 1.5L51 21l-1.5-3.5L46 16l3.5-1.5L51 11z' fill='url(%23g)'/%3E%3C/svg%3E" />
+  <title>The AI Prompts – 3D Studio Prompt Vault</title>
+  <!-- Custom 3D Isometric Prism Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g1' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%23818cf8'/%3E%3Cstop offset='100%25' stop-color='%23c084fc'/%3E%3C/linearGradient%3E%3ClinearGradient id='g2' x1='0' y1='1' x2='1' y2='0'%3E%3Cstop offset='0%25' stop-color='%234f46e5'/%3E%3Cstop offset='100%25' stop-color='%2338bdf8'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='%2309090b'/%3E%3Cpolygon points='32,10 52,21.5 32,33 12,21.5' fill='url(%23g1)'/%3E%3Cpolygon points='12,21.5 32,33 32,54 12,42.5' fill='%23312e81'/%3E%3Cpolygon points='52,21.5 32,33 32,54 52,42.5' fill='url(%23g2)' opacity='0.85'/%3E%3Ccircle cx='32' cy='33' r='4' fill='%23ffffff'/%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet" />
@@ -22,9 +22,9 @@
           },
           colors: {
             store: {
-              bg: '#09090b',
-              card: '#111114',
-              border: '#27272a',
+              bg: '#07070a',
+              card: '#101015',
+              border: '#24242e',
               accent: '#6366f1',
             }
           }
@@ -35,7 +35,7 @@
   <style>
     html {
       scroll-behavior: smooth;
-      background-color: #09090b;
+      background-color: #07070a;
       color: #fafafa;
     }
     .no-scrollbar::-webkit-scrollbar {
@@ -45,46 +45,109 @@
       -ms-overflow-style: none;
       scrollbar-width: none;
     }
+
+    /* 3D Perspective Grid & Floating Animations (Zero Lag Pure CSS) */
+    .hero-3d-grid {
+      background-size: 36px 36px;
+      background-image:
+        linear-gradient(to right, rgba(99, 102, 241, 0.14) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(99, 102, 241, 0.14) 1px, transparent 1px);
+      transform: perspective(500px) rotateX(55deg) scale(1.6);
+      transform-origin: center top;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,0.85), transparent 85%);
+      -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0.85), transparent 85%);
+    }
+
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-7px) rotate(2deg); }
+    }
+    .animate-float-3d {
+      animation: floatSlow 5s ease-in-out infinite;
+    }
+
+    /* 3D Tilt Card Surface */
+    .card-3d-wrap {
+      perspective: 1000px;
+    }
+    .card-3d-inner {
+      transform-style: preserve-3d;
+      transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.22s ease, border-color 0.22s ease;
+      box-shadow: 0 14px 30px -12px rgba(0, 0, 0, 0.75), inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
+    }
+    .card-3d-inner:hover {
+      box-shadow: 0 22px 42px -12px rgba(99, 102, 241, 0.28), inset 0 1px 0 0 rgba(255, 255, 255, 0.16);
+    }
+
+    /* 3D Tactile Extruded Button */
+    .btn-3d-primary {
+      background: linear-gradient(180deg, #6366f1 0%, #4f46e5 100%);
+      box-shadow: 0 4px 0 #312e81, 0 10px 20px -6px rgba(99, 102, 241, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.28);
+      transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.15s ease;
+    }
+    .btn-3d-primary:hover {
+      filter: brightness(1.08);
+    }
+    .btn-3d-primary:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 #312e81, 0 5px 12px -4px rgba(99, 102, 241, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-3d-emerald {
+      background: linear-gradient(180deg, #10b981 0%, #059669 100%);
+      box-shadow: 0 4px 0 #064e3b, 0 10px 20px -6px rgba(16, 185, 129, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.28);
+      transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.15s ease;
+    }
+    .btn-3d-emerald:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 #064e3b;
+    }
   </style>
 </head>
 <body class="bg-store-bg text-zinc-100 min-h-screen flex flex-col antialiased selection:bg-indigo-500/30">
 
-  <!-- Sticky Header -->
-  <header class="sticky top-0 z-40 bg-store-bg/85 backdrop-blur-xl border-b border-store-border">
+  <!-- Sticky Glass Header -->
+  <header class="sticky top-0 z-40 bg-store-bg/80 backdrop-blur-xl border-b border-white/[0.07]">
     <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between gap-3">
-      <!-- Premium Custom Brand Logo -->
+      <!-- 3D Isometric Cube Brand Logo -->
       <a href="#" id="brandLogo" class="flex items-center gap-3 shrink-0 group">
-        <div class="relative w-10 h-10 rounded-xl bg-gradient-to-b from-zinc-800/90 to-zinc-950 p-[1px] shadow-lg shadow-indigo-500/15 group-hover:shadow-indigo-500/30 transition">
-          <div class="w-full h-full rounded-[11px] bg-[#0c0c10] flex items-center justify-center relative overflow-hidden">
-            <div class="absolute -top-3 -right-3 w-8 h-8 bg-indigo-500/25 blur-md rounded-full"></div>
-            <svg width="26" height="26" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <div class="relative w-10 h-10 rounded-xl bg-gradient-to-b from-zinc-800 to-zinc-950 p-[1px] shadow-[0_6px_16px_rgba(99,102,241,0.28)] group-hover:scale-105 transition">
+          <div class="w-full h-full rounded-[11px] bg-[#0b0b10] flex items-center justify-center relative overflow-hidden">
+            <div class="absolute inset-0 bg-radial from-indigo-500/20 to-transparent"></div>
+            <svg width="28" height="28" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <defs>
-                <linearGradient id="jpGrad" x1="4" y1="4" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+                <linearGradient id="cubeTop" x1="8" y1="6" x2="32" y2="20" gradientUnits="userSpaceOnUse">
                   <stop offset="0%" stop-color="#A5B4FC" />
-                  <stop offset="50%" stop-color="#818CF8" />
                   <stop offset="100%" stop-color="#C084FC" />
                 </linearGradient>
+                <linearGradient id="cubeRight" x1="20" y1="20" x2="33" y2="34" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#6366F1" />
+                  <stop offset="100%" stop-color="#38BDF8" />
+                </linearGradient>
               </defs>
-              <!-- J Stroke -->
-              <path d="M13.5 9.5V21.2C13.5 24.4 11.5 26.5 8.5 26.5C7.1 26.5 5.9 26.1 5 25.4" stroke="white" stroke-width="2.7" stroke-linecap="round" />
-              <!-- P Stroke -->
-              <path d="M18.5 26V9.5H24.2C27.1 9.5 29 11.3 29 14.1C29 16.9 27.1 18.7 24.2 18.7H18.5" stroke="url(#jpGrad)" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round" />
-              <!-- AI Prism Spark -->
-              <path d="M29.5 4.5L30.4 6.6L32.5 7.5L30.4 8.4L29.5 10.5L28.6 8.4L26.5 7.5L28.6 6.6L29.5 4.5Z" fill="#C084FC" />
+              <!-- 3D Isometric Cube Faces -->
+              <polygon points="20,6 33,13.5 20,21 7,13.5" fill="url(#cubeTop)" />
+              <polygon points="7,13.5 20,21 20,35 7,27.5" fill="#2E2A72" />
+              <polygon points="33,13.5 20,21 20,35 33,27.5" fill="url(#cubeRight)" opacity="0.9" />
+              <!-- Inner 3D Wireframe Edge Highlight -->
+              <polyline points="7,13.5 20,21 33,13.5" stroke="white" stroke-opacity="0.65" stroke-width="1.2" fill="none" />
+              <line x1="20" y1="21" x2="20" y2="35" stroke="white" stroke-opacity="0.45" stroke-width="1.2" />
+              <!-- AI Core Node -->
+              <circle cx="20" cy="21" r="2.3" fill="white" />
             </svg>
           </div>
         </div>
         <div class="flex flex-col">
-          <div class="flex items-center gap-1">
-            <span class="font-display font-extrabold text-base sm:text-lg tracking-tight text-white leading-none">JINNA</span>
-            <span class="font-display font-bold text-base sm:text-lg tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400 leading-none">PROMPTS</span>
+          <div class="flex items-center gap-1.5">
+            <span class="font-display font-extrabold text-sm sm:text-lg tracking-tight text-white leading-none">THE AI</span>
+            <span class="font-display font-extrabold text-sm sm:text-lg tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-sky-400 leading-none">PROMPTS</span>
           </div>
-          <span class="text-[9px] font-medium uppercase tracking-[0.2em] text-zinc-500 mt-1">AI Studio Vault</span>
+          <span class="text-[9px] font-semibold uppercase tracking-[0.22em] text-zinc-500 mt-1">3D Studio Vault</span>
         </div>
       </a>
 
       <!-- View Switcher -->
-      <nav class="hidden sm:flex items-center bg-zinc-900/90 p-1 rounded-xl border border-store-border">
+      <nav class="hidden sm:flex items-center bg-zinc-900/90 p-1 rounded-xl border border-white/[0.08] shadow-inner">
         <button id="tabExploreDesktop" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 text-white transition">
           Explore Store
         </button>
@@ -96,7 +159,7 @@
 
       <!-- Auth Controls -->
       <div class="flex items-center gap-2">
-        <button id="openAuthBtn" class="px-3.5 sm:px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs sm:text-sm font-semibold transition shadow-lg shadow-indigo-600/20">
+        <button id="openAuthBtn" class="btn-3d-primary px-3.5 sm:px-4 py-2 rounded-xl text-white text-xs sm:text-sm font-semibold">
           Login / Sign Up
         </button>
         <div id="userMenu" class="hidden items-center gap-2">
@@ -109,7 +172,7 @@
     </div>
 
     <!-- Mobile View Switcher -->
-    <div class="sm:hidden border-t border-store-border/70 px-4 py-2 flex gap-2 bg-store-bg">
+    <div class="sm:hidden border-t border-white/[0.06] px-4 py-2 flex gap-2 bg-store-bg">
       <button id="tabExploreMobile" class="flex-1 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 text-white transition">
         Explore Store
       </button>
@@ -122,45 +185,61 @@
 
   <!-- Main Content -->
   <main class="flex-1 max-w-6xl w-full mx-auto px-4 py-5 sm:py-7">
-    <!-- Compact Cinematic Glass Hero Card + Search -->
+    <!-- 3D Depth Glass Hero Section -->
     <section id="heroSection" class="mb-6">
-      <div class="relative overflow-hidden rounded-2xl border border-zinc-800/90 bg-zinc-950 p-5 sm:p-8 shadow-2xl">
-        <!-- Premium Ambient Background Visual with Smooth Dark Merge -->
+      <div class="relative overflow-hidden rounded-2xl border border-white/[0.1] bg-[#0b0b10] p-5 sm:p-8 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.9)]">
+        <!-- 3D Perspective Grid Floor -->
+        <div class="hero-3d-grid absolute inset-0 pointer-events-none"></div>
+
+        <!-- Ambient Studio Image + Depth Lighting -->
         <img
           src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1400&q=80"
           alt=""
           aria-hidden="true"
-          class="absolute inset-0 w-full h-full object-cover object-center opacity-45 scale-105 pointer-events-none"
+          class="absolute inset-0 w-full h-full object-cover object-center opacity-35 scale-105 pointer-events-none"
         />
-        <div class="absolute inset-0 bg-gradient-to-r from-[#09090b] via-[#09090b]/85 to-[#09090b]/35 pointer-events-none"></div>
-        <div class="absolute inset-0 bg-gradient-to-t from-[#09090b] via-transparent to-[#09090b]/50 pointer-events-none"></div>
-        <div class="absolute -bottom-16 -left-16 w-56 h-56 rounded-full bg-indigo-600/20 blur-3xl pointer-events-none"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-[#07070a] via-[#07070a]/85 to-transparent pointer-events-none"></div>
+        <div class="absolute -top-20 right-10 w-64 h-64 rounded-full bg-indigo-600/25 blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-20 left-10 w-64 h-64 rounded-full bg-purple-600/20 blur-3xl pointer-events-none"></div>
 
-        <!-- Hero Content -->
-        <div class="relative z-10 max-w-xl">
-          <span class="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-indigo-300 bg-indigo-500/15 border border-indigo-400/25 backdrop-blur-md px-3 py-1 rounded-full mb-3">
-            Curated Studio Vault
-          </span>
-
-          <h1 class="font-display font-extrabold text-2xl sm:text-4xl text-white tracking-tight leading-[1.15]">
-            Turn Normal Selfies Into <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400">Studio AI Portraits</span>
-          </h1>
-
-          <p class="text-zinc-300 text-xs sm:text-sm mt-2.5 leading-relaxed">
-            Copy-paste tested prompts engineered for Gemini, Midjourney & ChatGPT. Unlock once, own forever.
-          </p>
-
-          <!-- 3 Quick Trust Badges -->
-          <div class="mt-4 flex flex-wrap items-center gap-2 text-[11px] font-medium text-zinc-200">
-            <span class="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10 backdrop-blur-md">
-              ⚡ 1-Sec Auto Unlock
+        <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <!-- Left Copy -->
+          <div class="max-w-xl">
+            <span class="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-indigo-300 bg-indigo-500/15 border border-indigo-400/25 backdrop-blur-md px-3 py-1 rounded-full mb-3">
+              Next-Gen AI Prompt Engineering
             </span>
-            <span class="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10 backdrop-blur-md">
-              🎨 Gemini & Midjourney
-            </span>
-            <span class="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10 backdrop-blur-md">
-              ♾️ Lifetime Vault
-            </span>
+
+            <h1 class="font-display font-extrabold text-2xl sm:text-4xl text-white tracking-tight leading-[1.15]">
+              Turn Normal Selfies Into <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-sky-400">Studio AI Portraits</span>
+            </h1>
+
+            <p class="text-zinc-300 text-xs sm:text-sm mt-2.5 leading-relaxed">
+              Copy-paste precision prompts built for Gemini, Midjourney & ChatGPT. Pay once via UPI, unlock in 1 second, own forever.
+            </p>
+
+            <!-- 3D Glass Badges -->
+            <div class="mt-4 flex flex-wrap items-center gap-2 text-[11px] font-medium text-zinc-200">
+              <span class="px-2.5 py-1 rounded-lg bg-white/[0.06] border border-white/[0.12] shadow-sm backdrop-blur-md">
+                ⚡ 1-Sec Auto Unlock
+              </span>
+              <span class="px-2.5 py-1 rounded-lg bg-white/[0.06] border border-white/[0.12] shadow-sm backdrop-blur-md">
+                🎨 Gemini & Midjourney
+              </span>
+              <span class="px-2.5 py-1 rounded-lg bg-white/[0.06] border border-white/[0.12] shadow-sm backdrop-blur-md">
+                ♾️ Lifetime Vault
+              </span>
+            </div>
+          </div>
+
+          <!-- Right Floating 3D Visual Badge (Desktop) -->
+          <div class="hidden md:flex items-center justify-center shrink-0 pr-4">
+            <div class="animate-float-3d relative w-36 h-36 rounded-2xl bg-gradient-to-br from-indigo-500/20 via-purple-500/15 to-sky-500/20 border border-white/15 backdrop-blur-xl flex flex-col items-center justify-center shadow-[0_20px_40px_rgba(79,70,229,0.35)]">
+              <div class="w-12 h-12 rounded-xl bg-indigo-600/30 border border-indigo-400/40 flex items-center justify-center mb-2 shadow-inner">
+                <span class="font-display font-extrabold text-xl text-white">AI</span>
+              </div>
+              <span class="font-display font-bold text-xs text-white tracking-wide">8K STUDIO</span>
+              <span class="text-[10px] text-indigo-300 mt-0.5">Verified Prompts</span>
+            </div>
           </div>
         </div>
       </div>
@@ -172,7 +251,7 @@
             id="searchInput"
             type="text"
             placeholder="Search prompts (e.g., Cyberpunk, Portrait, Cinematic)..."
-            class="w-full bg-store-card border border-store-border rounded-xl pl-4 pr-4 py-2.5 text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-indigo-500 transition"
+            class="w-full bg-store-card border border-store-border rounded-xl pl-4 pr-4 py-2.5 text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-indigo-500 shadow-inner transition"
           />
         </div>
       </div>
@@ -188,8 +267,8 @@
       <p class="text-xs sm:text-sm text-zinc-400 mt-1">All prompts you have unlocked are saved permanently to your account.</p>
     </section>
 
-    <!-- Prompts Grid -->
-    <section id="promptsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+    <!-- 3D Prompts Grid -->
+    <section id="promptsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       <!-- Rendered by JS -->
     </section>
 
@@ -197,795 +276,95 @@
     <div id="emptyState" class="hidden text-center py-16 px-4 bg-store-card border border-store-border rounded-2xl">
       <p id="emptyStateTitle" class="text-base font-semibold text-white">No prompts found</p>
       <p id="emptyStateDesc" class="text-xs sm:text-sm text-zinc-400 mt-1">Try a different search keyword or category.</p>
-      <button id="emptyStateBtn" class="mt-4 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-xs font-semibold text-white transition">
+      <button id="emptyStateBtn" class="btn-3d-primary mt-4 px-4 py-2 rounded-xl text-xs font-semibold text-white">
         Browse All Prompts
       </button>
     </div>
   </main>
 
-  <!-- Footer with Mandatory Compliance & Info Pages -->
-  <footer class="border-t border-store-border bg-zinc-950/60 py-8 px-4">
-    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-      <div class="flex items-center gap-2.5 text-center sm:text-left">
-        <div class="w-7 h-7 rounded-lg bg-zinc-900 border border-store-border flex items-center justify-center shrink-0">
-          <span class="font-display font-extrabold text-xs text-indigo-400">JP</span>
-        </div>
+  <!-- Footer with Web Design Lead Banner & Mandatory Policy Links -->
+  <footer class="border-t border-white/[0.08] bg-[#050508] py-8 px-4 mt-8">
+    <div class="max-w-6xl mx-auto space-y-6">
+      <!-- Custom Website Development Lead Card -->
+      <div class="rounded-2xl border border-indigo-500/25 bg-gradient-to-r from-indigo-950/40 via-zinc-900/70 to-purple-950/40 p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-lg">
         <div>
-          <p class="font-display font-bold text-sm text-white">Jinna Prompts</p>
-          <p class="text-xs text-zinc-500 mt-0.5">© 2026 Jinna Prompts. All prompts tested for high-detail AI image generation.</p>
+          <span class="text-[10px] font-bold uppercase tracking-widest text-indigo-400">Custom Web Studio</span>
+          <h3 class="font-display font-bold text-sm sm:text-base text-white mt-0.5">
+            Want a high-converting 3D website like this for your brand?
+          </h3>
+          <p class="text-xs text-zinc-400 mt-0.5">
+            We build fast, mobile-first stores, portfolios & payment-ready websites.
+          </p>
         </div>
+        <button
+          type="button"
+          id="openWebInquiryBtn"
+          class="btn-3d-primary shrink-0 px-4 py-2.5 rounded-xl text-xs font-semibold text-white"
+        >
+          Get Your Website →
+        </button>
       </div>
 
-      <div class="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs text-zinc-400">
-        <button type="button" data-policy="about" class="policy-link hover:text-white transition">About Us</button>
-        <button type="button" data-policy="privacy" class="policy-link hover:text-white transition">Privacy Policy</button>
-        <button type="button" data-policy="terms" class="policy-link hover:text-white transition">Terms & Conditions</button>
-        <button type="button" data-policy="refund" class="policy-link hover:text-white transition">Refund Policy</button>
-        <button type="button" data-policy="contact" class="policy-link hover:text-white transition">Contact Us</button>
+      <!-- Brand & Legal Links -->
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2">
+        <div class="flex items-center gap-2.5 text-center sm:text-left">
+          <div class="w-7 h-7 rounded-lg bg-zinc-900 border border-white/10 flex items-center justify-center shrink-0">
+            <span class="font-display font-extrabold text-[10px] text-indigo-400">AI</span>
+          </div>
+          <div>
+            <p class="font-display font-bold text-sm text-white">The AI Prompts</p>
+            <p class="text-xs text-zinc-500 mt-0.5">© 2026 The AI Prompts. All prompts tested for high-detail AI image generation.</p>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs text-zinc-400">
+          <button type="button" data-policy="about" class="policy-link hover:text-white transition">About Us</button>
+          <button type="button" data-policy="privacy" class="policy-link hover:text-white transition">Privacy Policy</button>
+          <button type="button" data-policy="terms" class="policy-link hover:text-white transition">Terms & Conditions</button>
+          <button type="button" data-policy="refund" class="policy-link hover:text-white transition">Refund Policy</button>
+          <button type="button" data-policy="contact" class="policy-link hover:text-white transition">Contact Us</button>
+        </div>
       </div>
     </div>
   </footer>
 
-  <!-- Legal & Store Info Modal (About, Privacy, Terms, Refund, Contact) -->
-  <div id="infoModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-store-card border border-store-border w-full max-w-lg rounded-2xl p-6 relative shadow-2xl max-h-[85vh] flex flex-col">
-      <div class="flex items-center justify-between pb-3 border-b border-store-border">
-        <h3 id="infoModalTitle" class="font-display font-bold text-lg text-white">Information</h3>
-        <button id="closeInfoModal" class="w-8 h-8 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-white flex items-center justify-center text-sm font-bold">
-          ✕
-        </button>
-      </div>
-      <div id="infoModalBody" class="mt-4 overflow-y-auto pr-1 text-xs sm:text-sm text-zinc-300 space-y-3 leading-relaxed">
-        <!-- Populated dynamically -->
-      </div>
-    </div>
-  </div>
-
-  <!-- Auth Modal -->
-  <div id="authModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-store-card border border-store-border w-full max-w-md rounded-2xl p-6 relative shadow-2xl">
-      <button id="closeAuthModal" class="absolute top-4 right-4 w-8 h-8 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-white flex items-center justify-center text-sm font-bold">
+  <!-- Custom Website Client Inquiry Modal -->
+  <div id="webInquiryModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-store-card border border-white/15 w-full max-w-md rounded-2xl p-6 relative shadow-2xl">
+      <button id="closeWebInquiryModal" class="absolute top-4 right-4 w-8 h-8 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-white flex items-center justify-center text-sm font-bold">
         ✕
       </button>
 
-      <h3 id="authModalTitle" class="font-display font-bold text-xl text-white">Welcome Back</h3>
-      <p id="authModalSubtitle" class="text-xs text-zinc-400 mt-1">Log in to Jinna Prompts to access or unlock your AI photo prompts.</p>
-
-      <!-- Mode Switch -->
-      <div class="grid grid-cols-2 bg-zinc-950 p-1 rounded-xl border border-store-border mt-4">
-        <button id="switchLoginBtn" type="button" class="py-2 rounded-lg text-xs font-semibold bg-indigo-600 text-white transition">
-          Login
-        </button>
-        <button id="switchSignupBtn" type="button" class="py-2 rounded-lg text-xs font-semibold text-zinc-400 hover:text-white transition">
-          Create Account
-        </button>
-      </div>
-
-      <!-- Error Alert -->
-      <div id="authErrorBox" class="hidden mt-4 p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-xs text-red-300 leading-relaxed"></div>
-
-      <form id="authForm" class="mt-4 space-y-3.5">
-        <div>
-          <label class="block text-xs font-medium text-zinc-300 mb-1.5">Email Address</label>
-          <input
-            id="authEmail"
-            type="email"
-            required
-            placeholder="you@example.com"
-            class="w-full bg-zinc-950 border border-store-border rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-indigo-500"
-          />
-        </div>
-        <div>
-          <label class="block text-xs font-medium text-zinc-300 mb-1.5">Password</label>
-          <input
-            id="authPassword"
-            type="password"
-            required
-            minlength="6"
-            placeholder="Minimum 6 characters"
-            class="w-full bg-zinc-950 border border-store-border rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-indigo-500"
-          />
-        </div>
-        <button
-          id="authSubmitBtn"
-          type="submit"
-          class="w-full py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold transition shadow-lg shadow-indigo-600/25"
-        >
-          Login & Continue
-        </button>
-      </form>
-    </div>
-  </div>
-
-  <!-- Payment / Instant Auto-Unlock Modal -->
-  <div id="paymentModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-store-card border border-store-border w-full max-w-md rounded-2xl p-6 relative shadow-2xl">
-      <button id="closePaymentModal" class="absolute top-4 right-4 w-8 h-8 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-white flex items-center justify-center text-sm font-bold">
-        ✕
-      </button>
-
-      <span class="text-[11px] font-semibold uppercase tracking-wider text-indigo-400">24/7 Automatic Unlock</span>
-      <h3 id="payPromptTitle" class="font-display font-bold text-lg text-white mt-1">Prompt Title</h3>
-
-      <div class="mt-4 p-3.5 rounded-xl bg-zinc-950 border border-store-border flex items-center justify-between">
-        <div>
-          <p class="text-xs text-zinc-300 font-medium">Instant UPI Checkout</p>
-          <p class="text-[11px] text-emerald-400 mt-0.5">Unlocks automatically right after payment</p>
-        </div>
-        <div class="text-right">
-          <span id="payPromptPrice" class="font-display font-extrabold text-2xl text-white">₹29</span>
-        </div>
-      </div>
-
-      <div class="mt-5 space-y-2.5">
-        <button id="instamojoPayBtn" class="w-full py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold transition shadow-lg shadow-indigo-600/25">
-          Pay via UPI (GPay / PhonePe / Paytm)
-        </button>
-        <button id="demoUnlockBtn" class="w-full py-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-store-border text-zinc-300 text-xs font-medium transition">
-          Preview Mode: Simulate Instant Auto-Unlock
-        </button>
-      </div>
-      <p class="text-[11px] text-zinc-500 text-center mt-3">
-        By continuing, you agree to Jinna Prompts Terms & Refund Policy.
+      <span class="text-[11px] font-semibold uppercase tracking-wider text-indigo-400">Custom Web Development</span>
+      <h3 class="font-display font-bold text-xl text-white mt-1">Build Your Website</h3>
+      <p class="text-xs text-zinc-400 mt-1">
+        Like the 3D design and speed of <strong class="text-zinc-200">The AI Prompts</strong>? Send your project details below to get started.
       </p>
-    </div>
-  </div>
 
-  <!-- Toast Notification -->
-  <div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-50 px-4 py-2.5 rounded-xl bg-zinc-900 border border-zinc-700 text-xs font-medium text-white shadow-xl"></div>
-
-  <!-- Firebase + App Logic -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import {
-      getAuth,
-      createUserWithEmailAndPassword,
-      signInWithEmailAndPassword,
-      signOut,
-      onAuthStateChanged
-    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    import {
-      getFirestore,
-      doc,
-      getDoc,
-      setDoc,
-      arrayUnion
-    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-    // 1. INSTAMOJO AUTOMATIC PAYMENT SETTINGS
-    const STORE_CONFIG = {
-      instamojoPaymentLink: "REPLACE_WITH_YOUR_INSTAMOJO_LINK",
-      supportEmail: "kruthik.kodamala2006@gmail.com"
-    };
-
-    // 2. STORE POLICIES & INFO CONTENT
-    const POLICY_CONTENT = {
-      about: {
-        title: "About Jinna Prompts",
-        html: `
-          <p><strong class="text-white">Jinna Prompts</strong> is a digital creative platform dedicated to providing carefully tested, high-detail AI photo generation prompts for creators, designers, and social media enthusiasts.</p>
-          <p>Every prompt listed in our store is engineered and verified across leading AI image generators—including <strong class="text-white">Google Gemini, Midjourney, and ChatGPT</strong>—to deliver consistent lighting, realistic textures, and studio-grade composition.</p>
-          <p>Our goal is to save creators hours of trial-and-error by offering ready-to-copy prompts with instant digital delivery and lifetime dashboard access.</p>
-        `
-      },
-      privacy: {
-        title: "Privacy Policy",
-        html: `
-          <p class="text-zinc-400 text-xs">Last Updated: November 2026</p>
-          <p><strong class="text-white">1. Information We Collect:</strong> When you create an account on Jinna Prompts, we collect your email address and maintain a record of the digital prompts unlocked under your account using Google Firebase.</p>
-          <p><strong class="text-white">2. Payment Security:</strong> We do not store your UPI PIN, bank credentials, or debit/credit card numbers. All payments are processed securely through encrypted third-party payment gateways.</p>
-          <p><strong class="text-white">3. How We Use Your Data:</strong> Your account information is used strictly to authenticate your login, restore your unlocked prompts across devices, and provide customer support.</p>
-          <p><strong class="text-white">4. Data Sharing:</strong> We never sell, rent, or trade your personal email or purchase history to third-party marketers.</p>
-        `
-      },
-      terms: {
-        title: "Terms & Conditions",
-        html: `
-          <p class="text-zinc-400 text-xs">Last Updated: November 2026</p>
-          <p><strong class="text-white">1. Digital License:</strong> Purchasing a prompt on Jinna Prompts grants you a personal, non-exclusive license to use the prompt text to generate AI images for personal or social media use.</p>
-          <p><strong class="text-white">2. Prohibited Use:</strong> You may not resell, redistribute, publish, or share the unlocked raw prompt text publicly or on competing prompt marketplaces.</p>
-          <p><strong class="text-white">3. AI Output Variations:</strong> Because AI models evolve continuously, generated images may vary slightly depending on the AI tool version and reference photo used.</p>
-          <p><strong class="text-white">4. Account Responsibility:</strong> You are responsible for keeping your login credentials secure. Unlocked prompts remain tied to the registered email account.</p>
-        `
-      },
-      refund: {
-        title: "Refund & Cancellation Policy",
-        html: `
-          <p class="text-zinc-400 text-xs">Last Updated: November 2026</p>
-          <p><strong class="text-white">1. Instant Digital Delivery:</strong> All items sold on Jinna Prompts are intangible digital text prompts that unlock immediately upon payment confirmation. Therefore, orders cannot be cancelled once unlocked.</p>
-          <p><strong class="text-white">2. Eligible Refunds:</strong> A full refund will be issued within 5–7 business days if: (a) you were charged twice for the same prompt due to a technical glitch, or (b) payment was deducted from your bank/UPI account but the prompt failed to unlock even after contacting support.</p>
-          <p><strong class="text-white">3. How to Request Support:</strong> Email your registered email ID and payment transaction reference to <span class="text-indigo-400">${STORE_CONFIG.supportEmail}</span> within 48 hours of the transaction.</p>
-        `
-      },
-      contact: {
-        title: "Contact Us",
-        html: `
-          <p>Have a question about a prompt, account access, or payment confirmation? We are here to help.</p>
-          <div class="p-3.5 rounded-xl bg-zinc-950 border border-store-border space-y-2">
-            <p><strong class="text-white">Store Name:</strong> Jinna Prompts</p>
-            <p><strong class="text-white">Support Email:</strong> <a href="mailto:${STORE_CONFIG.supportEmail}" class="text-indigo-400 underline">${STORE_CONFIG.supportEmail}</a></p>
-            <p><strong class="text-white">Response Time:</strong> Within 24 hours (Monday – Saturday)</p>
-            <p><strong class="text-white">Country:</strong> India</p>
-          </div>
-          <p class="text-xs text-zinc-400">For faster assistance with payment issues, please include your registered account email and UPI transaction ID.</p>
-        `
-      }
-    };
-
-    // 3. YOUR PROMPTS CATALOG
-    const PROMPTS = [
-      {
-        id: "neon-cyberpunk-portrait",
-        title: "Neon Rain Cyberpunk Street Portrait",
-        category: "Cyberpunk",
-        tool: "Gemini / Midjourney",
-        price: 29,
-        image: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=80",
-        promptText: "Ultra-detailed cinematic street portrait of a young Indian man standing under neon cyan and magenta rain reflections at night, wearing a dark matte techwear jacket, wet hair strands, shallow depth of field, 85mm f/1.4 lens, volumetric fog, dramatic rim lighting, photorealistic 8k."
-      },
-      {
-        id: "royal-editorial-studio",
-        title: "Moody Black & Gold Editorial Studio",
-        category: "Studio Portrait",
-        tool: "Gemini / ChatGPT",
-        price: 29,
-        image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80",
-        promptText: "High-fashion editorial studio portrait against a deep charcoal backdrop, warm golden key light sculpting facial contours, tailored black blazer, crisp skin texture, subtle film grain, Hasselblad medium format aesthetic, sharp focus on eyes, 8k resolution."
-      },
-      {
-        id: "golden-hour-rooftop",
-        title: "Golden Hour Cinematic Rooftop Look",
-        category: "Cinematic",
-        tool: "Gemini / Midjourney",
-        price: 29,
-        image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=800&q=80",
-        promptText: "Candid golden hour portrait on an urban rooftop overlooking a hazy city skyline at sunset, warm amber backlight glowing through hair, linen casual shirt, natural skin tones, anamorphic lens flare, Kodak Portra 400 color grading, 50mm f/1.2."
-      },
-      {
-        id: "dark-fantasy-warrior",
-        title: "Mythic Dark Fantasy Armor Concept",
-        category: "Fantasy",
-        tool: "Midjourney v6",
-        price: 29,
-        image: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80",
-        promptText: "Epic dark fantasy character portrait wearing intricately engraved obsidian and bronze armor, glowing embers floating in dark smoky atmosphere, dramatic chiaroscuro lighting, hyper-detailed textures, Unreal Engine 5 cinematic render, 8k."
-      },
-      {
-        id: "minimal-luxury-watch",
-        title: "Luxury Monochrome Suit & Watch",
-        category: "Editorial",
-        tool: "Gemini / ChatGPT",
-        price: 29,
-        image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80",
-        promptText: "Timeless black-and-white fine art portrait in a tailored dark suit adjusting a mechanical luxury wristwatch, dramatic side window lighting, rich contrast, Leica M11 monochrome photography style, crisp details."
-      },
-      {
-        id: "futuristic-car-night",
-        title: "Midnight Supercar & Smoke Aesthetic",
-        category: "Cinematic",
-        tool: "Gemini / Midjourney",
-        price: 29,
-        image: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=800&q=80",
-        promptText: "Cinematic wide shot leaning beside a matte black sports car inside a dimly lit concrete tunnel, cool blue overhead LED strips, low-lying atmospheric smoke, sharp reflections on glossy paint, automotive magazine photography, 35mm lens."
-      }
-    ];
-
-    // 4. FIREBASE INITIALIZATION (kruthik-f3cb7)
-    const firebaseConfig = {
-      apiKey: "AIzaSyC6HPk_wMU6p17jYzsPvkA-e1i4T81BjFg",
-      authDomain: "kruthik-f3cb7.firebaseapp.com",
-      projectId: "kruthik-f3cb7",
-      storageBucket: "kruthik-f3cb7.firebasestorage.app",
-      messagingSenderId: "600037917793",
-      appId: "1:600037917793:web:f97ac20801a56a879f1620",
-      measurementId: "G-D1LTQV04YV"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-
-    // 5. APP STATE
-    let currentUser = null;
-    let unlockedIds = new Set();
-    let activeTab = "explore";
-    let activeCategory = "All";
-    let searchQuery = "";
-    let authMode = "login";
-    let pendingPrompt = null;
-    let activePayPrompt = null;
-
-    const promptsGrid = document.getElementById("promptsGrid");
-    const categoryBar = document.getElementById("categoryBar");
-    const searchInput = document.getElementById("searchInput");
-    const emptyState = document.getElementById("emptyState");
-    const heroSection = document.getElementById("heroSection");
-    const purchasesHeader = document.getElementById("purchasesHeader");
-    const authModal = document.getElementById("authModal");
-    const authForm = document.getElementById("authForm");
-    const authErrorBox = document.getElementById("authErrorBox");
-    const paymentModal = document.getElementById("paymentModal");
-    const infoModal = document.getElementById("infoModal");
-
-    let toastTimer;
-    function showToast(msg) {
-      const toast = document.getElementById("toast");
-      toast.textContent = msg;
-      toast.classList.remove("hidden");
-      clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => toast.classList.add("hidden"), 3000);
-    }
-
-    // Policy & Info Modal Handlers
-    document.querySelectorAll(".policy-link").forEach(btn => {
-      btn.onclick = () => {
-        const item = POLICY_CONTENT[btn.dataset.policy];
-        if (!item) return;
-        document.getElementById("infoModalTitle").textContent = item.title;
-        document.getElementById("infoModalBody").innerHTML = item.html;
-        infoModal.classList.remove("hidden");
-      };
-    });
-
-    document.getElementById("closeInfoModal").onclick = () => infoModal.classList.add("hidden");
-    infoModal.addEventListener("click", e => {
-      if (e.target === infoModal) infoModal.classList.add("hidden");
-    });
-
-    // Instamojo Automatic Callback
-    if (window.Instamojo) {
-      window.Instamojo.configure({
-        handlers: {
-          onSuccess: async function (response) {
-            if (!activePayPrompt) return;
-            const unlockedId = activePayPrompt.id;
-            paymentModal.classList.add("hidden");
-            activePayPrompt = null;
-            await unlockPromptForUser(unlockedId, response && response.paymentId ? response.paymentId : "instamojo");
-            showToast("Payment received! Prompt unlocked automatically.");
-          },
-          onFailure: function () {
-            showToast("Payment failed or cancelled. Please try again.");
-          }
-        }
-      });
-    }
-
-    async function loadUserPurchases(uid) {
-      const localKey = `jinnaprompts_unlocked_${uid}`;
-      const legacyKey = `promptstore_unlocked_${uid}`;
-      try {
-        const cached = JSON.parse(localStorage.getItem(localKey) || localStorage.getItem(legacyKey) || "[]");
-        unlockedIds = new Set(cached);
-      } catch (_) {
-        unlockedIds = new Set();
-      }
-
-      try {
-        const snap = await getDoc(doc(db, "users", uid));
-        if (snap.exists() && Array.isArray(snap.data().unlockedPrompts)) {
-          snap.data().unlockedPrompts.forEach(id => unlockedIds.add(id));
-          localStorage.setItem(localKey, JSON.stringify([...unlockedIds]));
-        }
-      } catch (err) {
-        console.warn("Firestore sync skipped:", err.message);
-      }
-
-      updatePurchaseBadges();
-      renderPrompts();
-    }
-
-    async function unlockPromptForUser(promptId, paymentRef = "verified") {
-      if (!currentUser) return;
-      unlockedIds.add(promptId);
-
-      const localKey = `jinnaprompts_unlocked_${currentUser.uid}`;
-      localStorage.setItem(localKey, JSON.stringify([...unlockedIds]));
-
-      updatePurchaseBadges();
-      renderPrompts();
-
-      try {
-        await setDoc(
-          doc(db, "users", currentUser.uid),
-          {
-            email: currentUser.email,
-            unlockedPrompts: arrayUnion(promptId),
-            lastPaymentRef: paymentRef,
-            updatedAt: new Date().toISOString()
-          },
-          { merge: true }
-        );
-      } catch (err) {
-        console.warn("Firestore save warning:", err.message);
-      }
-    }
-
-    function updatePurchaseBadges() {
-      const count = unlockedIds.size;
-      document.getElementById("purchaseBadgeDesktop").textContent = count;
-      document.getElementById("purchaseBadgeMobile").textContent = count;
-    }
-
-    function renderCategories() {
-      const categories = ["All", ...new Set(PROMPTS.map(p => p.category))];
-      categoryBar.innerHTML = "";
-      categories.forEach(cat => {
-        const btn = document.createElement("button");
-        btn.textContent = cat;
-        const isActive = cat === activeCategory;
-        btn.className = isActive
-          ? "px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-indigo-600 text-white shrink-0 transition"
-          : "px-3.5 py-1.5 rounded-xl text-xs font-medium bg-store-card border border-store-border text-zinc-400 hover:text-white shrink-0 transition";
-        btn.onclick = () => {
-          activeCategory = cat;
-          renderCategories();
-          renderPrompts();
-        };
-        categoryBar.appendChild(btn);
-      });
-    }
-
-    function renderPrompts() {
-      let filtered = PROMPTS;
-
-      if (activeTab === "purchases") {
-        filtered = filtered.filter(p => unlockedIds.has(p.id));
-      } else {
-        if (activeCategory !== "All") {
-          filtered = filtered.filter(p => p.category === activeCategory);
-        }
-        if (searchQuery.trim()) {
-          const q = searchQuery.toLowerCase();
-          filtered = filtered.filter(
-            p =>
-              p.title.toLowerCase().includes(q) ||
-              p.category.toLowerCase().includes(q) ||
-              p.tool.toLowerCase().includes(q)
-          );
-        }
-      }
-
-      promptsGrid.innerHTML = "";
-
-      if (filtered.length === 0) {
-        emptyState.classList.remove("hidden");
-        if (activeTab === "purchases") {
-          document.getElementById("emptyStateTitle").textContent = "No unlocked prompts yet";
-          document.getElementById("emptyStateDesc").textContent =
-            "Unlock any prompt and it will appear here permanently.";
-        } else {
-          document.getElementById("emptyStateTitle").textContent = "No matching prompts";
-          document.getElementById("emptyStateDesc").textContent =
-            "Try clearing your search or switching category.";
-        }
-        return;
-      }
-
-      emptyState.classList.add("hidden");
-
-      filtered.forEach(item => {
-        const isUnlocked = currentUser && unlockedIds.has(item.id);
-        const card = document.createElement("article");
-        card.className =
-          "group bg-store-card border border-store-border rounded-2xl overflow-hidden flex flex-col justify-between transition hover:border-zinc-700";
-
-        card.innerHTML = `
-          <div>
-            <div class="relative aspect-[4/5] bg-zinc-950 overflow-hidden">
-              <img
-                src="${item.image}"
-                alt="${item.title}"
-                loading="lazy"
-                class="w-full h-full object-cover transition duration-500 group-hover:scale-105"
-              />
-              <div class="absolute top-3 left-3 flex items-center gap-1.5">
-                <span class="px-2.5 py-1 rounded-lg bg-black/70 backdrop-blur-md text-[11px] font-semibold text-zinc-200 border border-white/10">
-                  ${item.category}
-                </span>
-              </div>
-              <div class="absolute top-3 right-3">
-                ${
-                  isUnlocked
-                    ? `<span class="px-2.5 py-1 rounded-lg bg-emerald-500/25 backdrop-blur-md text-[11px] font-semibold text-emerald-300 border border-emerald-500/40">Unlocked</span>`
-                    : `<span class="px-2.5 py-1 rounded-lg bg-black/75 backdrop-blur-md text-[11px] font-semibold text-amber-300 border border-amber-500/30">Locked</span>`
-                }
-              </div>
-            </div>
-
-            <div class="p-4">
-              <div class="flex items-center justify-between gap-2 text-[11px] text-zinc-400 mb-1">
-                <span>${item.tool}</span>
-                <span>ID: #${item.id.slice(0, 6)}</span>
-              </div>
-              <h3 class="font-display font-bold text-base text-white leading-snug">${item.title}</h3>
-
-              ${
-                isUnlocked
-                  ? `<div class="mt-3 p-3 rounded-xl bg-zinc-950 border border-store-border text-xs text-zinc-200 leading-relaxed select-all">
-                      ${item.promptText}
-                    </div>`
-                  : `<div class="mt-3 relative p-3 rounded-xl bg-zinc-950/70 border border-store-border/70 overflow-hidden">
-                      <p class="text-xs text-zinc-500 select-none blur-[4px]">
-                        Ultra-detailed cinematic portrait prompt hidden until unlocked...
-                      </p>
-                      <div class="absolute inset-0 flex items-center justify-center bg-zinc-950/40">
-                        <span class="text-[11px] font-medium text-zinc-300">Prompt locked • Unlock to copy</span>
-                      </div>
-                    </div>`
-              }
-            </div>
-          </div>
-
-          <div class="px-4 pb-4">
-            ${
-              isUnlocked
-                ? `<button data-copy-id="${item.id}" class="copy-prompt-btn w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold transition">
-                    Copy Prompt
-                  </button>`
-                : `<button data-unlock-id="${item.id}" class="unlock-prompt-btn w-full py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold transition shadow-lg shadow-indigo-600/20">
-                    Unlock Prompt
-                  </button>`
-            }
-          </div>
-        `;
-
-        promptsGrid.appendChild(card);
-      });
-
-      document.querySelectorAll(".unlock-prompt-btn").forEach(btn => {
-        btn.onclick = () => {
-          const promptObj = PROMPTS.find(p => p.id === btn.dataset.unlockId);
-          if (!promptObj) return;
-          if (!currentUser) {
-            pendingPrompt = promptObj;
-            openAuth("signup");
-            showToast("Create a free account or login first to unlock.");
-            return;
-          }
-          openPayment(promptObj);
-        };
-      });
-
-      document.querySelectorAll(".copy-prompt-btn").forEach(btn => {
-        btn.onclick = async () => {
-          const promptObj = PROMPTS.find(p => p.id === btn.dataset.copyId);
-          if (!promptObj) return;
-          try {
-            await navigator.clipboard.writeText(promptObj.promptText);
-            btn.textContent = "Copied!";
-            showToast("Prompt copied to clipboard!");
-            setTimeout(() => {
-              btn.textContent = "Copy Prompt";
-            }, 2000);
-          } catch (_) {
-            showToast("Select the prompt text box above to copy.");
-          }
-        };
-      });
-    }
-
-    function switchTab(tab) {
-      activeTab = tab;
-      const isExplore = tab === "explore";
-
-      heroSection.classList.toggle("hidden", !isExplore);
-      purchasesHeader.classList.toggle("hidden", isExplore);
-
-      document.getElementById("tabExploreDesktop").className = isExplore
-        ? "px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 text-white transition"
-        : "px-3.5 py-1.5 rounded-lg text-xs font-semibold text-zinc-400 hover:text-white transition";
-      document.getElementById("tabPurchasesDesktop").className = !isExplore
-        ? "px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 text-white transition flex items-center gap-1.5"
-        : "px-3.5 py-1.5 rounded-lg text-xs font-semibold text-zinc-400 hover:text-white transition flex items-center gap-1.5";
-
-      document.getElementById("tabExploreMobile").className = isExplore
-        ? "flex-1 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 text-white transition"
-        : "flex-1 py-1.5 rounded-lg text-xs font-semibold bg-zinc-900 text-zinc-400 border border-store-border transition";
-      document.getElementById("tabPurchasesMobile").className = !isExplore
-        ? "flex-1 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 text-white transition flex items-center justify-center gap-1.5"
-        : "flex-1 py-1.5 rounded-lg text-xs font-semibold bg-zinc-900 text-zinc-400 border border-store-border transition flex items-center justify-center gap-1.5";
-
-      renderPrompts();
-    }
-
-    document.getElementById("tabExploreDesktop").onclick = () => switchTab("explore");
-    document.getElementById("tabExploreMobile").onclick = () => switchTab("explore");
-    document.getElementById("tabPurchasesDesktop").onclick = () => {
-      if (!currentUser) {
-        openAuth("login");
-        showToast("Please login to view your purchased prompts.");
-        return;
-      }
-      switchTab("purchases");
-    };
-    document.getElementById("tabPurchasesMobile").onclick = () => {
-      if (!currentUser) {
-        openAuth("login");
-        showToast("Please login to view your purchased prompts.");
-        return;
-      }
-      switchTab("purchases");
-    };
-
-    document.getElementById("emptyStateBtn").onclick = () => {
-      searchQuery = "";
-      searchInput.value = "";
-      activeCategory = "All";
-      renderCategories();
-      switchTab("explore");
-    };
-
-    searchInput.addEventListener("input", e => {
-      searchQuery = e.target.value;
-      renderPrompts();
-    });
-
-    function openAuth(mode = "login") {
-      authMode = mode;
-      authErrorBox.classList.add("hidden");
-      authErrorBox.textContent = "";
-      updateAuthModalUI();
-      authModal.classList.remove("hidden");
-    }
-
-    function updateAuthModalUI() {
-      const isLogin = authMode === "login";
-      document.getElementById("authModalTitle").textContent = isLogin
-        ? "Welcome Back"
-        : "Create Your Free Account";
-      document.getElementById("authModalSubtitle").textContent = isLogin
-        ? "Log in to Jinna Prompts to access or unlock your AI photo prompts."
-        : "Save your unlocked prompts forever and access them anytime.";
-      document.getElementById("authSubmitBtn").textContent = isLogin
-        ? "Login & Continue"
-        : "Create Account & Continue";
-
-      document.getElementById("switchLoginBtn").className = isLogin
-        ? "py-2 rounded-lg text-xs font-semibold bg-indigo-600 text-white transition"
-        : "py-2 rounded-lg text-xs font-semibold text-zinc-400 hover:text-white transition";
-      document.getElementById("switchSignupBtn").className = !isLogin
-        ? "py-2 rounded-lg text-xs font-semibold bg-indigo-600 text-white transition"
-        : "py-2 rounded-lg text-xs font-semibold text-zinc-400 hover:text-white transition";
-    }
-
-    document.getElementById("openAuthBtn").onclick = () => openAuth("login");
-    document.getElementById("closeAuthModal").onclick = () => authModal.classList.add("hidden");
-    document.getElementById("switchLoginBtn").onclick = () => {
-      authMode = "login";
-      authErrorBox.classList.add("hidden");
-      updateAuthModalUI();
-    };
-    document.getElementById("switchSignupBtn").onclick = () => {
-      authMode = "signup";
-      authErrorBox.classList.add("hidden");
-      updateAuthModalUI();
-    };
-
-    function formatFirebaseAuthError(code) {
-      switch (code) {
-        case "auth/email-already-in-use":
-          return "This email already has an account. Switch to the Login tab above!";
-        case "auth/invalid-credential":
-        case "auth/wrong-password":
-        case "auth/user-not-found":
-          return "Incorrect email or password. Please check and try again.";
-        case "auth/weak-password":
-          return "Password is too weak. Use at least 6 characters (e.g., Kruthik@123).";
-        case "auth/invalid-email":
-          return "Please enter a valid email address.";
-        case "auth/too-many-requests":
-          return "Too many attempts. Please wait a minute and try again.";
-        default:
-          return `Authentication error (${code || "try-again"}). Please try again.`;
-      }
-    }
-
-    authForm.addEventListener("submit", async e => {
-      e.preventDefault();
-      const email = document.getElementById("authEmail").value.trim();
-      const password = document.getElementById("authPassword").value;
-      const submitBtn = document.getElementById("authSubmitBtn");
-
-      authErrorBox.classList.add("hidden");
-      submitBtn.disabled = true;
-      submitBtn.textContent = authMode === "login" ? "Logging in..." : "Creating account...";
-
-      try {
-        if (authMode === "login") {
-          await signInWithEmailAndPassword(auth, email, password);
-        } else {
-          await createUserWithEmailAndPassword(auth, email, password);
-        }
-
-        authModal.classList.add("hidden");
-        authForm.reset();
-        showToast("Logged in successfully!");
-
-        if (pendingPrompt) {
-          const toUnlock = pendingPrompt;
-          pendingPrompt = null;
-          openPayment(toUnlock);
-        }
-      } catch (err) {
-        authErrorBox.textContent = formatFirebaseAuthError(err.code);
-        authErrorBox.classList.remove("hidden");
-      } finally {
-        submitBtn.disabled = false;
-        updateAuthModalUI();
-      }
-    });
-
-    document.getElementById("logoutBtn").onclick = async () => {
-      await signOut(auth);
-      unlockedIds.clear();
-      updatePurchaseBadges();
-      switchTab("explore");
-      showToast("Logged out.");
-    };
-
-    // Payment Modal Logic
-    function openPayment(promptObj) {
-      activePayPrompt = promptObj;
-      document.getElementById("payPromptTitle").textContent = promptObj.title;
-      document.getElementById("payPromptPrice").textContent = `₹${promptObj.price}`;
-      paymentModal.classList.remove("hidden");
-    }
-
-    document.getElementById("closePaymentModal").onclick = () => {
-      paymentModal.classList.add("hidden");
-      activePayPrompt = null;
-    };
-
-    document.getElementById("demoUnlockBtn").onclick = async () => {
-      if (!activePayPrompt) return;
-      const id = activePayPrompt.id;
-      paymentModal.classList.add("hidden");
-      activePayPrompt = null;
-      await unlockPromptForUser(id, "preview_test");
-      showToast("Unlocked! Prompt is now visible & saved.");
-    };
-
-    document.getElementById("instamojoPayBtn").onclick = () => {
-      if (!activePayPrompt) return;
-
-      if (STORE_CONFIG.instamojoPaymentLink.includes("REPLACE_WITH_YOUR")) {
-        showToast("Paste your Instamojo link in code once KYC is approved!");
-        return;
-      }
-
-      if (window.Instamojo) {
-        window.Instamojo.open(STORE_CONFIG.instamojoPaymentLink);
-      } else {
-        window.open(STORE_CONFIG.instamojoPaymentLink, "_blank");
-      }
-    };
-
-    // Auth State Observer
-    onAuthStateChanged(auth, async user => {
-      currentUser = user;
-      const openAuthBtn = document.getElementById("openAuthBtn");
-      const userMenu = document.getElementById("userMenu");
-      const userEmailLabel = document.getElementById("userEmailLabel");
-
-      if (user) {
-        openAuthBtn.classList.add("hidden");
-        userMenu.classList.remove("hidden");
-        userMenu.classList.add("flex");
-        userEmailLabel.textContent = user.email;
-        await loadUserPurchases(user.uid);
-      } else {
-        openAuthBtn.classList.remove("hidden");
-        userMenu.classList.add("hidden");
-        userMenu.classList.remove("flex");
-        unlockedIds.clear();
-        updatePurchaseBadges();
-        renderPrompts();
-      }
-    });
-
-    renderCategories();
-    renderPrompts();
-  </script>
-</body>
-</html>
+      <form id="webInquiryForm" class="mt-4 space-y-3">
+        <div>
+          <label class="block text-xs font-medium text-zinc-300 mb-1">Your Name / Brand</label>
+          <input
+            id="clientName"
+            type="text"
+            required
+            placeholder="e.g., Rahul Studio"
+            class="w-full bg-zinc-950 border border-store-border rounded-xl px-3.5 py-2 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-indigo-500"
+          />
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-zinc-300 mb-1">Website Type</label>
+          <select
+            id="clientSiteType"
+            class="w-full bg-zinc-950 border border-store-border rounded-xl px-3.5 py-2 text-sm text-white focus:outline-none focus:border-indigo-500"
+          >
+            <option value="Digital Product / Prompt Store">Digital Product / Prompt Store</option>
+            <option value="E-Commerce / Clothing Brand">E-Commerce / Clothing Brand</option>
+            <option value="Creator Portfolio / Landing Page">Creator Portfolio / Landing Page</option>
+            <option value="Business Website">Business Website</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-zinc-300 mb-1">Your Contact (WhatsApp / Email)</label>
+          <input
+  
