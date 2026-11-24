@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Queen's Last Game — Offline Demo</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#071522;color:white;font-family:system-ui,Arial}canvas{display:block;width:100%;height:100%;touch-action:none}
+#top{position:fixed;top:10px;left:10px;right:10px;display:flex;justify-content:space-between;pointer-events:none;gap:8px}
+.p{background:#06111ddd;border:1px solid #b4c7d055;border-radius:10px;padding:8px 11px;font-size:11px;box-shadow:0 5px 18px #0007}
+#brand{font-weight:900;letter-spacing:1.3px;font-size:13px}#mission{text-align:right;color:#dbe7ef}#mission b{color:#f1cd80}
+#controls{position:fixed;bottom:18px;left:16px;right:16px;display:flex;justify-content:space-between;align-items:end;pointer-events:none}
+.pad{display:grid;grid-template-columns:54px 54px 54px;grid-template-rows:54px 54px;gap:5px;pointer-events:auto}
+button{border:1px solid #d3e1e788;background:#0b2036dd;color:white;font-weight:800;font-size:20px;border-radius:14px;touch-action:none}
+.pad button{width:54px;height:54px}.empty{visibility:hidden}
+#jump{pointer-events:auto;width:72px;height:72px;border-radius:50%;background:#d2ad62;color:#171106;font-size:12px}
+#hint{position:fixed;bottom:145px;left:50%;transform:translateX(-50%);font-size:11px;background:#06111ddd;border:1px solid #b4c7d055;border-radius:20px;padding:7px 12px;white-space:nowrap}
+#end{position:fixed;inset:0;background:#020812eF;display:none;align-items:center;justify-content:center;padding:20px;text-align:center}
+#end.show{display:flex}#card{max-width:450px;background:linear-gradient(145deg,#1a2b39,#080e17);border:1px solid #d3b16a;border-radius:18px;padding:25px}
+h1{color:#f1d18b;letter-spacing:2px}p{line-height:1.55;color:#dbe6ec}#again{background:#d2ad62;color:#171106;font-size:14px;padding:12px 22px}
+@media(min-width:800px){#controls{left:30px;right:30px}.pad button{width:60px;height:60px}}
+</style>
+</head>
+<body>
+<canvas id="game"></canvas>
+<div id="top">
+ <div class="p"><div id="brand">QUEEN'S LAST GAME</div><div>OFFLINE DEMO • BUILD 0.2</div></div>
+ <div class="p" id="mission">MISSION 01<br><b>Reach the royal doors</b><br><span id="dist">Distance: 60 m</span></div>
+</div>
+<div id="hint">Use arrows / WASD to move • SPACE to jump</div>
+<div id="controls">
+ <div class="pad">
+  <button class="empty"></button><button data-k="up">▲</button><button class="empty"></button>
+  <button data-k="left">◀</button><button data-k="down">▼</button><button data-k="right">▶</button>
+ </div>
+ <button id="jump">JUMP</button>
+</div>
+<div id="end"><div id="card"><h1>THE QUEEN'S REVEAL</h1><p>"You thought you were hunting me. But every step you took was part of my game."</p><p>The Queen planned the competition. She watched every team. This is only the beginning...</p><b>LEVEL 1 COMPLETE</b><br><br><button id="again">PLAY AGAIN</button></div></div>
+<script>
+(()=>{
+const c=document.getElementById('game'),ctx=c.getContext('2d');
+let W=0,H=0,dpr=1;
+function resize(){dpr=Math.min(devicePixelRatio||1,1.5);W=innerWidth;H=innerHeight;c.width=W*dpr;c.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0)}
+addEventListener('resize',resize);resize();
+const keys={up:false,down:false,left:false,right:false};
+function keyMap(e,on){let k=e.key.toLowerCase();if(k==='w'||k==='arrowup')keys.up=on;if(k==='s'||k==='arrowdown')keys.down=on;if(k==='a'||k==='arrowleft')keys.left=on;if(k==='d'||k==='arrowright')keys.right=on;if(k===' '&&on)jump()}
+addEventListener('keydown',e=>{keyMap(e,true);if([' ','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.key))e.preventDefault()});
+addEventListener('keyup',e=>keyMap(e,false));
+document.querySelectorAll('[data-k]').forEach(b=>{let k=b.dataset.k;b.addEventListener('pointerdown',e=>{e.preventDefault();keys[k]=true;b.setPointerCapture(e.pointerId)});['pointerup','pointercancel','lostpointercapture'].forEach(ev=>b.addEventListener(ev,()=>keys[k]=false))});
+let x=0,z=0,jumpY=0,jumpV=0,won=false,last=0;
+function jump(){if(jumpY<=0){jumpV=8.5}}
+document.getElementById('jump').addEventListener('pointerdown',e=>{e.preventDefault();jump()});
+function poly(points,fill,stroke){ctx.beginPath();points.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.closePath();ctx.fillStyle=fill;ctx.fill();if(stroke){ctx.strokeStyle=stroke;ctx.stroke()}}
+function line(points,color,width=1){ctx.beginPath();points.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.strokeStyle=color;ctx.lineWidth=width;ctx.stroke()}
+function draw(){
+ const horizon=H*.32,center=W/2;
+ const sky=ctx.createLinearGradient(0,0,0,H);sky.addColorStop(0,'#071523');sky.addColorStop(.6,'#18394b');sky.addColorStop(1,'#416070');ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);
+ // distant ocean
+ ctx.fillStyle='#092b40';ctx.fillRect(0,horizon,W,H-horizon);
+ for(let i=0;i<22;i++){let yy=horizon+((i*37+performance.now()*.012)%Math.max(1,H-horizon));ctx.globalAlpha=.12;line([[0,yy],[W,yy+Math.sin(i)*3]],'#8eb7c7',1)}ctx.globalAlpha=1;
+ // ship deck perspective
+ poly([[center-W*.48,H*.47],[center+W*.48,H*.47],[W*.98,H],[W*.02,H]],'#394953','#9aabb1');
+ // deck edge rails
+ line([[center-W*.47,H*.47],[W*.02,H]],'#b3c0c2',4);line([[center+W*.47,H*.47],[W*.98,H]],'#b3c0c2',4);
+ // rail posts
+ for(let i=0;i<13;i++){let t=i/12,y=H*.48+t*H*.49;let lx=center-W*.47+(W*.02-(center-W*.47))*t,rx=center+W*.47+(W*.98-(center+W*.47))*t;line([[lx,y-8*(1-t)],[lx,y+12*(1-t)]],'#a9b8bb',2);line([[rx,y-8*(1-t)],[rx,y+12*(1-t)]],'#a9b8bb',2)}
+ // deck markings perspective
+ for(let i=1;i<7;i++){let t=i/7,y=H*.47+t*H*.53;line([[center-W*.4*t,y],[center+W*.4*t,y]],'#bda66d55',2)}
+ // containers left/right
+ poly([[W*.13,H*.58],[W*.3,H*.58],[W*.34,H*.76],[W*.11,H*.76]],'#58646b','#85939a');
+ poly([[W*.7,H*.56],[W*.86,H*.56],[W*.9,H*.73],[W*.68,H*.73]],'#5b6269','#9aa3a6');
+ // royal structure in distance
+ poly([[center-W*.18,H*.48],[center+W*.18,H*.48],[center+W*.14,H*.25],[center-W*.14,H*.25]],'#1c2e3b','#a58b55');
+ poly([[center-W*.09,H*.48],[center+W*.09,H*.48],[center+W*.08,H*.29],[center-W*.08,H*.29]],'#8e6b38','#f0cd7a');
+ // door glow
+ let grd=ctx.createRadialGradient(center,H*.39,2,center,H*.39,W*.19);grd.addColorStop(0,'#ffe1a077');grd.addColorStop(1,'#f5bd5500');ctx.fillStyle=grd;ctx.fillRect(center-W*.25,H*.22,W*.5,H*.4);
+ // player drawn centered lower screen, subtle movement bob
+ const px=center+x*W*.025,py=H*.78-jumpY;
+ ctx.save();ctx.translate(px,py);
+ // shadow
+ ctx.globalAlpha=.3;ctx.fillStyle='#000';ctx.beginPath();ctx.ellipse(0,24+jumpY*.35,24,8,0,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
+ // legs
+ ctx.strokeStyle='#111e2a';ctx.lineWidth=12;ctx.lineCap='round';line([[-8,2],[-10,22]],'#152638',12);line([[8,2],[11,22]],'#152638',12);
+ // backpack and torso
+ ctx.fillStyle='#111e2b';ctx.fillRect(9,-47,16,30);
+ poly([[-16,-53],[14,-53],[18,-8],[-17,-8]],'#263e52','#718899');
+ // arms
+ line([[-15,-45],[-24,-18]],'#b77d60',8);line([[14,-45],[23,-19]],'#b77d60',8);
+ // head
+ ctx.fillStyle='#bd8666';ctx.beginPath();ctx.arc(0,-65,12,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle='#18232e';ctx.beginPath();ctx.arc(0,-70,12,Math.PI,Math.PI*2);ctx.fill();
+ ctx.restore();
+ // HUD direction arrow and small objective marker
+ ctx.fillStyle='#f1d28b';ctx.font='bold 12px system-ui';ctx.textAlign='center';ctx.fillText('ROYAL CHAMBER',center,H*.2);
+}
+function frame(t){let dt=Math.min((t-last)/1000||0,.04);last=t;if(!won){
+ let speed=190*dt;if(keys.left)x=Math.max(-9,x-speed/10);if(keys.right)x=Math.min(9,x+speed/10);if(keys.up)z=Math.max(-62,z-speed*.48);if(keys.down)z=Math.min(10,z+speed*.35);
+ jumpY+=jumpV*dt*60;jumpV-=.42*dt*60;if(jumpY<0){jumpY=0;jumpV=0}
+ document.getElementById('dist').textContent='Distance: '+Math.max(0,Math.round(62+z))+' m';
+ if(z<=-62){won=true;setTimeout(()=>document.getElementById('end').classList.add('show'),500)}
+ }draw();requestAnimationFrame(frame)}
+document.getElementById('again').onclick=()=>{x=0;z=0;jumpY=0;jumpV=0;won=false;document.getElementById('end').classList.remove('show')};
+requestAnimationFrame(frame);
+})();
+</script>
+</body></html>
