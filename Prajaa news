@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#0D47A1" />
+  <title>PRAJAA NEWS Network - తెలుగు వార్తలు</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            prajaaBlue: '#0D47A1',
+            prajaaDarkBlue: '#082E6B',
+            prajaaRed: '#D32F2F',
+            prajaaGold: '#FBC02D',
+          },
+          fontFamily: {
+            telugu: ['"Noto Sans Telugu"', 'sans-serif'],
+            brand: ['"Poppins"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Noto Sans Telugu', sans-serif; -webkit-tap-highlight-color: transparent; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    @keyframes marquee {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
+    }
+    .animate-marquee {
+      display: inline-block;
+      white-space: nowrap;
+      animation: marquee 22s linear infinite;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-950 text-gray-900 dark:text-gray-100 pb-20 select-none">
+
+  <!-- TOP APP BAR -->
+  <header class="sticky top-0 z-40 bg-prajaaBlue text-white shadow-md border-b-2 border-prajaaGold">
+    <div class="max-w-xl mx-auto px-3 py-2.5 flex items-center justify-between">
+      <div class="flex items-center gap-2.5">
+        <img src="logo.jpg" onerror="this.style.display='none'" alt="Logo" class="w-10 h-10 rounded-full object-cover bg-white p-0.5 border border-prajaaGold shadow" />
+        <div>
+          <h1 class="font-brand font-extrabold text-base tracking-wide leading-none text-white">
+            PRAJAA <span class="text-prajaaGold">NEWS</span>
+          </h1>
+          <span class="text-[11px] font-brand tracking-widest uppercase text-blue-200 block mt-0.5">Network • తెలుగు</span>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <span class="flex items-center gap-1 bg-prajaaRed text-white text-[10px] font-bold px-2 py-0.5 rounded-full animate-pulse">
+          <span class="w-1.5 h-1.5 bg-white rounded-full"></span> LIVE
+        </span>
+        <button onclick="toggleDarkMode()" id="themeBtn" class="p-2 rounded-full bg-prajaaDarkBlue hover:bg-blue-800 text-sm" title="Theme">
+          🌙
+        </button>
+      </div>
+    </div>
+
+    <!-- BREAKING NEWS TICKER -->
+    <div class="bg-prajaaRed text-white text-xs py-1.5 px-2 flex items-center overflow-hidden">
+      <span class="bg-prajaaGold text-gray-950 font-brand font-extrabold text-[10px] px-2 py-0.5 rounded mr-2 shrink-0 uppercase">
+        Breaking
+      </span>
+      <div class="overflow-hidden w-full">
+        <div id="breakingTicker" class="animate-marquee font-semibold">
+          తెలంగాణ, ఆంధ్రప్రదేశ్ తాజా వార్తలు • హైదరాబాద్ లో మెట్రో విస్తరణ పనులు వేగవంతం • AP లో కొత్త పరిశ్రమల ఏర్పాటుకు ప్రభుత్వం గ్రీన్ సిగ్నల్...
+        </div>
+      </div>
+    </div>
+
+    <!-- CATEGORY TABS -->
+    <nav class="bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200 border-b border-gray-200 dark:border-gray-800">
+      <div id="categoryBar" class="max-w-xl mx-auto flex overflow-x-auto no-scrollbar px-2 py-2 gap-2">
+        <!-- Categories injected by JS -->
+      </div>
+    </nav>
+  </header>
+
+  <!-- SEARCH BAR (Hidden by default, toggled from bottom nav) -->
+  <div id="searchContainer" class="hidden max-w-xl mx-auto px-3 pt-3">
+    <div class="relative">
+      <input type="text" id="searchInput" oninput="renderNews()" placeholder="వార్తలను వెతకండి (Search news)..."
+        class="w-full pl-4 pr-10 py-2.5 rounded-xl bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 text-sm focus:outline-none focus:border-prajaaBlue" />
+      <button onclick="clearSearch()" class="absolute right-3 top-2.5 text-gray-400 text-sm">✕</button>
+    </div>
+  </div>
+
+  <!-- MAIN NEWS FEED -->
+  <main class="max-w-xl mx-auto px-3 pt-3">
+    <div id="sectionTitle" class="flex items-center justify-between mb-2.5">
+      <h2 class="text-sm font-extrabold text-prajaaBlue dark:text-prajaaGold border-l-4 border-prajaaRed pl-2">
+        తాజా వార్తలు (Latest News)
+      </h2>
+      <span id="newsCount" class="text-xs text-gray-500"></span>
+    </div>
+
+    <div id="newsFeed" class="space-y-3.5">
+      <!-- News cards injected here -->
+    </div>
+  </main>
+
+  <!-- FULL ARTICLE MODAL -->
+  <div id="articleModal" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-xs overflow-y-auto">
+    <div class="min-h-screen bg-white dark:bg-gray-950 max-w-xl mx-auto shadow-2xl pb-16">
+      <!-- Modal Top Bar -->
+      <div class="sticky top-0 z-10 bg-prajaaBlue text-white px-3 py-3 flex items-center justify-between">
+        <button onclick="closeArticle()" class="flex items-center gap-1 text-sm font-bold bg-prajaaDarkBlue px-3 py-1 rounded-lg">
+          ← వెనక్కి
+        </button>
+        <div class="flex items-center gap-2">
+          <button onclick="changeFontSize(-1)" class="px-2.5 py-1 bg-prajaaDarkBlue rounded text-xs font-bold">A-</button>
+          <button onclick="changeFontSize(1)" class="px-2.5 py-1 bg-prajaaDarkBlue rounded text-xs font-bold">A+</button>
+          <button id="modalBookmarkBtn" onclick="toggleBookmarkCurrent()" class="px-2.5 py-1 bg-prajaaDarkBlue rounded text-sm">🔖</button>
+        </div>
+      </div>
+
+      <!-- Article Body -->
+      <div id="modalContent" class="p-4"></div>
+    </div>
+  </div>
+
+  <!-- BOTTOM APP NAVIGATION -->
+  <footer class="fixed bottom-0 inset-x-0 z-40 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 shadow-lg">
+    <div class="max-w-xl mx-auto grid grid-cols-4 py-1.5 text-center text-[11px] font-bold">
+      <button onclick="switchTab('home')" id="nav-home" class="flex flex-col items-center text-prajaaBlue dark:text-prajaaGold">
+        <span class="text-lg">🏠</span>
+        <span>హోమ్</span>
+      </button>
+      <button onclick="switchTab('trending')" id="nav-trending" class="flex flex-col items-center text-gray-500">
+        <span class="text-lg">🔥</span>
+        <span>ట్రెండింగ్</span>
+      </button>
+      <button onclick="switchTab('search')" id="nav-search" class="flex flex-col items-center text-gray-500">
+        <span class="text-lg">🔍</span>
+        <span>వెతకండి</span>
+      </button>
+      <button onclick="switchTab('saved')" id="nav-saved" class="flex flex-col items-center text-gray-500">
+        <span class="text-lg">🔖</span>
+        <span>సేవ్ చేసినవి</span>
+      </button>
+    </div>
+  </footer>
+
+  <!-- FIREBASE SDK (Optional - works with demo data automatically until configured) -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, collection, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    // TODO: Replace with your Firebase Config when ready for cloud sync
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT.firebaseapp.com",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_PROJECT.appspot.com",
+      messagingSenderId: "YOUR_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
+
+    const categories = ["అన్నీ", "తెలంగాణ", "ఆంధ్రప్రదేశ్", "రాజకీయాలు", "సినిమా", "క్రీడలు", "బిజినెస్"];
+    let selectedCategory = "అన్నీ";
+    let currentTab = "home";
+    let currentArticleId = null;
+    let articleFontSize = 16;
+
+    // Default Telugu Sample News (So app looks complete immediately)
+    const defaultNews = [
+      {
+        id: "n1",
+        title: "హైదరాబాద్ ఐటీ కారిడార్‌లో కొత్త మౌలిక సదుపాయాలు.. ట్రాఫిక్ కష్టాలకు చెక్!",
+        category: "తెలంగాణ",
+        image: "https://images.unsplash.com/photo-1570168007204-dfb528c6958f?auto=format&fit=crop&w=900&q=80",
+        summary: "గచ్చిబౌలి, మాదాపూర్ ప్రాంతాల్లో పెరుగుతున్న ట్రాఫిక్ రద్దీని నియంత్రించేందుకు ప్రభుత్వం కొత్త ఫ్లైఓవర్లు, అండర్‌పాస్‌ల నిర్మాణాన్ని వేగవంతం చేసింది.",
+        content: "హైదరాబాద్: నగరంలోని ఐటీ కారిడార్ ప్రాంతాల్లో ప్రయాణికులకు మెరుగైన రవాణా సౌకర్యాలు కల్పించేందుకు అధికారులు ప్రత్యేక ప్రణాళికలు సిద్ధం చేశారు. గచ్చిబౌలి జంక్షన్ నుండి ఫైనాన్షియల్ డిస్ట్రిక్ట్ వరకు అదనపు రోడ్ల విస్తరణ పనులు శరవేగంగా జరుగుతున్నాయి.\n\nరానున్న ఆరు నెలల్లో ఈ పనులు పూర్తి చేసి ప్రజలకు అందుబాటులోకి తీసుకురానున్నట్లు మున్సిపల్ శాఖ అధికారులు వెల్లడించారు. దీనివల్ల ప్రతిరోజూ లక్షలాది మంది ఉద్యోగులకు ప్రయాణ సమయం గణనీయంగా ఆదా కానుంది.",
+        time: "15 నిమిషాల క్రితం",
+        trending: true
+      },
+      {
+        id: "n2",
+        title: "ఏపీలో యువతకు భారీ ఉపాధి అవకాశాలు.. కొత్త పరిశ్రమల ఏర్పాటుకు ఆమోదం",
+        category: "ఆంధ్రప్రదేశ్",
+        image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=900&q=80",
+        summary: "రాష్ట్రంలో పారిశ్రామిక అభివృద్ధిని పరుగులు పెట్టించేందుకు ప్రభుత్వం కీలక నిర్ణయం తీసుకుంది. విశాఖ, తిరుపతి ప్రాంతాల్లో కొత్త యూనిట్లు రానున్నాయి.",
+        content: "అమరావతి: ఆంధ్రప్రదేశ్ రాష్ట్రంలో పెట్టుబడులను ఆకర్షించేందుకు ప్రభుత్వం నూతన పారిశ్రామిక విధానాన్ని అమలు చేస్తోంది. తాజాగా జరిగిన ఉన్నత స్థాయి సమావేశంలో పలు ప్రముఖ కంపెనీల ప్రతిపాదనలకు ఆమోదం లభించింది.\n\nఈ ప్రాజెక్టుల ద్వారా ప్రత్యక్షంగా, పరోక్షంగా వేలాది మంది స్థానిక యువతకు ఉద్యోగ అవకాశాలు లభించనున్నాయి. సింగిల్ విండో విధానంలో అనుమతులు మంజూరు చేస్తామని అధికారులు తెలిపారు.",
+        time: "42 నిమిషాల క్రితం",
+        trending: true
+      },
+      {
+        id: "n3",
+        title: "బాక్సాఫీస్ వద్ద రికార్డులు సృష్టిస్తున్న తెలుగు సినిమా.. అభిమానుల సందడి",
+        category: "సినిమా",
+        image: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=900&q=80",
+        summary: "తెలుగు రాష్ట్రాల్లోని థియేటర్ల వద్ద పండగ వాతావరణం నెలకొంది. మొదటి రోజే భారీ వసూళ్లతో చిత్రం దూసుకుపోతోంది.",
+        content: "హైదరాబాద్: తెలుగు చిత్ర పరిశ్రమలో మరో భారీ విజయం నమోదైంది. విజువల్స్, బ్యాక్‌గ్రౌండ్ స్కోర్ ప్రేక్షకులను విశేషంగా ఆకట్టుకుంటున్నాయని సినీ విశ్లేషకులు చెబుతున్నారు.\n\nరెండు తెలుగు రాష్ట్రాల్లోనే కాకుండా ఓవర్సీస్ మార్కెట్‌లోనూ ఈ చిత్రానికి అద్భుతమైన స్పందన లభిస్తోంది. వీకెండ్ కలెక్షన్లు మరింత పెరిగే అవకాశం ఉందని ట్రేడ్ వర్గాలు అంచనా వేస్తున్నాయి.",
+        time: "2 గంటల క్రితం",
+        trending: false
+      },
+      {
+        id: "n4",
+        title: "టీమిండియా ఘన విజయం.. మెరిసిన తెలుగు కుర్రాడు!",
+        category: "క్రీడలు",
+        image: "https://images.unsplash.com/photo-1531415074968-036ba1b575da?auto=format&fit=crop&w=900&q=80",
+        summary: "ఉత్కంఠభరితంగా సాగిన మ్యాచ్‌లో భారత జట్టు అద్భుత ప్రదర్శన కనబరిచి సిరీస్‌ను కైవసం చేసుకుంది.",
+        content: "ముంబై: అంతర్జాతీయ క్రికెట్‌లో భారత యువ ఆటగాళ్లు తమ సత్తా చాటుతున్నారు. కీలక సమయంలో ఒత్తిడిని తట్టుకుని ఆడిన ఇన్నింగ్స్ జట్టు విజయంలో కీలక పాత్ర పోషించింది.\n\nమ్యాచ్ అనంతరం కెప్టెన్ మాట్లాడుతూ యువ ఆటగాళ్ల ఆత్మవిశ్వాసం జట్టుకు ఎంతో బలాన్ని ఇస్తోందని ప్రశంసించారు.",
+        time: "3 గంటల క్రితం",
+        trending: true
+      }
+    ];
+
+    let allNews = JSON.parse(localStorage.getItem('prajaa_news_data')) || defaultNews;
+    if (!localStorage.getItem('prajaa_news_data')) {
+      localStorage.setItem('prajaa_news_data', JSON.stringify(defaultNews));
+    }
+
+    // Try Firebase if configured
+    if (firebaseConfig.apiKey !== "YOUR_API_KEY") {
+      try {
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const q = query(collection(db, "news"), orderBy("createdAt", "desc"));
+        onSnapshot(q, (snapshot) => {
+          const cloudNews = [];
+          snapshot.forEach((doc) => cloudNews.push({ id: doc.id, ...doc.data() }));
+          if (cloudNews.length > 0) {
+            allNews = cloudNews;
+            updateTicker();
+            renderNews();
+          }
+        });
+      } catch (e) {
+        console.log("Running in local demo mode");
+      }
+    }
+
+    // Listen for changes from admin.html in same browser
+    window.addEventListener('storage', () => {
+      allNews = JSON.parse(localStorage.getItem('prajaa_news_data')) || defaultNews;
+      updateTicker();
+      renderNews();
+    });
+
+    function updateTicker() {
+      const ticker = document.getElementById('breakingTicker');
+      if (allNews.length > 0) {
+        ticker.textContent = allNews.slice(0, 4).map(n => "🔴 " + n.title).join("   •   ");
+      }
+    }
+
+    function renderCategories() {
+      const bar = document.getElementById('categoryBar');
+      bar.innerHTML = categories.map(cat => `
+        <button onclick="selectCategory('${cat}')"
+          class="px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition ${
+            selectedCategory === cat
+              ? 'bg-prajaaBlue text-white shadow'
+              : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300'
+          }">
+          ${cat}
+        </button>
+      `).join('');
+    }
+
+    window.selectCategory = (cat) => {
+      selectedCategory = cat;
+      currentTab = 'home';
+      updateNavHighlight();
+      renderCategories();
+      renderNews();
+    };
+
+    window.switchTab = (tab) => {
+      currentTab = tab;
+      updateNavHighlight();
+      const searchBox = document.getElementById('searchContainer');
+      if (tab === 'search') {
+        searchBox.classList.remove('hidden');
+        document.getElementById('searchInput').focus();
+      } else {
+        searchBox.classList.add('hidden');
+      }
+      renderNews();
+    };
+
+    function updateNavHighlight() {
+      ['home', 'trending', 'search', 'saved'].forEach(t => {
+        const el = document.getElementById(`nav-${t}`);
+        if (t === currentTab) {
+          el.classList.remove('text-gray-500');
+          el.classList.add('text-prajaaBlue', 'dark:text-prajaaGold');
+        } else {
+          el.classList.add('text-gray-500');
+          el.classList.remove('text-prajaaBlue', 'dark:text-prajaaGold');
+        }
+      });
+    }
+
+    window.clearSearch = () => {
+      document.getElementById('searchInput').value = '';
+      renderNews();
+    };
+
+    window.renderNews = () => {
+      const feed = document.getElementById('newsFeed');
+      const searchQuery = document.getElementById('searchInput').value.toLowerCase();
+      const savedIds = JSON.parse(localStorage.getItem('prajaa_saved_ids') || '[]');
+      const titleEl = document.querySelector('#sectionTitle h2');
+
+      let filtered = [...allNews];
+
+      if (currentTab === 'saved') {
+        titleEl.textContent = "సేవ్ చేసిన వార్తలు (Saved News)";
+        filtered = filtered.filter(n => savedIds.includes(n.id));
+      } else if (currentTab === 'trending') {
+        titleEl.textContent = "ట్రెండింగ్ వార్తలు (Trending)";
+        filtered = filtered.filter(n => n.trending);
+      } else {
+        titleEl.textContent = selectedCategory === "అన్నీ" ? "తాజా వార్తలు (Latest News)" : `${selectedCategory} వార్తలు`;
+        if (selectedCategory !== "అన్నీ") {
+          filtered = filtered.filter(n => n.category === selectedCategory);
+        }
+      }
+
+      if (searchQuery) {
+        filtered = filtered.filter(n =>
+          n.title.toLowerCase().includes(searchQuery) ||
+          n.summary.toLowerCase().includes(searchQuery)
+        );
+      }
+
+      document.getElementById('newsCount').textContent = `${filtered.length} వార్తలు`;
+
+      if (filtered.length === 0) {
+        feed.innerHTML = `
+          <div class="text-center py-12 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800">
+            <p class="text-3xl mb-2">📰</p>
+            <p class="text-sm font-bold text-gray-500">వార్తలు లభించలేదు</p>
+          </div>`;
+        return;
+      }
+
+      feed.innerHTML = filtered.map((news, idx) => `
+        <article onclick="openArticle('${news.id}')"
+          class="bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-sm border border-gray-200 dark:border-gray-800 active:scale-[0.99] transition cursor-pointer">
+          ${idx === 0 ? `
+            <div class="relative">
+              <img src="${news.image}" alt="News" class="w-full h-52 object-cover" />
+              <span class="absolute top-3 left-3 bg-prajaaRed text-white text-[11px] font-bold px-2.5 py-0.5 rounded-md shadow">
+                ${news.category}
+              </span>
+            </div>
+            <div class="p-3.5">
+              <h3 class="text-base font-extrabold leading-snug mb-1.5 text-gray-900 dark:text-white">${news.title}</h3>
+              <p class="text-xs text-gray-600 dark:text-gray-400 line-clamp-2 mb-3">${news.summary}</p>
+              <div class="flex items-center justify-between text-[11px] text-gray-500 border-t border-gray-100 dark:border-gray-800 pt-2">
+                <span>🕒 ${news.time || 'ఇప్పుడే'}</span>
+                <button onclick="event.stopPropagation(); shareWhatsApp('${news.id}')"
+                  class="flex items-center gap-1 text-green-600 font-bold bg-green-50 dark:bg-green-950/50 px-2.5 py-1 rounded-full">
+                  📲 Share
+                </button>
+              </div>
+            </div>
+          ` : `
+            <div class="flex gap-3 p-3">
+              <img src="${news.image}" alt="News" class="w-28 h-24 rounded-xl object-cover shrink-0" />
+              <div class="flex flex-col justify-between flex-1">
+                <div>
+                  <span class="text-[10px] font-bold text-prajaaRed uppercase">${news.category}</span>
+                  <h3 class="text-sm font-bold leading-snug line-clamp-2 mt-0.5">${news.title}</h3>
+                </div>
+                <div class="flex items-center justify-between text-[11px] text-gray-500 mt-2">
+                  <span>🕒 ${news.time || 'ఇప్పుడే'}</span>
+                  <button onclick="event.stopPropagation(); shareWhatsApp('${news.id}')" class="text-green-600 font-bold">
+                    📲 Share
+                  </button>
+                </div>
+              </div>
+            </div>
+          `}
+        </article>
+      `).join('');
+    };
+
+    window.openArticle = (id) => {
+      const news = allNews.find(n => n.id === id);
+      if (!news) return;
+      currentArticleId = id;
+      const modal = document.getElementById('articleModal');
+      const content = document.getElementById('modalContent');
+      const paragraphs = (news.content || news.summary).split('\n').filter(p => p.trim()).map(p => `<p class="mb-4">${p}</p>`).join('');
+
+      content.innerHTML = `
+        <span class="inline-block bg-prajaaRed text-white text-xs font-bold px-2.5 py-0.5 rounded mb-2">${news.category}</span>
+        <h1 class="text-xl font-extrabold leading-snug mb-2">${news.title}</h1>
+        <div class="flex items-center justify-between text-xs text-gray-500 mb-3 pb-2 border-b border-gray-200 dark:border-gray-800">
+          <span>PRAJAA NEWS Network • 🕒 ${news.time || 'ఇప్పుడే'}</span>
+        </div>
+        <img src="${news.image}" alt="News" class="w-full h-56 object-cover rounded-xl mb-4 shadow" />
+        <div id="articleText" style="font-size: ${articleFontSize}px;" class="leading-relaxed text-gray-800 dark:text-gray-200">
+          ${paragraphs}
+        </div>
+        <div class="mt-6 pt-4 border-t border-gray-200 dark:border-gray-800 flex gap-3">
+          <button onclick="shareWhatsApp('${news.id}')"
+            class="flex-1 bg-green-600 text-white font-bold py-3 rounded-xl text-sm shadow">
+            📲 WhatsApp లో షేర్ చేయండి
+          </button>
+        </div>
+      `;
+      modal.classList.remove('hidden');
+    };
+
+    window.closeArticle = () => {
+      document.getElementById('articleModal').classList.add('hidden');
+    };
+
+    window.changeFontSize = (delta) => {
+      articleFontSize = Math.min(22, Math.max(14, articleFontSize + delta * 2));
+      const el = document.getElementById('articleText');
+      if (el) el.style.fontSize = articleFontSize + 'px';
+    };
+
+    window.toggleBookmarkCurrent = () => {
+      if (!currentArticleId) return;
+      let saved = JSON.parse(localStorage.getItem('prajaa_saved_ids') || '[]');
+      if (saved.includes(currentArticleId)) {
+        saved = saved.filter(id => id !== currentArticleId);
+        alert("Saved list నుండి తొలగించబడింది");
+      } else {
+        saved.push(currentArticleId);
+        alert("వార్త సేవ్ చేయబడింది!");
+      }
+      localStorage.setItem('prajaa_saved_ids', JSON.stringify(saved));
+    };
+
+    window.shareWhatsApp = (id) => {
+      const news = allNews.find(n => n.id === id);
+      if (!news) return;
+      const text = `*${news.title}*\n\n${news.summary}\n\nమరిన్ని తాజా వార్తల కోసం *PRAJAA NEWS Network* యాప్ చూడండి:\n${window.location.href}`;
+      window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+    };
+
+    window.toggleDarkMode = () => {
+      document.documentElement.classList.toggle('dark');
+      const isDark = document.documentElement.classList.contains('dark');
+      document.getElementById('themeBtn').textContent = isDark ? '☀️' : '🌙';
+    };
+
+    // Init
+    updateTicker();
+    renderCategories();
+    renderNews();
+  </script>
+</body>
+</html>
